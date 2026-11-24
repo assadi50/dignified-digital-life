@@ -268,6 +268,29 @@ textarea.copybox{width:100%;min-height:120px;border:1px solid var(--line);border
 .mini button{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:4px 10px;font-size:13px;cursor:pointer}
 .done-line{display:flex;gap:8px;align-items:flex-start;color:var(--good);font-weight:600}
 .done-line svg{flex:none;margin-top:4px}
+
+/* participant report viewer, answers table and print */
+.banner.vw{display:block}
+.banner.vw .tiny{display:block;font-weight:400;margin-top:4px}
+.answers summary{cursor:pointer}
+.answers .tscroll{overflow-x:auto;margin-top:10px}
+table.ans{border-collapse:collapse;width:100%;font-size:14px}
+table.ans th,table.ans td{border-bottom:1px solid var(--line);padding:7px 6px;text-align:start;vertical-align:top}
+table.ans th{color:var(--muted);font-weight:600}
+table.ans td:last-child{width:38%;font-weight:600}
+@media print{
+  :root,:root:not([data-theme="light"]),:root[data-theme="dark"]{
+    --bg:#FFFFFF; --surface:#FFFFFF; --sunk:#EEF3EF; --ink:#14211C; --muted:#5A6A62; --line:#D6DFD9;
+    --accent:#175C4C; --accent-ink:#FFFFFF; --accent-soft:#DCEDE6; --time:#B8730F; --time-soft:#F7EAD3;
+    --fam:#B0435A; --hea:#4A7F35; --soc:#2A6A8C; --dig:#6556A3; --good:#2F7A4F; --warn:#A86A0C; --crit:#A63A3A; --crit-soft:#F6E1DF; color-scheme:light}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{background:#fff;padding:0}
+  .top-actions,.share,.noexp,.ownbox,.own-row,.mini,[data-act],.toast,.copybox,.dstep .opts,#daOther,.linkbtn,.banner .tiny{display:none!important}
+  .card{break-inside:avoid;page-break-inside:avoid;box-shadow:none!important}
+  .answers{break-inside:auto;page-break-inside:auto}
+  .answers summary{list-style:none}
+  @page{margin:12mm}
+}
 </style>
 
 </head>
@@ -327,7 +350,7 @@ const T = {
   rHist:"سجل نتائجي",histFirst:"هذا أول قياس محفوظ على هذا الجهاز. أعد القياس بعد 30 يوماً لترى ما تغيّر.",histChange:"مقارنة بقياسك السابق ({d}):",
   histCols:["التاريخ","التوازن","جودة الحياة","الاستنزاف",""],histOpen:"اعرض",histNote:"يُحفظ هذا السجل على جهازك فقط. أما نتيجة كل قياس فتُحفظ في التجربة الميدانية برمز مجهول دون اسمك أو بريدك.",
   histClear:"امسح سجلي من هذا الجهاز",histConfirm:"اضغط مرة أخرى لتأكيد المسح",histCleared:"مُسح السجل.",histCount:"لديك {n} قياسات محفوظة على هذا الجهاز.",histOne:"لديك قياس واحد محفوظ على هذا الجهاز.",
-  pastBanner:"تقرير محفوظ بتاريخ {d}",pastBack:"عودة",
+  pastBanner:"تقرير محفوظ بتاريخ {d}",pastBack:"عودة",vwBanner:"تقرير مشارك · رقم المشارك {p} · القياس رقم {n}",vwNote:"عرض للقراءة فقط مبني على رمز النتيجة، ولا يغيّر شيئاً في بيانات هذا الجهاز.",vwShareT:"أرسل التقرير أو اطبعه",vwWa:"أرسل عبر واتساب",vwMail:"أرسل بالبريد",print:"اطبع أو احفظ PDF",vwLinkNote:"الرابط يفتح التقرير الكامل، بما فيه الرفاه والاستنزاف. أرسله لصاحب التقرير أو لمن يحق له الاطلاع فقط.",vwLink:"التقرير الكامل",vwBad:"رمز النتيجة في هذا الرابط غير صالح.",vwOpen:"افتح البوصلة وابدأ قياسك",ansT:"الإجابات بالتفصيل",ansQ:"السؤال",ansA:"الإجابة",ansHours:"الوقت الذي وفرته التقنية",ansWho:"الرفاه خلال الأسبوعين الماضيين",
   dIdx:"التوازن",dQol:"جودة الحياة",dDrain:"الاستنزاف",
   rShare:"شارك تقريرك",wa:"أرسل الملخص عبر واتساب",png:"احفظ بطاقة التقرير (صورة)",html:"احفظ التقرير المفصل",copy:"انسخ الملخص",mail:"افتح البريد بالملخص",
   shareNote:"الملخص المشترك يتضمن التوازن وعائد الوقت وقرار الأسبوع وخطتك، ولا يتضمن نتائج الرفاه والاستنزاف. لمشاركة التقرير كاملاً بالبريد أو واتساب، احفظ التقرير المفصل ثم أرفقه.",
@@ -379,7 +402,7 @@ const T = {
   rHist:"My results history",histFirst:"This is the first check saved on this device. Take it again in 30 days to see what changed.",histChange:"Compared with your last check ({d}):",
   histCols:["Date","Balance","Quality of life","Drain",""],histOpen:"Open",histNote:"This history is kept on your device only. Each result is also saved to the field trial under an anonymous code, without your name or email.",
   histClear:"Clear my history on this device",histConfirm:"Press again to confirm",histCleared:"History cleared.",histCount:"You have {n} checks saved on this device.",histOne:"You have one check saved on this device.",
-  pastBanner:"Saved report from {d}",pastBack:"Back",
+  pastBanner:"Saved report from {d}",pastBack:"Back",vwBanner:"Participant report · ID {p} · check-in {n}",vwNote:"Read-only view built from the result code. It changes nothing on this device.",vwShareT:"Send or print this report",vwWa:"Send on WhatsApp",vwMail:"Send by email",print:"Print or save as PDF",vwLinkNote:"The link opens the full report, including wellbeing and drain. Send it only to the person it belongs to or someone entitled to see it.",vwLink:"Full report",vwBad:"The result code in this link is not valid.",vwOpen:"Open the compass and take your own check",ansT:"Answers in detail",ansQ:"Question",ansA:"Answer",ansHours:"Time technology saved",ansWho:"Wellbeing over the last two weeks",
   dIdx:"Balance",dQol:"Quality of life",dDrain:"Drain",
   rShare:"Share your report",wa:"Send the summary on WhatsApp",png:"Save the report card (image)",html:"Save the full report",copy:"Copy the summary",mail:"Open email with the summary",
   shareNote:"The shared summary includes your balance, time dividend, weekly decision and plan. It leaves out wellbeing and drain. To share the full report by email or WhatsApp, save it and attach the file.",
@@ -409,7 +432,7 @@ const app=document.getElementById("app");
 const BLANK=()=>({stage:null,a:{},t1:null,t2:[],who:[null,null,null,null,null],ls:null,en:null,dr:null,task:null,act:null,hrs:null,rei:null,mine:[],done:{}});
 let dsel=null,dother="";
 let S=Object.assign({lang:"ar",step:-1,view:"survey",tried:false,runId:null},BLANK());
-let V=S, pastEntry=null, clearArmed=false;
+let V=S, pastEntry=null, clearArmed=false, VIEW=null, VIEWBAD=false;
 const caps={db:null,user:null,dl:null,canWrite:false,isAdmin:false,pilotState:""};
 const STANDALONE=!(window.claude&&window.claude.use);
 let memPid=null;
@@ -477,6 +500,22 @@ function getPid(){
 }
 function randomPid(){const cs=C.PID_CHARS;let s="";const arr=new Uint32Array(6);try{crypto.getRandomValues(arr)}catch(e){for(let i=0;i<6;i++)arr[i]=Math.floor(Math.random()*1e9)}for(let i=0;i<6;i++)s+=cs[arr[i]%cs.length];return s}
 function cohort(){let c="";try{const q=new URLSearchParams(location.search).get("g");if(q)c=q}catch(e){}if(!c&&location.hash)c=location.hash.slice(1);c=(c||"").toUpperCase();return /^[A-Z0-9]{1,10}$/.test(c)?c:""}
+/* rebuild a participant's answers from a result code (report viewer: ?r=CODE) */
+function decodeCode(code){
+  const m=/^DDL2-(\d{38})(\d{2})-([A-Z2-9]{6})(?:-([A-Z0-9]{1,10}))?$/.exec(String(code||"").trim().toUpperCase());if(!m)return null;
+  const dg=m[1];let ck=0;for(let i=0;i<dg.length;i++)ck+=(+dg[i])*(i+1);if(ck%97!==+m[2])return null;
+  const v={};let p=0;for(const [n,w] of C.CODE_FIELDS){v[n]=dg.slice(p,p+w);p+=w}
+  const st=BLANK();const sg=C.STAGES[+v.stage];if(!sg)return null;st.stage=sg.key;
+  for(const it of C.ITEMS){const x=+v[it.id];if(x>3)return null;st.a[it.id]=x}
+  st.t1=+v.T1;if(!C.TIME.T1.hours[st.t1]&&st.t1!==0)return null;
+  st.t2=C.TIME.T2.opts.filter((o,i)=>v.T2[i]==="1").map(o=>o.key);
+  for(let k=0;k<5;k++){const i=C.WHO5.values.indexOf(+v["W"+(k+1)]);if(i<0)return null;st.who[k]=i}
+  st.ls=+v.LS;st.en=+v.EN;st.dr=+v.DR;if(st.ls>10||st.en>10||st.dr>10)return null;
+  st.task=+v.TASK;st.act=+v.ACT;st.hrs=+v.HRS;st.rei=+v.REI;
+  if(!C.TASKS[st.task]||!C.ACTIONS[st.act]||!C.REINVEST_KEYS[st.rei]||st.hrs>3)return null;
+  return {code:m[0],st,pid:m[3],cohort:m[4]||"",seq:+v.SEQ,lang:+v.LANG===1?"en":"ar"};
+}
+function viewUrl(code){return location.origin+location.pathname+"?r="+encodeURIComponent(code)}
 function seqOf(id){const h=history().slice().sort((a,b)=>a.id-b.id);const i=h.findIndex(x=>x.id===id);return Math.min(9,i<0?h.length+1:i+1)}
 function buildCode(st,id){
   const v={stage:C.STAGES.findIndex(s=>s.key===st.stage),T1:st.t1,T2:C.TIME.T2.opts.map(o=>st.t2.includes(o.key)?1:0).join(""),
@@ -606,6 +645,7 @@ function vReport(){
   const st=V,R=compute(st);const stg=C.STAGES.find(s=>s.key===st.stage);const blAll=baseFor(st.stage),bl=blAll&&blAll.ok?blAll:null;const w=C.WEIGHTS[st.stage];const P=C.PERSONAS[R.persona];const ar=S.lang==="ar";
   const wtxt=C.DIMENSIONS.map(d=>(ar?d.short_ar:d.short_en)+" "+Math.round(w[d.key]*100)+"%").join(" · ");
   let h='<section class="view report">';
+  if(VIEW)h+='<div class="banner vw"><b>'+esc(f(t("vwBanner"),{p:VIEW.pid,n:VIEW.seq}))+(VIEW.cohort?" · "+esc(VIEW.cohort):"")+'</b><span class="tiny">'+esc(t("vwNote"))+'</span></div>';
   if(pastEntry)h+='<div class="banner"><b>'+esc(f(t("pastBanner"),{d:pastEntry.date}))+'</b><button class="btn ghost" data-act="pastBack">'+esc(t("pastBack"))+"</button></div>";
   h+='<h1 style="font-size:clamp(24px,5vw,30px)">'+esc(t("rTitle"))+"</h1>";
   // persona + balance
@@ -637,16 +677,32 @@ function vReport(){
   // plan
   h+=planCard(R,st);
   // history
+  h+=answersCard(st,!!VIEW);
+  if(VIEW){
+    const link=viewUrl(VIEW.code),sum=summaryText(R,st)+"\n\n"+t("vwLink")+": "+link;
+    h+='<div class="card share"><h3>'+esc(t("vwShareT"))+'</h3><div class="share-row"><button data-act="print">'+icon("doc")+esc(t("print"))+'</button><a class="wa" target="_blank" rel="noopener" href="https://wa.me/?text='+encodeURIComponent(sum)+'">'+icon("wa")+esc(t("vwWa"))+'</a><a href="mailto:?subject='+encodeURIComponent(t("sumHead"))+"&body="+encodeURIComponent(sum)+'">'+icon("mail")+esc(t("vwMail"))+'</a>'+
+      '<button data-act="html">'+icon("doc")+esc(t("html"))+'</button><button data-act="png">'+icon("img")+esc(t("png"))+'</button><button data-act="copy">'+icon("copy")+esc(t("copy"))+'</button></div><p class="note">'+esc(t("vwLinkNote"))+'</p><div class="toast" id="toast" role="status"></div><textarea class="copybox" id="copybox" readonly hidden>'+esc(sum)+"</textarea></div>";
+    h+='<div class="card"><p class="foot">'+esc(t("disclaimer"))+'</p><div><a class="linkbtn" href="'+esc(location.pathname)+'">'+esc(t("vwOpen"))+"</a></div></div>";
+    app.innerHTML=h+"</section>";return;
+  }
   h+=histCard();
   if(!pastEntry){
     const sum=summaryText(R,st);
     h+='<div class="card share"><h3>'+esc(t("rShare"))+'</h3><div class="share-row"><a class="wa" target="_blank" rel="noopener" href="https://wa.me/?text='+encodeURIComponent(sum)+'">'+icon("wa")+esc(t("wa"))+'</a>'+
-       '<button data-act="png" class="dl-only">'+icon("img")+esc(t("png"))+'</button><button data-act="html" class="dl-only">'+icon("doc")+esc(t("html"))+'</button><button data-act="copy">'+icon("copy")+esc(t("copy"))+'</button><a href="mailto:?subject='+encodeURIComponent(t("sumHead"))+"&body="+encodeURIComponent(sum)+'">'+icon("mail")+esc(t("mail"))+'</a></div><p class="note">'+esc(t("shareNote"))+'</p><div class="toast" id="toast" role="status"></div><textarea class="copybox" id="copybox" readonly hidden>'+esc(sum)+"</textarea></div>";
+       '<button data-act="png" class="dl-only">'+icon("img")+esc(t("png"))+'</button><button data-act="html" class="dl-only">'+icon("doc")+esc(t("html"))+'</button><button data-act="copy">'+icon("copy")+esc(t("copy"))+'</button><a href="mailto:?subject='+encodeURIComponent(t("sumHead"))+"&body="+encodeURIComponent(sum)+'">'+icon("mail")+esc(t("mail"))+'</a><button data-act="print">'+icon("doc")+esc(t("print"))+'</button></div><p class="note">'+esc(t("shareNote"))+'</p><div class="toast" id="toast" role="status"></div><textarea class="copybox" id="copybox" readonly hidden>'+esc(sum)+"</textarea></div>";
     h+=pilotCard();
-    h+='<div class="card"><p>'+esc(t("retake"))+'</p><div><button class="btn ghost" data-act="restart">'+esc(t("retakeBtn"))+'</button></div><p class="foot">'+esc(t("disclaimer"))+"</p></div>";
+    h+='<div class="card noexp"><p>'+esc(t("retake"))+'</p><div><button class="btn ghost" data-act="restart">'+esc(t("retakeBtn"))+'</button></div><p class="foot">'+esc(t("disclaimer"))+"</p></div>";
   }else h+='<div class="card"><p class="foot">'+esc(t("disclaimer"))+"</p></div>";
   app.innerHTML=h+"</section>";
   if(!caps.dl&&!STANDALONE)document.querySelectorAll(".dl-only").forEach(b=>b.hidden=true);
+}
+function answersCard(st,open){
+  const ar=S.lang==="ar",row=(q,a)=>"<tr><td>"+esc(q)+"</td><td>"+esc(a)+"</td></tr>";
+  let rows=C.ITEMS.map(it=>row(L(it),(ar?it.opts_ar:it.opts_en)[st.a[it.id]])).join("");
+  rows+=row(L(C.TIME.T1),(ar?C.TIME.T1.opts_ar:C.TIME.T1.opts_en)[st.t1]);
+  rows+=(ar?C.WHO5.items_ar:C.WHO5.items_en).map((q,k)=>row(t("ansWho")+": "+q,(ar?C.WHO5.opts_ar:C.WHO5.opts_en)[st.who[k]])).join("");
+  rows+=row(L(C.LIFE_SAT),of10(st.ls))+row(L(C.ENERGY),of10(st.en))+row(L(C.DRAIN),of10(st.dr));
+  return '<div class="card answers"><details'+(open?" open":"")+'><summary><h3 style="display:inline">'+esc(t("ansT"))+'</h3></summary><div class="tscroll"><table class="ans"><thead><tr><th>'+esc(t("ansQ"))+"</th><th>"+esc(t("ansA"))+"</th></tr></thead><tbody>"+rows+"</tbody></table></div></details></div>";
 }
 /* ---------- infographics ---------- */
 const HEX={family:"#B0435A",health:"#4A7F35",social:"#2A6A8C",digital:"#6556A3"};
@@ -734,7 +790,7 @@ function drainStep(st){
   const m=(st.mine||[]).find(x=>x.src==="drain");
   let x='<div class="dstep"><h4>'+esc(t("dStepT"))+"</h4>";
   if(m)return x+'<p class="done-line">'+icon("check")+"<span>"+esc(m.t)+" · "+esc(f(t("starts"),{d:fmtDay(m.d)}))+'</span></p><p class="tiny">'+esc(t("dStepDone"))+"</p></div>";
-  if(pastEntry)return "";
+  if(pastEntry||VIEW)return "";
   x+='<p class="tiny">'+esc(t("dStepQ"))+'</p><div class="opts cols1" role="radiogroup">'+C.DRAIN_ACTIONS.map((a,i)=>'<label class="opt" for="DA-'+i+'"><input type="radio" id="DA-'+i+'" name="DA" value="'+i+'"'+(dsel===String(i)?" checked":"")+'><span class="dot"></span><span>'+esc(L(a))+"</span></label>").join("")+
     '<label class="opt" for="DA-o"><input type="radio" id="DA-o" name="DA" value="o"'+(dsel==="o"?" checked":"")+'><span class="dot"></span><span>'+esc(t("other"))+"</span></label></div>"+
     '<input class="txt" id="daOther" maxlength="120" autocomplete="off" placeholder="'+esc(t("otherPh"))+'" value="'+esc(dother)+'"'+(dsel==="o"?"":" hidden")+">"+
@@ -746,7 +802,7 @@ function planLi(key,text,sub,checked,ro,m){
     (m&&!ro?'<span class="mini"><button data-act="ics" data-id="'+m.id+'">'+icon("cal")+esc(t("cal"))+'</button><button data-act="rmMine" data-id="'+m.id+'">'+esc(t("remove"))+"</button></span>":"")+"</span></li>";
 }
 function planCard(R,st){
-  const ar=S.lang==="ar",ro=!!pastEntry,done=st.done||{},mine=st.mine||[];
+  const ar=S.lang==="ar",ro=!!pastEntry||!!VIEW,done=st.done||{},mine=st.mine||[];
   let x='<div class="card"><h3>'+esc(t("rPlan"))+'</h3><p class="meta-line">'+esc(t("planNote"))+'</p><ul class="plan">';
   R.plan.forEach(it=>{x+=planLi("a-"+it.id,ar?it.tip_ar:it.tip_en,L(C.DIMENSIONS.find(d=>d.key===it.dim)),!!done[it.id],ro,null)});
   mine.forEach(m=>{x+=planLi("m-"+m.id,m.t,(m.src==="drain"?t("fromDrain"):t("mineLbl"))+" · "+f(t("starts"),{d:fmtDay(m.d)}),!!m.done,ro,m)});
@@ -785,7 +841,7 @@ function pilotCard(){
   const code=buildCode(S,S.runId);const url=formsUrl(code);
   if(url){
     const auto=!!C.RELAY;
-    return '<div class="card"><h3>'+esc(t("rPilot"))+'</h3>'+(auto?'<p class="autosave '+(caps.saveState||"wait")+'" id="autosave" role="status">'+esc(t(caps.saveState==="ok"?"autoOk":caps.saveState==="err"?"autoErr":"autoWait"))+'</p><p class="tiny">'+esc(t("pilotAutoP"))+'</p>':'<p>'+esc(t("pilotFormP"))+'</p>')+'<div><span class="meta-line">'+esc(t("pidLbl"))+'</span><div class="code">'+esc(getPid())+'</div><p class="tiny">'+esc(t("pidNote"))+'</p></div><div><a class="linkbtn" target="_blank" rel="noopener" href="'+esc(url)+'">'+esc(t("pilotFormBtn"))+'</a></div>'+
+    return '<div class="card noexp"><h3>'+esc(t("rPilot"))+'</h3>'+(auto?'<p class="autosave '+(caps.saveState||"wait")+'" id="autosave" role="status">'+esc(t(caps.saveState==="ok"?"autoOk":caps.saveState==="err"?"autoErr":"autoWait"))+'</p><p class="tiny">'+esc(t("pilotAutoP"))+'</p>':'<p>'+esc(t("pilotFormP"))+'</p>')+'<div><span class="meta-line">'+esc(t("pidLbl"))+'</span><div class="code">'+esc(getPid())+'</div><p class="tiny">'+esc(t("pidNote"))+'</p></div><div><a class="linkbtn" target="_blank" rel="noopener" href="'+esc(url)+'">'+esc(t("pilotFormBtn"))+'</a></div>'+
       '<details><summary class="tiny">'+esc(t("pidChange"))+'</summary><div class="pid-row" style="margin-top:8px"><input id="pidIn" maxlength="6" autocomplete="off" aria-label="'+esc(t("pidLbl"))+'"><button class="btn ghost" data-act="pid" style="padding:8px 14px;font-size:14px">'+esc(t("pidSave"))+'</button></div><div class="toast" id="pidToast" role="status"></div></details></div>';
   }
   if(caps.canWrite){
@@ -862,7 +918,21 @@ async function makeCard(R){
 function roundRect(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()}
 function wrapText(g,text,x,y,max,lh,al){g.textAlign=al;const words=text.split(" ");let line="";for(const wd of words){const test=line?line+" "+wd:wd;if(g.measureText(test).width>max&&line){g.fillText(line,x,y);line=wd;y+=lh}else line=test}if(line){g.fillText(line,x,y);y+=lh}return y}
 
-/* ---------- full report file ---------- */
+/* ---------- full report file in the same design as the screen ---------- */
+function snapHTML(){
+  const sec=app.querySelector(".report");const css=[...document.querySelectorAll("style")].map(x=>x.textContent).join("\n");if(!sec||!css)return null;
+  const c=sec.cloneNode(true);
+  c.querySelectorAll(".share,.noexp,.share-row,[data-act],.toast,.copybox,.ownbox,.own-row,.dstep .opts,#daOther,.banner .tiny").forEach(e=>e.remove());
+  c.querySelectorAll("details").forEach(d=>d.setAttribute("open",""));
+  c.querySelectorAll("input").forEach(i=>i.setAttribute("disabled",""));
+  const rtl=S.lang==="ar",code=VIEW?VIEW.code:buildCode(V,pastEntry?pastEntry.id:S.runId);
+  const brand=document.querySelector("header.top .brand");
+  const foot='<div class="card"><p class="tiny">'+esc(t("reportFile")+" · "+t("generated")+": "+today())+'</p><p class="tiny">'+esc(t("codeLbl"))+': <span dir="ltr">'+esc(code)+'</span></p></div>';
+  return '<!doctype html><html lang="'+S.lang+'" dir="'+(rtl?"rtl":"ltr")+'" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(t("brand")+" · "+t("reportFile"))+'</title>'+
+    '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Reem+Kufi:wght@500;600;700&display=swap"><style>'+css+'</style></head><body><div class="wrap"><header class="top">'+(brand?'<div class="brand">'+brand.innerHTML+"</div>":"")+"</header>"+c.outerHTML.replace("<section","<section").trim()+foot+"</div></body></html>";
+}
+window.addEventListener("beforeprint",()=>document.querySelectorAll(".report details").forEach(d=>d.open=true));
+/* ---------- older plain report file (fallback) ---------- */
 function reportHTML(R,st){
   const rtl=S.lang==="ar";const blAll=baseFor(st.stage),bl=blAll&&blAll.ok?blAll:null;const stg=C.STAGES.find(s=>s.key===st.stage);const P=C.PERSONAS[R.persona];const Q=C.QOL_WEIGHTS;const HB=C.HOURS_BACK;
   const row=(n,v,pct,lab,col)=>'<div class="r"><div class="h"><b>'+esc(n)+'</b><span>'+esc(v)+'</span></div><div class="b"><i style="width:'+pct+"%;background:"+col+'"></i></div><small>'+esc(lab)+"</small></div>";
@@ -880,13 +950,15 @@ function reportHTML(R,st){
   b+="<h2>"+esc(t("rPlan"))+"</h2><ul>"+R.plan.map(it=>"<li>"+esc(rtl?it.tip_ar:it.tip_en)+"</li>").join("")+(st.mine||[]).map(m=>"<li>"+esc(m.t)+" <small>("+esc(f(t("starts"),{d:fmtDay(m.d)}))+")</small></li>").join("")+"</ul><p>"+esc(t("tipLabel")+L(C.DIGITAL_TIP))+"</p>";
   b+="<h3>"+esc(t("answers"))+"</h3><table>"+C.ITEMS.map(it=>"<tr><td>"+esc(L(it))+"</td><td>"+esc((rtl?it.opts_ar:it.opts_en)[st.a[it.id]])+"</td></tr>").join("")+
     "<tr><td>"+esc(L(C.LIFE_SAT))+"</td><td>"+esc(of10(st.ls))+"</td></tr><tr><td>"+esc(L(C.ENERGY))+"</td><td>"+esc(of10(st.en))+"</td></tr><tr><td>"+esc(L(C.DRAIN))+"</td><td>"+esc(of10(st.dr))+"</td></tr></table>";
-  b+='<p class="m">'+esc(t("codeLbl")+": ")+'<span dir="ltr">'+esc(buildCode(st,pastEntry?pastEntry.id:S.runId))+'</span></p><p class="m">'+esc(t("retake"))+'</p><p class="m">'+esc(t("disclaimer"))+"</p>";
+  b+='<p class="m">'+esc(t("codeLbl")+": ")+'<span dir="ltr">'+esc(VIEW?VIEW.code:buildCode(st,pastEntry?pastEntry.id:S.runId))+'</span></p><p class="m">'+esc(t("retake"))+'</p><p class="m">'+esc(t("disclaimer"))+"</p>";
   return '<!doctype html><html lang="'+S.lang+'" dir="'+(rtl?"rtl":"ltr")+'"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(t("brand"))+"</title><style>body{font-family:'IBM Plex Sans Arabic','Segoe UI',Tahoma,sans-serif;max-width:720px;margin:24px auto;padding:0 16px;color:#14211C;background:#fff;line-height:1.7}.rlegend{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;font-size:13px;color:#5A6A62;margin:4px 0 12px}.rlegend span{display:inline-flex;align-items:center;gap:6px}.rlegend em{font-style:normal;font-weight:700;color:#A86A0C}h1{color:#175C4C;margin-bottom:0}h2{margin-top:28px;border-bottom:2px solid #DCEDE6;padding-bottom:4px}.m{color:#5A6A62;font-size:14px}.big{font-size:44px;font-weight:700;color:#175C4C;margin:8px 0}.big span{font-size:18px;color:#14211C;font-weight:600}.big.t{color:#B8730F}.big.q{color:#2A6A8C}.big.d{font-size:28px}.r{margin:10px 0}.h{display:flex;justify-content:space-between}.b{height:10px;background:#E9EFEA;border-radius:10px;overflow:hidden}.b i{display:block;height:100%}small{color:#5A6A62}table{border-collapse:collapse;width:100%;font-size:14px}td{border-bottom:1px solid #D6DFD9;padding:6px 4px;vertical-align:top}td:last-child{width:38%;font-weight:600}.s{background:#F6E1DF;padding:10px;border-radius:8px}</style></head><body>"+b+"</body></html>";
 }
 
 /* ---------- actions ---------- */
 function go(step){S.step=step;S.tried=false;save();render();window.scrollTo({top:0,behavior:"auto"})}
 function render(){header();
+  if(VIEWBAD){app.innerHTML='<section class="view"><div class="card"><p>'+esc(t("vwBad"))+'</p><div><a class="linkbtn" href="'+esc(location.pathname)+'">'+esc(t("vwOpen"))+"</a></div></div></section>";return}
+  if(VIEW){V=VIEW.st;return vReport()}
   if(S.view==="dash")return vDash();
   if(pastEntry)return vReport();
   V=S;
@@ -901,7 +973,7 @@ function render(){header();
 /* ---------- automatic saving to the field trial (through the relay into the KGC Form) ---------- */
 function updSave(){const e=document.getElementById("autosave");if(!e)return;e.className="autosave "+(caps.saveState||"wait");e.textContent=t(caps.saveState==="ok"?"autoOk":caps.saveState==="err"?"autoErr":"autoWait")}
 function autoSave(){
-  if(!C.RELAY||pastEntry||S.step!==REPORT||!S.runId)return;
+  if(VIEW||!C.RELAY||pastEntry||S.step!==REPORT||!S.runId)return;
   const code=buildCode(S,S.runId);let sent=fetchStore("ddl-sent");if(!sent||typeof sent!=="object")sent={};
   if(sent[S.runId]===code){caps.saveState="ok";updSave();return}
   if(caps.saving===code)return;caps.saving=code;caps.saveState="wait";updSave();
@@ -919,7 +991,7 @@ function partialCode(){
 }
 let lastPartial=null;
 function sendPartial(){
-  if(!C.RELAY||pastEntry||S.view!=="survey"||S.step<0||S.step>=REPORT||!S.stage)return;
+  if(VIEW||VIEWBAD||!C.RELAY||pastEntry||S.view!=="survey"||S.step<0||S.step>=REPORT||!S.stage)return;
   const code=partialCode();if(code===lastPartial)return;lastPartial=code;
   try{navigator.sendBeacon(C.RELAY,new Blob([JSON.stringify({code})],{type:"text/plain"}))}catch(e){}
 }
@@ -960,9 +1032,10 @@ app.addEventListener("click",async e=>{
   else if(act==="past"){const en=history().find(x=>String(x.id)===b.dataset.id);if(!en||!en.snap)return;pastEntry=en;V=Object.assign({},en.snap);render();window.scrollTo(0,0)}
   else if(act==="pastBack"){pastEntry=null;V=S;render();window.scrollTo(0,0)}
   else if(act==="clearHist"){if(!clearArmed){clearArmed=true;b.textContent=t("histConfirm");return}try{localStorage.removeItem("ddl-history")}catch(err){}clearArmed=false;pastEntry=null;V=S;keepScroll(render);toast("htoast",t("histCleared"))}
-  else if(act==="copy"){const txt=summaryText(compute(),V);try{await navigator.clipboard.writeText(txt);toast("toast",t("copied"))}catch(err){const box=document.getElementById("copybox");box.hidden=false;box.focus();box.select();toast("toast",t("copyFallback"))}}
+  else if(act==="print"){try{window.print()}catch(err){}}
+  else if(act==="copy"){const txt=VIEW?(document.getElementById("copybox")||{}).value||summaryText(compute(),V):summaryText(compute(),V);try{await navigator.clipboard.writeText(txt);toast("toast",t("copied"))}catch(err){const box=document.getElementById("copybox");box.hidden=false;box.focus();box.select();toast("toast",t("copyFallback"))}}
   else if(act==="png"||act==="html"){if(!caps.dl&&!STANDALONE){toast("toast",t("saveUnavailable"));return}
-    const R=compute();try{const data=act==="png"?await makeCard(R):reportHTML(R,V);const fn=act==="png"?"dignified-digital-life-card.png":"dignified-digital-life-report.html";
+    const R=compute();try{const data=act==="png"?await makeCard(R):(snapHTML()||reportHTML(R,V));const fn=(act==="png"?"dignified-digital-life-card":"dignified-digital-life-report")+(VIEW?"-"+VIEW.pid+"-"+VIEW.seq:"")+(act==="png"?".png":".html");
       if(caps.dl)await caps.dl.save({filename:fn,data});else nativeSave(fn,data);toast("toast",t("saved"))}
     catch(err){try{console.warn("save failed",err)}catch(e){}toast("toast",err&&err.code==="declined"?t("declined"):t("saveUnavailable"))}}
   else if(act==="pid"){const inp=document.getElementById("pidIn");const v=(inp&&inp.value||"").trim().toUpperCase();
@@ -974,7 +1047,7 @@ app.addEventListener("click",async e=>{
   else if(act==="ics"){const m=(S.mine||[]).find(x=>x.id===b.dataset.id);if(!m)return;const txt=icsText(m);
     try{if(caps.dl)await caps.dl.save({filename:"plan-step.ics",data:txt});else nativeSave("plan-step.ics",new Blob([txt],{type:"text/calendar;charset=utf-8"}));toast("otoast",t("calSaved"))}catch(err){toast("otoast",err&&err.code==="declined"?t("declined"):t("saveUnavailable"))}}
 });
-document.getElementById("langBtn").addEventListener("click",()=>{S.lang=S.lang==="ar"?"en":"ar";save();render()});
+document.getElementById("langBtn").addEventListener("click",()=>{S.lang=S.lang==="ar"?"en":"ar";if(!VIEW&&!VIEWBAD)save();render()});
 document.getElementById("dashBtn").addEventListener("click",()=>{S.view=S.view==="dash"?"survey":"dash";pastEntry=null;V=S;render()});
 function firstIncomplete(){for(let s=0;s<=6;s++){if(!complete(s))return s}return REPORT}
 
@@ -1012,7 +1085,11 @@ function vDash(){
 }
 
 /* ---------- boot ---------- */
-load();render();
+load();
+(function(){let q=null;try{q=new URLSearchParams(location.search).get("r")}catch(e){}
+  if(q){const d=decodeCode(q);if(d){VIEW=d;S.lang=d.lang;V=d.st}else VIEWBAD=true}})();
+render();
+if(VIEW){try{if(new URLSearchParams(location.search).get("print")==="1")(document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(()=>setTimeout(()=>window.print(),400))}catch(e){}}
 (async function(){
   if(!window.claude||!window.claude.use){
     /* hosted copy: the Forms link lives in config.json so it can change without touching this page */
