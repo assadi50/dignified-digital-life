@@ -161,7 +161,7 @@ function decode(code){
 let SRC="live",FILEDATA=null,FILENAME="",PARTIAL=[],LIVE=[],LIVEPART=[],LIVE_RAW=[],FILERAW=[],LIVE_AT=null,LIVE_ERR="",RELAY=RELAY_DEFAULT,KEY="";
 const REP=/DDLP-([0-9X]{38})-([A-Z2-9]{6})-S(\d)/;
 function seqPos(){let p=0;for(const [n,w] of C.CODE_FIELDS){if(n==="SEQ")return p;p+=w}return -1}
-function decodePartial(s){const m=REP.exec(s);if(!m)return null;const sp=seqPos();const q=m[1][sp];const c=/^-([A-Z0-9]{1,10})/.exec(s.slice(s.indexOf(m[0])+m[0].length));return {code:m[0]+(c?c[0]:""),pid:m[2],seq:q==="X"?1:+q,step:+m[3],cohort:c?c[1]:""}}
+function decodePartial(s){const m=REP.exec(s);if(!m)return null;const sp=seqPos();const q=m[1][sp];const c=/^-([A-Z0-9]{1,10})/.exec(s.slice(s.indexOf(m[0])+m[0].length));const sg=m[1][0]==="X"?null:(C.STAGES[+m[1][0]]||{}).key||null;return {code:m[0]+(c?c[0]:""),pid:m[2],seq:q==="X"?1:+q,step:+m[3],cohort:c?c[1]:"",stage:sg}}
 /* links to the full report on the site (same design as the participant sees) */
 function siteUrl(code,extra){return new URL("./?r="+encodeURIComponent(code)+(extra||""),location.href).href}
 function shareText(r){return ["تقرير بوصلة الحياة الرقمية الكريمة","رقم المشارك: "+r.pid+" · القياس رقم "+r.seq,"مؤشر التوازن: "+r0(r.idx)+" من 100","جودة الحياة: "+r0(r.qol)+" من 100","الرفاه WHO-5: "+r0(r.who)+" من 100","الاستنزاف: "+r.dr+" من 10",DK.map(k=>dimShort(k)+" "+r0(r.dims[k])).join(" | "),"","التقرير الكامل: "+siteUrl(r.code)].join("\n")}
@@ -341,7 +341,7 @@ function renderPerson(D){
 
 /* ---------- live results from the relay ---------- */
 const hhmm=d=>d.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"});
-function unfinished(){const done=new Set(rowsAll().filter(r=>r&&!r.bad).map(r=>r.pid+"|"+r.seq));return new Set(partsAll().filter(x=>!done.has(x.pid+"|"+x.seq)).map(x=>x.pid+"|"+x.seq)).size}
+function unfinished(){const fs=$("#fStage").value;const done=new Set(rowsAll().filter(r=>r&&!r.bad).map(r=>r.pid+"|"+r.seq));return new Set(partsAll().filter(x=>cohortOk(x)&&(fs==="all"||x.stage===fs)&&!done.has(x.pid+"|"+x.seq)).map(x=>x.pid+"|"+x.seq)).size}
 function banner(){const b=$("#banner");b.classList.remove("err");
   if(SRC==="file"){b.innerHTML="<b>نتائج من ملف Forms:</b> "+esc(FILENAME)+". يظهر كل مشارك برقمه فقط.";return}
   if(!KEY){b.classList.add("err");b.innerHTML='<b>النتائج المباشرة محمية بمفتاح خاص.</b> افتح اللوحة من الرابط الخاص الذي وصلك، أو الصق المفتاح هنا.<div class="keybox"><input id="keyIn" type="password" autocomplete="off" aria-label="مفتاح اللوحة" placeholder="مفتاح اللوحة"><button type="button" id="keyGo">افتح النتائج</button></div>'+(LIVE_ERR?'<p class="note">'+esc(LIVE_ERR)+"</p>":"");
