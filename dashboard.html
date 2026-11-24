@@ -204,7 +204,7 @@ function render(){
   $("#banner").innerHTML=SRC==="demo"
     ?"<b>بيانات تجريبية للعرض فقط.</b> 20 مشاركاً افتراضياً (15 مواطناً إماراتياً و5 مقيمين، من الجنسين ومن المراحل الحياتية الأربع) أجابوا على أسئلة البوصلة نفسها خمسة أسابيع متتالية. الجنس والجنسية والعمر جزء من شخصية كل مشارك افتراضي فقط، والبوصلة لا تسألها. تُحذف هذه البيانات قبل التجربة الحقيقية."
     :"<b>نتائج حقيقية من ملف Forms:</b> "+esc(FILENAME)+". الأسماء غير معروفة، ويظهر كل مشارك برقمه فقط.";
-  $("#srcInfo").textContent=rows.length+" قياساً · "+pids.length+" مشاركاً";
+  $("#srcInfo").textContent="المشاركون: "+pids.length+" · القياسات: "+rows.length;
   if(!rows.length){$("#kpis").innerHTML="";$("#main").innerHTML='<div class="card c12 empty">لا توجد قياسات صالحة لهذا الاختيار.</div>';return}
   /* KPIs: first vs latest check-in of each participant */
   const first=pids.map(p=>people[p][0]),last=pids.map(p=>people[p][people[p].length-1]);
@@ -212,7 +212,7 @@ function render(){
   const kp=(lb,f,l,fmt,good)=>{const has=fm.length>0;const d=has?(+fmt(l))-(+fmt(f)):0;const pos=good==="down"?d<0:d>0;
     return '<div class="kpi"><span class="lb">'+esc(lb)+'</span><span class="v num">'+fmt(has?l:avg(last.map(x=>x._v)))+"</span>"+(has?'<span class="d">أول قياس <span class="num">'+fmt(f)+"</span> · التغير <b class=\""+(pos||Math.abs(d)<.05?"":"neg")+' num">'+(d>0?"+":d<0?"−":"")+fmt(Math.abs(d))+"</b></span>":"")+"</div>"};
   const A=(arr,k)=>avg(arr.map(x=>x[k]));
-  $("#kpis").innerHTML='<div class="kpi"><span class="lb">المشاركون</span><span class="v num">'+pids.length+'</span><span class="d"><span class="num">'+rows.length+"</span> قياساً · "+(weeks.length?"حتى الأسبوع "+weeks[weeks.length-1]:"")+"</span></div>"+
+  $("#kpis").innerHTML='<div class="kpi"><span class="lb">المشاركون</span><span class="v num">'+pids.length+'</span><span class="d">القياسات: <span class="num">'+rows.length+"</span> · "+(weeks.length?"حتى الأسبوع "+weeks[weeks.length-1]:"")+"</span></div>"+
     kp("مؤشر التوازن (آخر قياس)",A(fm,"idx"),A(lm,"idx"),r0)+kp("جودة الحياة (آخر قياس)",A(fm,"qol"),A(lm,"qol"),r0)+kp("الرفاه WHO-5 (آخر قياس)",A(fm,"who"),A(lm,"who"),r0)+
     kp("الاستنزاف من 10 (آخر قياس)",A(fm,"dr"),A(lm,"dr"),r1,"down")+
     '<div class="kpi"><span class="lb">ساعات تعود إلى الحياة سنوياً</span><span class="v num">'+sum(last.map(x=>x.human)).toLocaleString("en-US")+'</span><span class="d">مجموع آخر قياس لكل مشارك</span></div>';
@@ -276,7 +276,7 @@ function render(){
     options:baseOpts({scales:Object.assign(baseOpts().scales,{y:Object.assign(baseOpts().scales.y,{min:0,max:100})}),plugins:Object.assign(baseOpts().plugins,{tooltip:Object.assign(baseOpts().plugins.tooltip,{callbacks:{title:c=>stRows[c[0].dataIndex].s.ar,label:c=>" "+c.dataset.label+": "+r0(c.parsed.y)}})})})});
   const hbar=(id,labs,data,fmt)=>{charts[id]=new Chart($("#"+id),{type:"bar",data:{labels:labs,datasets:[{label:"",data,backgroundColor:accent,borderRadius:{topLeft:4,bottomLeft:4},borderSkipped:"start",maxBarThickness:20,categoryPercentage:.8,barPercentage:.9}]},
     options:baseOpts({indexAxis:"y",layout:{padding:{left:8,right:4,top:4,bottom:0}},scales:{x:{reverse:true,grid:{color:css("--grid")},border:{display:false},ticks:{color:css("--muted"),precision:0,font:{family:"IBM Plex Sans Arabic",size:11}}},y:{position:"right",grid:{display:false},border:{color:css("--grid")},ticks:{color:css("--ink"),font:{family:"IBM Plex Sans Arabic",size:12}}}},
-      plugins:Object.assign(baseOpts().plugins,{tooltip:Object.assign(baseOpts().plugins.tooltip,{callbacks:{title:c=>c[0].label,label:c=>" "+(fmt?fmt(c.parsed.x):c.parsed.x+" قياساً")}})})})})};
+      plugins:Object.assign(baseOpts().plugins,{tooltip:Object.assign(baseOpts().plugins.tooltip,{callbacks:{title:c=>c[0].label,label:c=>" "+(fmt?fmt(c.parsed.x):"القياسات: "+c.parsed.x)}})})})})};
   hbar("cAct",C.ACTIONS.map(a=>a.noun_ar),cnt(rows,"act",C.ACTIONS.map(a=>a.key)));
   const tk=C.TASKS.map(t=>[t.ar,rows.filter(r=>r.task===t.key).length]).sort((a,b)=>b[1]-a[1]);hbar("cTask",tk.map(x=>x[0]),tk.map(x=>x[1]));
   const rk=C.REINVEST_KEYS.map(k=>[(C.T2.find(o=>o.key===k)||{}).ar||k,rows.filter(r=>r.rei===k).length]).sort((a,b)=>b[1]-a[1]);hbar("cRei",rk.map(x=>x[0]),rk.map(x=>x[1]));
@@ -326,7 +326,7 @@ $("#file").addEventListener("change",async e=>{
         d.t=tcol>=0?Date.parse(r[tcol])||0:0;out.push(d);break}})});
     if(!out.length){toast("لم أجد رموز نتائج صالحة في هذا الملف.","err");return}
     FILEDATA=out;FILENAME=fl.name;SRC="file";const o=$("#fSrc").querySelector('[value="file"]');o.disabled=false;$("#fSrc").value="file";selPid=null;
-    toast("تمت قراءة "+out.length+" رداً"+(bad?"، واستُبعد "+bad+" رمزاً غير صالح":"")+".","ok");render();
+    toast("الردود المقروءة: "+out.length+(bad?" · رموز غير صالحة استُبعدت: "+bad:""),"ok");render();
   }catch(err){toast(err.message==="lib"?"تعذّر تحميل أداة قراءة Excel. تحقق من الاتصال وأعد المحاولة.":"تعذّرت قراءة الملف. صدّر النتائج من Forms بصيغة Excel ثم أعد المحاولة.","err")}
   e.target.value="";
 });
