@@ -217,6 +217,10 @@ textarea.copybox{width:100%;min-height:120px;border:1px solid var(--line);border
 .tile .lb{font-size:12px;color:var(--muted)}
 .tile em{font-style:normal;font-size:11.5px;font-weight:700}
 .tile em.up{color:var(--good)} .tile em.down{color:var(--crit)}
+.tile .vs{font-size:12px;font-weight:600;color:var(--muted)} .tile .vs.up{color:var(--good)} .tile .vs.down{color:var(--crit)} .tile .vs b{font-size:13px;font-family:inherit}
+.rlegend{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;font-size:12.5px;color:var(--muted);margin:-4px 0 10px}
+.rlegend span{display:inline-flex;align-items:center;gap:6px}
+.rlegend em.demo{font-style:normal;font-weight:700;color:var(--warn,#A86A0C);border:1px solid currentColor;border-radius:999px;padding:0 7px;font-size:11px}
 .gapm{margin-top:8px}
 .gapm-track{position:relative;height:28px;border-radius:14px;background:var(--sunk);margin-top:26px}
 .gapm-span{position:absolute;top:0;bottom:0;background:var(--time-soft);border:2px dashed var(--time);border-radius:14px;box-sizing:border-box}
@@ -314,7 +318,7 @@ const T = {
   gapNames:{sat_gt_energy:"رضا أعلى من الطاقة",energy_gt_sat:"طاقة أعلى من الرضا",aligned:"متقاربان"},
   sumHead:"بوصلة الحياة الرقمية الكريمة",sumPersona:"نمطي",sumIndex:"مؤشر التوازن",sumTime:"عائد الوقت: {n} {u} في السنة تعود إلى حياتي",
   sumDecision:"قراري لهذا الأسبوع: {d}، ويعود وقتها إلى: {r}.",sumPlan:"خطتي لهذا الأسبوع:",
-  strongest:"الأقوى",weakest:"الأضعف",radarNote:"كلما اتسع الشكل واقترب من الحواف، كان توازنك أقوى. الحلقتان حول النقطتين تحددان أقوى بعد وأضعفه.",wShort:"الوزن {w}%",dStepT:"خطوة لحماية طاقتك (اختياري)",dStepQ:"اختر خطوة واحدة تبدأ بها، وستُضاف إلى خطتك للأيام السبعة القادمة.",other:"خطوة أخرى من اختياري",otherPh:"اكتب خطوتك باختصار",startQ:"متى تبدأ؟",sToday:"اليوم",sTomorrow:"غداً",sIn2:"بعد غد",sNextWeek:"بداية الأسبوع القادم",addToPlan:"أضفها إلى خطتي",dStepDone:"أُضيفت إلى خطتك للأيام السبعة القادمة.",pickOne:"اختر خطوة أولاً.",ownT:"أضف خطوة من اختيارك",ownPh:"مثال: أمشي مع أسرتي بعد العشاء",add:"أضف",starts:"تبدأ {d}",cal:"أضف إلى التقويم",remove:"احذف",ownMax:"أضفت ثلاث خطوات من اختيارك، وهذا يكفي لأسبوع واحد.",ownEmpty:"اكتب الخطوة أولاً.",mineLbl:"خطوة من اختيارك",fromDrain:"لحماية طاقتك",calDesc:"تذكير يومي لمدة سبعة أيام من خطتك في بوصلة الحياة الرقمية الكريمة.",calSaved:"حُفظ ملف التقويم. افتحه لإضافة التذكير.",histShareWa:"شارك سجلي عبر واتساب",histShareMail:"شارك سجلي عبر البريد",histShareNote:"السجل المشترك يتضمن جودة الحياة والاستنزاف، فشاركه مع من تثق به.",histSumHead:"سجل نتائجي في بوصلة الحياة الرقمية الكريمة",histLine:"{d}: التوازن {i}، جودة الحياة {q}، الاستنزاف {r} من 10",histDelta:"التغير منذ أول قياس: التوازن {i}، جودة الحياة {q}، الاستنزاف {r}",sumMine:"خطوات اخترتها:",
+  strongest:"الأقوى",weakest:"الأضعف",blYou:"نتيجتك",blBase:"متوسط مرحلتك · عدد المشاركين: {n}",blDemo:"بيانات تجريبية",blVs:"عن متوسط مرحلتك",blSame:"مثل متوسط مرحلتك",blWait:"المقارنة بمتوسط مرحلتك تظهر عندما يبلغ عدد المشاركين فيها {m}. العدد الحالي: {n}.",blNote:"المتوسط محسوب من نتائج مجمّعة فقط، ولا يُنشر جواب أي شخص.",radarNote:"كلما اتسع الشكل واقترب من الحواف، كان توازنك أقوى. الحلقتان حول النقطتين تحددان أقوى بعد وأضعفه.",wShort:"الوزن {w}%",dStepT:"خطوة لحماية طاقتك (اختياري)",dStepQ:"اختر خطوة واحدة تبدأ بها، وستُضاف إلى خطتك للأيام السبعة القادمة.",other:"خطوة أخرى من اختياري",otherPh:"اكتب خطوتك باختصار",startQ:"متى تبدأ؟",sToday:"اليوم",sTomorrow:"غداً",sIn2:"بعد غد",sNextWeek:"بداية الأسبوع القادم",addToPlan:"أضفها إلى خطتي",dStepDone:"أُضيفت إلى خطتك للأيام السبعة القادمة.",pickOne:"اختر خطوة أولاً.",ownT:"أضف خطوة من اختيارك",ownPh:"مثال: أمشي مع أسرتي بعد العشاء",add:"أضف",starts:"تبدأ {d}",cal:"أضف إلى التقويم",remove:"احذف",ownMax:"أضفت ثلاث خطوات من اختيارك، وهذا يكفي لأسبوع واحد.",ownEmpty:"اكتب الخطوة أولاً.",mineLbl:"خطوة من اختيارك",fromDrain:"لحماية طاقتك",calDesc:"تذكير يومي لمدة سبعة أيام من خطتك في بوصلة الحياة الرقمية الكريمة.",calSaved:"حُفظ ملف التقويم. افتحه لإضافة التذكير.",histShareWa:"شارك سجلي عبر واتساب",histShareMail:"شارك سجلي عبر البريد",histShareNote:"السجل المشترك يتضمن جودة الحياة والاستنزاف، فشاركه مع من تثق به.",histSumHead:"سجل نتائجي في بوصلة الحياة الرقمية الكريمة",histLine:"{d}: التوازن {i}، جودة الحياة {q}، الاستنزاف {r} من 10",histDelta:"التغير منذ أول قياس: التوازن {i}، جودة الحياة {q}، الاستنزاف {r}",sumMine:"خطوات اخترتها:",
   cardFoot:"للتأمل الذاتي وليس تشخيصاً",reportFile:"التقرير المفصل",generated:"تاريخ القياس",codeLbl:"رمز النتيجة",answers:"إجاباتك"},
  en:{brand:"Dignified Digital Life Compass",tag:"Proposal prototype · v2",lang:"العربية",
   eyebrow:"A 5 minute self check",h1:"Where does your time go, and how much comes back to you?",
@@ -366,7 +370,7 @@ const T = {
   gapNames:{sat_gt_energy:"Satisfaction above energy",energy_gt_sat:"Energy above satisfaction",aligned:"Close together"},
   sumHead:"Dignified Digital Life Compass",sumPersona:"My pattern",sumIndex:"Balance index",sumTime:"Time dividend: {n} {u} a year back to my life",
   sumDecision:"My decision this week: {d}, with the time going to: {r}.",sumPlan:"My plan this week:",
-  strongest:"Strongest",weakest:"Weakest",radarNote:"The wider the shape and the closer it gets to the edges, the stronger your balance. The rings mark your strongest and weakest areas.",wShort:"Weight {w}%",dStepT:"A step to protect your energy (optional)",dStepQ:"Pick one step to start with. It will be added to your plan for the next 7 days.",other:"Another step of my own",otherPh:"Write your step in a few words",startQ:"When will you start?",sToday:"Today",sTomorrow:"Tomorrow",sIn2:"In two days",sNextWeek:"Start of next week",addToPlan:"Add it to my plan",dStepDone:"Added to your plan for the next 7 days.",pickOne:"Pick a step first.",ownT:"Add a step of your own",ownPh:"For example: walk with my family after dinner",add:"Add",starts:"starts {d}",cal:"Add to calendar",remove:"Remove",ownMax:"You added three steps of your own, which is plenty for one week.",ownEmpty:"Write the step first.",mineLbl:"Your own step",fromDrain:"To protect your energy",calDesc:"A daily reminder for seven days from your plan in the Dignified Digital Life Compass.",calSaved:"Calendar file saved. Open it to add the reminder.",histShareWa:"Share my history on WhatsApp",histShareMail:"Share my history by email",histShareNote:"The shared history includes quality of life and drain, so share it with someone you trust.",histSumHead:"My results history: Dignified Digital Life Compass",histLine:"{d}: balance {i}, quality of life {q}, drain {r}/10",histDelta:"Change since the first check: balance {i}, quality of life {q}, drain {r}",sumMine:"Steps I chose:",
+  strongest:"Strongest",weakest:"Weakest",blYou:"You",blBase:"Your stage average · people: {n}",blDemo:"demo data",blVs:"vs your stage average",blSame:"Same as your stage average",blWait:"The comparison with your stage average appears once {m} people in your stage have taken part. So far: {n}.",blNote:"Averages come from pooled results only. Nobody's individual answers are published.",radarNote:"The wider the shape and the closer it gets to the edges, the stronger your balance. The rings mark your strongest and weakest areas.",wShort:"Weight {w}%",dStepT:"A step to protect your energy (optional)",dStepQ:"Pick one step to start with. It will be added to your plan for the next 7 days.",other:"Another step of my own",otherPh:"Write your step in a few words",startQ:"When will you start?",sToday:"Today",sTomorrow:"Tomorrow",sIn2:"In two days",sNextWeek:"Start of next week",addToPlan:"Add it to my plan",dStepDone:"Added to your plan for the next 7 days.",pickOne:"Pick a step first.",ownT:"Add a step of your own",ownPh:"For example: walk with my family after dinner",add:"Add",starts:"starts {d}",cal:"Add to calendar",remove:"Remove",ownMax:"You added three steps of your own, which is plenty for one week.",ownEmpty:"Write the step first.",mineLbl:"Your own step",fromDrain:"To protect your energy",calDesc:"A daily reminder for seven days from your plan in the Dignified Digital Life Compass.",calSaved:"Calendar file saved. Open it to add the reminder.",histShareWa:"Share my history on WhatsApp",histShareMail:"Share my history by email",histShareNote:"The shared history includes quality of life and drain, so share it with someone you trust.",histSumHead:"My results history: Dignified Digital Life Compass",histLine:"{d}: balance {i}, quality of life {q}, drain {r}/10",histDelta:"Change since the first check: balance {i}, quality of life {q}, drain {r}",sumMine:"Steps I chose:",
   cardFoot:"For self reflection, not a diagnosis",reportFile:"Full report",generated:"Date",codeLbl:"Result code",answers:"Your answers"}
 };
 const DIMCOL={family:"--fam",health:"--hea",social:"--soc",digital:"--dig"};
@@ -380,6 +384,12 @@ let V=S, pastEntry=null, clearArmed=false;
 const caps={db:null,user:null,dl:null,canWrite:false,isAdmin:false,pilotState:""};
 const STANDALONE=!(window.claude&&window.claude.use);
 let memPid=null;
+let BASE=null;
+function baseFor(stage){
+  if(!BASE||!BASE.stages||!BASE.stages[stage])return null;const b=BASE.stages[stage],n=Math.max(0,+b.n||0),m=Math.max(1,+BASE.min_n||20);
+  const ok=n>=m&&C.DIMENSIONS.every(d=>typeof b[d.key]==="number"&&b[d.key]>=0&&b[d.key]<=100);
+  return {n,m,ok,demo:!!BASE.demo,dims:b};
+}
 function nativeSave(filename,data){const blob=data instanceof Blob?data:new Blob([data],{type:"text/html;charset=utf-8"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(url);a.remove()},1500)}
 
 function t(k){return T[S.lang][k]}
@@ -564,7 +574,7 @@ function vDecision(){
   app.innerHTML=h+navRow(true)+"</section>";
 }
 function vReport(){
-  const st=V,R=compute(st);const stg=C.STAGES.find(s=>s.key===st.stage);const w=C.WEIGHTS[st.stage];const P=C.PERSONAS[R.persona];const ar=S.lang==="ar";
+  const st=V,R=compute(st);const stg=C.STAGES.find(s=>s.key===st.stage);const blAll=baseFor(st.stage),bl=blAll&&blAll.ok?blAll:null;const w=C.WEIGHTS[st.stage];const P=C.PERSONAS[R.persona];const ar=S.lang==="ar";
   const wtxt=C.DIMENSIONS.map(d=>(ar?d.short_ar:d.short_en)+" "+Math.round(w[d.key]*100)+"%").join(" · ");
   let h='<section class="view report">';
   if(pastEntry)h+='<div class="banner"><b>'+esc(f(t("pastBanner"),{d:pastEntry.date}))+'</b><button class="btn ghost" data-act="pastBack">'+esc(t("pastBack"))+"</button></div>";
@@ -586,7 +596,7 @@ function vReport(){
   const HB=C.HOURS_BACK;
   h+='<div class="card decision"><h3>'+esc(t("rDecision"))+'</h3><div class="head">'+esc(decisionText(R))+'</div><p>'+esc(t("decHow")+(ar?R.tip[0]:R.tip[1]))+'</p><p class="meta-line">'+esc(f(t("decTime"),{h:(ar?HB.opts_ar:HB.opts_en)[st.hrs],r:L(R.rei)}))+"</p></div>";
   // dimensions
-  h+='<div class="card"><h3>'+esc(t("rDims"))+'</h3><p class="tiny">'+esc(t("radarNote"))+'</p>'+radarSVG(R,w,PAL)+dimTiles(R)+gapMeter(R)+'<p class="meta-line">'+esc(f(t("gap"),{n:r0(R.gap)})+" "+(R.gap<20?t("gapLo"):R.gap<40?t("gapMid"):t("gapHi")))+"</p></div>";
+  h+='<div class="card"><h3>'+esc(t("rDims"))+'</h3><p class="tiny">'+esc(t("radarNote"))+'</p>'+radarSVG(R,w,PAL,bl)+(bl?blLegend(bl):"")+dimTiles(R,bl)+(bl?'<p class="tiny">'+esc(t("blNote"))+"</p>":blAll?'<p class="tiny">'+esc(f(t("blWait"),{m:blAll.m,n:blAll.n}))+"</p>":"")+gapMeter(R)+'<p class="meta-line">'+esc(f(t("gap"),{n:r0(R.gap)})+" "+(R.gap<20?t("gapLo"):R.gap<40?t("gapMid"):t("gapHi")))+"</p></div>";
   // time dividend
   h+='<div class="card time-card"><h3>'+esc(t("rTime"))+"</h3>";
   if(R.hours>0){
@@ -624,7 +634,7 @@ function extremes(R){
   const ks=C.DIMENSIONS.map(d=>d.key);if(R.gap<0.5)return {hi:null,lo:null};
   return {hi:ks.reduce((a,k)=>R.dims[k]>R.dims[a]?k:a,ks[0]),lo:R.weakest};
 }
-function radarSVG(R,w,pal){
+function radarSVG(R,w,pal,bl){
   /* a square web: the four areas sit on the corners, so labels get the full width above and below */
   const ar=S.lang==="ar",W=360,H=364,cx=180,cy=184,rad=132,ex=extremes(R),k2=Math.SQRT1_2;
   const ANG=ar?{family:-45,health:-135,social:135,digital:45}:{family:-135,health:-45,social:45,digital:135};
@@ -636,6 +646,7 @@ function radarSVG(R,w,pal){
   [25,50,75,100].forEach(g=>{s+='<polygon points="'+ring.map(k=>P(pt(k,g))).join(" ")+'" fill="none" stroke="'+pal.line+'" stroke-width="1.2"'+(g<100?' stroke-dasharray="3 4"':"")+"/>"});
   ks.forEach(k=>{const e=pt(k,100);s+='<line x1="'+cx+'" y1="'+cy+'" x2="'+e[0].toFixed(1)+'" y2="'+e[1].toFixed(1)+'" stroke="'+pal.line+'" stroke-width="1.2"/>'});
   [50,100].forEach(g=>{s+='<text x="'+cx+'" y="'+(cy-rad*k2*g/100-5).toFixed(1)+'" text-anchor="middle" font-size="11" fill="'+pal.muted+'">'+g+"</text>"});
+  if(bl)s+='<polygon points="'+ring.map(k=>P(pt(k,Math.max(bl.dims[k],3)))).join(" ")+'" fill="none" stroke="'+pal.ink+'" stroke-opacity=".7" stroke-width="2" stroke-dasharray="7 5" stroke-linejoin="round"/>';
   s+='<polygon points="'+ring.map(k=>P(pt(k,Math.max(R.dims[k],3)))).join(" ")+'" fill="'+pal.acc+'" fill-opacity=".16" stroke="'+pal.acc+'" stroke-width="2.5" stroke-linejoin="round"/>';
   ks.forEach(k=>{const p=pt(k,R.dims[k]);
     if(k===ex.hi||k===ex.lo)s+='<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="12" fill="none" stroke="'+(k===ex.hi?pal.good:pal.crit)+'" stroke-width="2.5"/>';
@@ -647,10 +658,15 @@ function radarSVG(R,w,pal){
     lines.forEach((l,i)=>{if(i>0)y+=l[4];s+='<text x="'+v[0].toFixed(1)+'" y="'+y.toFixed(1)+'" text-anchor="middle" font-size="'+l[1]+'" font-weight="'+l[2]+'" fill="'+l[3]+'">'+esc(l[0])+"</text>"})});
   return s+"</svg>";
 }
-function dimTiles(R){
+function blDelta(v,b){const d=Math.round(v-b);if(d===0)return {cls:"eq",txt:t("blSame")};return {cls:d>0?"up":"down",num:(d>0?"+":"\u2212")+Math.abs(d),txt:t("blVs")}}
+function blLegend(bl,file){
+  const sw=(dash,col)=>'<svg width="30" height="10" aria-hidden="true"><line x1="1" y1="5" x2="29" y2="5" stroke="'+col+'" stroke-width="2.5"'+(dash?' stroke-dasharray="6 4"':"")+'/></svg>';
+  return '<div class="rlegend"><span>'+sw(false,file?"#175C4C":"var(--accent)")+esc(t("blYou"))+'</span><span>'+sw(true,file?"#14211C":"var(--ink)")+esc(f(t("blBase"),{n:bl.n}))+(bl.demo?' <em class="demo">'+esc(t("blDemo"))+"</em>":"")+"</span></div>";
+}
+function dimTiles(R,bl){
   const ex=extremes(R);
   return '<div class="tiles">'+C.DIMENSIONS.map(d=>{const v=R.dims[d.key];const tg=d.key===ex.hi?' <em class="up">'+esc(t("strongest"))+'</em>':d.key===ex.lo?' <em class="down">'+esc(t("weakest"))+'</em>':"";
-    return '<div class="tile" style="--c:var('+DIMCOL[d.key]+')"><span class="nm">'+esc(L(d))+tg+'</span><b class="num">'+r0(v)+'</b><span class="lb">'+esc(L(dimLabel(v)))+'</span></div>'}).join("")+'</div>';
+    return '<div class="tile" style="--c:var('+DIMCOL[d.key]+')"><span class="nm">'+esc(L(d))+tg+'</span><b class="num">'+r0(v)+'</b><span class="lb">'+esc(L(dimLabel(v)))+'</span>'+(bl?(x=>'<span class="vs '+x.cls+'">'+(x.num?'<b class="num" dir="ltr">'+x.num+"</b> ":"")+esc(x.txt)+"</span>")(blDelta(v,bl.dims[d.key])):"")+'</div>'}).join("")+'</div>';
 }
 function gapMeter(R){
   const ks=C.DIMENSIONS.map(d=>d.key),vals=ks.map(k=>R.dims[k]),mn=Math.min(...vals),mx=Math.max(...vals);
@@ -796,7 +812,7 @@ function wrapText(g,text,x,y,max,lh,al){g.textAlign=al;const words=text.split(" 
 
 /* ---------- full report file ---------- */
 function reportHTML(R,st){
-  const rtl=S.lang==="ar";const stg=C.STAGES.find(s=>s.key===st.stage);const P=C.PERSONAS[R.persona];const Q=C.QOL_WEIGHTS;const HB=C.HOURS_BACK;
+  const rtl=S.lang==="ar";const blAll=baseFor(st.stage),bl=blAll&&blAll.ok?blAll:null;const stg=C.STAGES.find(s=>s.key===st.stage);const P=C.PERSONAS[R.persona];const Q=C.QOL_WEIGHTS;const HB=C.HOURS_BACK;
   const row=(n,v,pct,lab,col)=>'<div class="r"><div class="h"><b>'+esc(n)+'</b><span>'+esc(v)+'</span></div><div class="b"><i style="width:'+pct+"%;background:"+col+'"></i></div><small>'+esc(lab)+"</small></div>";
   const cols={family:"#B0435A",health:"#4A7F35",social:"#2A6A8C",digital:"#6556A3"};
   let b='<h1>'+esc(t("brand"))+'</h1><p class="m">'+esc(t("reportFile")+" · "+t("generated")+": "+today())+'</p>';
@@ -806,13 +822,13 @@ function reportHTML(R,st){
     '<p class="m">'+esc(f(t("uaeRef"),{v:C.UAE_LADDER_2026}))+"</p><h3>"+esc(t("satEnergy"))+"</h3><p>"+esc(L(C.GAP_READINGS[R.gapKey]))+'</p><p class="m">'+esc(L(C.GAP_NOTE))+"</p><p><b>"+esc(L(C.INSIGHTS[R.insight]))+"</b></p>"+(R.support?'<p class="s">'+esc(f(t("support"),{n:C.SUPPORT_LINE}))+"</p>":"")+'<p class="m">'+esc(L(C.QOL_NOTE))+"</p>";
   b+="<h2>"+esc(t("rDrain"))+"</h2>"+row(t("drainLbl"),of10(st.dr),st.dr*10,f(t("level"),{l:L(R.drainLevel)}),"#A86A0C")+row(t("energyAvail"),of10(st.en),st.en*10,"","#4A7F35")+"<p>"+esc(L(C.DRAIN_READINGS[R.drainKey]))+'</p><p class="m">'+esc(L(C.DRAIN_NOTE))+"</p>";
   b+="<h2>"+esc(t("rDecision"))+'</h2><p class="big d">'+esc(decisionText(R))+"</p><p>"+esc(t("decHow")+(rtl?R.tip[0]:R.tip[1]))+"</p><p>"+esc(f(t("decTime"),{h:(rtl?HB.opts_ar:HB.opts_en)[st.hrs],r:L(R.rei)}))+"</p>";
-  b+="<h2>"+esc(t("rDims"))+"</h2>"+'<div style="max-width:420px;margin:0 auto">'+radarSVG(R,C.WEIGHTS[st.stage],PAL_FILE)+"</div>"+C.DIMENSIONS.map(dd=>row(L(dd),String(r0(R.dims[dd.key])),r0(R.dims[dd.key]),L(dimLabel(R.dims[dd.key])),cols[dd.key])).join("")+'<p class="m">'+esc(f(t("gap"),{n:r0(R.gap)}))+"</p>";
+  b+="<h2>"+esc(t("rDims"))+"</h2>"+'<div style="max-width:420px;margin:0 auto">'+radarSVG(R,C.WEIGHTS[st.stage],PAL_FILE,bl)+(bl?blLegend(bl,true):"")+"</div>"+C.DIMENSIONS.map(dd=>row(L(dd),String(r0(R.dims[dd.key])),r0(R.dims[dd.key]),L(dimLabel(R.dims[dd.key]))+(bl?(x=>" · "+(x.num?x.num+" ":"")+x.txt)(blDelta(R.dims[dd.key],bl.dims[dd.key])):""),cols[dd.key])).join("")+(bl?'<p class="m">'+esc(t("blNote"))+"</p>":"")+'<p class="m">'+esc(f(t("gap"),{n:r0(R.gap)}))+"</p>";
   b+="<h2>"+esc(t("rTime"))+"</h2>"+(R.hours>0?"<p>"+esc(f(t("timeSaved"),{h:fmtH(R.hours),p:Math.round(R.share*100)}))+'</p><p class="big t">'+R.human+" <span>"+esc(hw(R.human)+" "+t("timeBigLabel"))+"</span></p>"+(R.lost>0?"<p>"+esc(f(t("timeLost"),{n:R.lost,u:hw(R.lost)}))+"</p>":""):"<p>"+esc(t("timeNone"))+"</p>");
   b+="<h2>"+esc(t("rPlan"))+"</h2><ul>"+R.plan.map(it=>"<li>"+esc(rtl?it.tip_ar:it.tip_en)+"</li>").join("")+(st.mine||[]).map(m=>"<li>"+esc(m.t)+" <small>("+esc(f(t("starts"),{d:fmtDay(m.d)}))+")</small></li>").join("")+"</ul><p>"+esc(t("tipLabel")+L(C.DIGITAL_TIP))+"</p>";
   b+="<h3>"+esc(t("answers"))+"</h3><table>"+C.ITEMS.map(it=>"<tr><td>"+esc(L(it))+"</td><td>"+esc((rtl?it.opts_ar:it.opts_en)[st.a[it.id]])+"</td></tr>").join("")+
     "<tr><td>"+esc(L(C.LIFE_SAT))+"</td><td>"+esc(of10(st.ls))+"</td></tr><tr><td>"+esc(L(C.ENERGY))+"</td><td>"+esc(of10(st.en))+"</td></tr><tr><td>"+esc(L(C.DRAIN))+"</td><td>"+esc(of10(st.dr))+"</td></tr></table>";
   b+='<p class="m">'+esc(t("codeLbl")+": ")+'<span dir="ltr">'+esc(buildCode(st,pastEntry?pastEntry.id:S.runId))+'</span></p><p class="m">'+esc(t("retake"))+'</p><p class="m">'+esc(t("disclaimer"))+"</p>";
-  return '<!doctype html><html lang="'+S.lang+'" dir="'+(rtl?"rtl":"ltr")+'"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(t("brand"))+"</title><style>body{font-family:'IBM Plex Sans Arabic','Segoe UI',Tahoma,sans-serif;max-width:720px;margin:24px auto;padding:0 16px;color:#14211C;background:#fff;line-height:1.7}h1{color:#175C4C;margin-bottom:0}h2{margin-top:28px;border-bottom:2px solid #DCEDE6;padding-bottom:4px}.m{color:#5A6A62;font-size:14px}.big{font-size:44px;font-weight:700;color:#175C4C;margin:8px 0}.big span{font-size:18px;color:#14211C;font-weight:600}.big.t{color:#B8730F}.big.q{color:#2A6A8C}.big.d{font-size:28px}.r{margin:10px 0}.h{display:flex;justify-content:space-between}.b{height:10px;background:#E9EFEA;border-radius:10px;overflow:hidden}.b i{display:block;height:100%}small{color:#5A6A62}table{border-collapse:collapse;width:100%;font-size:14px}td{border-bottom:1px solid #D6DFD9;padding:6px 4px;vertical-align:top}td:last-child{width:38%;font-weight:600}.s{background:#F6E1DF;padding:10px;border-radius:8px}</style></head><body>"+b+"</body></html>";
+  return '<!doctype html><html lang="'+S.lang+'" dir="'+(rtl?"rtl":"ltr")+'"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(t("brand"))+"</title><style>body{font-family:'IBM Plex Sans Arabic','Segoe UI',Tahoma,sans-serif;max-width:720px;margin:24px auto;padding:0 16px;color:#14211C;background:#fff;line-height:1.7}.rlegend{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;font-size:13px;color:#5A6A62;margin:4px 0 12px}.rlegend span{display:inline-flex;align-items:center;gap:6px}.rlegend em{font-style:normal;font-weight:700;color:#A86A0C}h1{color:#175C4C;margin-bottom:0}h2{margin-top:28px;border-bottom:2px solid #DCEDE6;padding-bottom:4px}.m{color:#5A6A62;font-size:14px}.big{font-size:44px;font-weight:700;color:#175C4C;margin:8px 0}.big span{font-size:18px;color:#14211C;font-weight:600}.big.t{color:#B8730F}.big.q{color:#2A6A8C}.big.d{font-size:28px}.r{margin:10px 0}.h{display:flex;justify-content:space-between}.b{height:10px;background:#E9EFEA;border-radius:10px;overflow:hidden}.b i{display:block;height:100%}small{color:#5A6A62}table{border-collapse:collapse;width:100%;font-size:14px}td{border-bottom:1px solid #D6DFD9;padding:6px 4px;vertical-align:top}td:last-child{width:38%;font-weight:600}.s{background:#F6E1DF;padding:10px;border-radius:8px}</style></head><body>"+b+"</body></html>";
 }
 
 /* ---------- actions ---------- */
@@ -922,6 +938,8 @@ load();render();
     /* hosted copy: the Forms link lives in config.json so it can change without touching this page */
     try{const r=await fetch("config.json",{cache:"no-store"});if(r.ok){const cfg=await r.json();
       if(cfg&&typeof cfg.forms_prefill_url==="string"&&cfg.forms_prefill_url.indexOf(C.FORMS.placeholder)>0){C.FORMS.prefill_url=cfg.forms_prefill_url;if(S.view==="survey"&&S.step===REPORT)keepScroll(render)}}}catch(e){}
+    /* stage averages (aggregates only) for the comparison on the report */
+    try{const r=await fetch("baseline.json",{cache:"no-store"});if(r.ok){const b=await r.json();if(b&&typeof b==="object"&&b.stages&&typeof b.stages==="object"){BASE=b;if(S.view==="survey"&&S.step===REPORT)keepScroll(render)}}}catch(e){}
     return;
   }
   try{caps.dl=await window.claude.use("downloads")}catch(e){}
