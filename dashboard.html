@@ -145,7 +145,10 @@ function decode(code){
 }
 
 /* ---------- data sources ---------- */
-let SRC="demo",FILEDATA=null,FILENAME="";
+let SRC="demo",FILEDATA=null,FILENAME="",PARTIAL=[];
+const REP=/DDLP-([0-9X]{38})-([A-Z2-9]{6})-S(\d)/;
+function seqPos(){let p=0;for(const [n,w] of C.CODE_FIELDS){if(n==="SEQ")return p;p+=w}return -1}
+function decodePartial(s){const m=REP.exec(s);if(!m)return null;const sp=seqPos();const q=m[1][sp];return {pid:m[2],seq:q==="X"?1:+q,step:+m[3]}}
 function demoRows(){return DEMO.responses.map(r=>Object.assign(decode(r.code)||{},{date:r.date}))}
 function personaOf(pid){return SRC==="demo"?DEMO.roster.find(p=>p.pid===pid):null}
 function label(pid){const p=personaOf(pid);return p?p.name_ar+" · "+p.nat:"مشارك "+pid}
@@ -215,6 +218,8 @@ function render(){
   $("#kpis").innerHTML='<div class="kpi"><span class="lb">المشاركون</span><span class="v num">'+pids.length+'</span><span class="d">القياسات: <span class="num">'+rows.length+"</span> · "+(weeks.length?"حتى الأسبوع "+weeks[weeks.length-1]:"")+"</span></div>"+
     kp("مؤشر التوازن (آخر قياس)",A(fm,"idx"),A(lm,"idx"),r0)+kp("جودة الحياة (آخر قياس)",A(fm,"qol"),A(lm,"qol"),r0)+kp("الرفاه WHO-5 (آخر قياس)",A(fm,"who"),A(lm,"who"),r0)+
     kp("الاستنزاف من 10 (آخر قياس)",A(fm,"dr"),A(lm,"dr"),r1,"down")+
+    (SRC==="file"?(()=>{const done=new Set(rowsAll().filter(r=>r&&!r.bad).map(r=>r.pid+"|"+r.seq));const un=new Set(PARTIAL.filter(x=>!done.has(x.pid+"|"+x.seq)).map(x=>x.pid+"|"+x.seq));
+      return '<div class="kpi"><span class="lb">بدأوا ولم يكملوا القياس</span><span class="v num">'+un.size+'</span><span class="d">آخر صفحة وصلوا إليها محفوظة دون أسماء</span></div>'})():"")+
     '<div class="kpi"><span class="lb">ساعات تعود إلى الحياة سنوياً</span><span class="v num">'+sum(last.map(x=>x.human)).toLocaleString("en-US")+'</span><span class="d">مجموع آخر قياس لكل مشارك</span></div>';
   /* weekly averages */
   const byW=k=>weeks.map(w=>avg(rows.filter(r=>r.seq===w).map(r=>r[k])));
@@ -319,13 +324,13 @@ $("#file").addEventListener("change",async e=>{
   const fl=e.target.files[0];if(!fl)return;toast("جارٍ القراءة...");
   try{
     if(typeof XLSX==="undefined")throw new Error("lib");
-    const wb=XLSX.read(await fl.arrayBuffer(),{type:"array",cellDates:true});const out=[];let bad=0;
+    const wb=XLSX.read(await fl.arrayBuffer(),{type:"array",cellDates:true});const out=[],part=[];let bad=0;
     wb.SheetNames.forEach(sn=>{const rows=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,raw:false,defval:""});
       const head=(rows[0]||[]).map(x=>String(x));const tcol=head.findIndex(x=>/Completion time|وقت الإكمال|Start time|وقت البدء/i.test(x));
-      rows.slice(1).forEach(r=>{for(const c of r){const s=String(c).toUpperCase().replace(/\s+/g,"");if(s.indexOf("DDL2-")<0)continue;const d=decode(s);if(!d)continue;if(d.bad){bad++;break}
+      rows.slice(1).forEach(r=>{for(const c of r){const s=String(c).toUpperCase().replace(/\s+/g,"");if(s.indexOf("DDLP-")>=0){const pp=decodePartial(s);if(pp)part.push(pp);break}if(s.indexOf("DDL2-")<0)continue;const d=decode(s);if(!d)continue;if(d.bad){bad++;break}
         d.t=tcol>=0?Date.parse(r[tcol])||0:0;out.push(d);break}})});
     if(!out.length){toast("لم أجد رموز نتائج صالحة في هذا الملف.","err");return}
-    FILEDATA=out;FILENAME=fl.name;SRC="file";const o=$("#fSrc").querySelector('[value="file"]');o.disabled=false;$("#fSrc").value="file";selPid=null;
+    FILEDATA=out;PARTIAL=part;FILENAME=fl.name;SRC="file";const o=$("#fSrc").querySelector('[value="file"]');o.disabled=false;$("#fSrc").value="file";selPid=null;
     toast("الردود المقروءة: "+out.length+(bad?" · رموز غير صالحة استُبعدت: "+bad:""),"ok");render();
   }catch(err){toast(err.message==="lib"?"تعذّر تحميل أداة قراءة Excel. تحقق من الاتصال وأعد المحاولة.":"تعذّرت قراءة الملف. صدّر النتائج من Forms بصيغة Excel ثم أعد المحاولة.","err")}
   e.target.value="";
