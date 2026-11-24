@@ -86,6 +86,13 @@ tr.pick{cursor:pointer} tr.pick:hover td{background:var(--sunk)} tr.sel td{backg
 .note{font-size:13px;color:var(--muted)}
 footer{margin-top:22px;font-size:13px;color:var(--muted)}
 footer p{margin:4px 0}
+.acts{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 12px}
+.acts a{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:9px;padding:7px 12px;min-height:40px;font-size:14px;font-weight:600;text-decoration:none}
+.acts a.go{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.acts a:hover{border-color:var(--accent)}
+a.rl{color:var(--accent);font-weight:600;text-decoration:none;white-space:nowrap}
+a.rl:hover{text-decoration:underline}
+#exportBtn{border-color:var(--accent);color:var(--accent);font-weight:600}
 .toast{font-size:13px;margin-inline-start:6px}
 .toast.err{color:var(--crit)} .toast.ok{color:var(--good)}
 </style>
@@ -102,6 +109,7 @@ footer p{margin:4px 0}
  <label>المجموعة <select id="fCohort"><option value="all">كل المجموعات</option></select></label>
  <label>البيانات <select id="fSrc"><option value="live">النتائج المباشرة</option><option value="file" disabled>ملف Forms المحمّل</option></select></label>
  <button type="button" id="refresh">↻ حدّث الآن</button>
+ <button type="button" id="exportBtn">⬇ حمّل كل السجلات (Excel)</button>
  <span class="filebtn">⬆ أو حمّل ملف نتائج Forms (Excel أو CSV)<input type="file" id="file" accept=".xlsx,.xls,.csv"></span>
  <span class="toast" id="toast" role="status"></span>
  <span class="src" id="srcInfo"></span>
@@ -110,6 +118,7 @@ footer p{margin:4px 0}
 <main class="grid" id="main"></main>
 <footer>
  <p>كل قياس يكتمل على البوصلة يُحفظ تلقائياً برمز نتيجة مجهول، وتصل نسخة منه إلى نموذج Microsoft Forms. اللوحة تقرأ الرموز المحفوظة كل دقيقتين، وتتحقق من صحة كل رمز (رقم التحقق)، ثم تحسب النتائج بالمعادلات نفسها المستخدمة في التقرير الشخصي.</p>
+ <p>ملف «كل السجلات» فيه ثلاث أوراق: «ردود Forms» بالترتيب نفسه لتصدير Forms (تُلصق في قالب التحليل من الخلية A4، أو تُحمّل هنا مرة أخرى)، و«السجلات المفصلة» بكل المؤشرات والإجابات ورابط التقرير لكل قياس، و«لم يكملوا».</p>
  <p>«رقم المشارك» يربط قياسات الشخص نفسه عبر الأسابيع دون اسم أو بريد. «الأسبوع» هو رقم القياس على جهاز المشارك.</p>
  <p>البوصلة لا تسأل عن الاسم أو البريد أو الجنس أو الجنسية أو العمر، لذلك يظهر كل مشارك برقمه فقط. الملف المحمّل يُعالج داخل متصفحك ولا يُرسل إلى أي مكان.</p>
 </footer>
@@ -149,10 +158,14 @@ function decode(code){
 }
 
 /* ---------- data sources ---------- */
-let SRC="live",FILEDATA=null,FILENAME="",PARTIAL=[],LIVE=[],LIVEPART=[],LIVE_AT=null,LIVE_ERR="",RELAY=RELAY_DEFAULT,KEY="";
+let SRC="live",FILEDATA=null,FILENAME="",PARTIAL=[],LIVE=[],LIVEPART=[],LIVE_RAW=[],FILERAW=[],LIVE_AT=null,LIVE_ERR="",RELAY=RELAY_DEFAULT,KEY="";
 const REP=/DDLP-([0-9X]{38})-([A-Z2-9]{6})-S(\d)/;
 function seqPos(){let p=0;for(const [n,w] of C.CODE_FIELDS){if(n==="SEQ")return p;p+=w}return -1}
-function decodePartial(s){const m=REP.exec(s);if(!m)return null;const sp=seqPos();const q=m[1][sp];return {pid:m[2],seq:q==="X"?1:+q,step:+m[3]}}
+function decodePartial(s){const m=REP.exec(s);if(!m)return null;const sp=seqPos();const q=m[1][sp];const c=/^-([A-Z0-9]{1,10})/.exec(s.slice(s.indexOf(m[0])+m[0].length));return {code:m[0]+(c?c[0]:""),pid:m[2],seq:q==="X"?1:+q,step:+m[3],cohort:c?c[1]:""}}
+/* links to the full report on the site (same design as the participant sees) */
+function siteUrl(code,extra){return new URL("./?r="+encodeURIComponent(code)+(extra||""),location.href).href}
+function shareText(r){return ["تقرير بوصلة الحياة الرقمية الكريمة","رقم المشارك: "+r.pid+" · القياس رقم "+r.seq,"مؤشر التوازن: "+r0(r.idx)+" من 100","جودة الحياة: "+r0(r.qol)+" من 100","الرفاه WHO-5: "+r0(r.who)+" من 100","الاستنزاف: "+r.dr+" من 10",DK.map(k=>dimShort(k)+" "+r0(r.dims[k])).join(" | "),"","التقرير الكامل: "+siteUrl(r.code)].join("\n")}
+function actsHTML(r){const tx=shareText(r);return '<div class="acts"><a class="go" target="_blank" rel="noopener" href="'+esc(siteUrl(r.code))+'">افتح التقرير المفصل</a><a target="_blank" rel="noopener" href="'+esc(siteUrl(r.code,"&print=1"))+'">اطبع أو احفظ PDF</a><a target="_blank" rel="noopener" href="https://wa.me/?text='+encodeURIComponent(tx)+'">أرسل عبر واتساب</a><a href="mailto:?subject='+encodeURIComponent("تقرير بوصلة الحياة الرقمية الكريمة · "+r.pid)+"&body="+encodeURIComponent(tx)+'">أرسل بالبريد</a></div>'}
 function label(pid){return "مشارك "+pid}
 function rowsAll(){return SRC==="live"?LIVE:(FILEDATA||[])}
 function partsAll(){return SRC==="live"?LIVEPART:PARTIAL}
@@ -248,8 +261,8 @@ function render(){
   h+='<div class="card c12" id="pCard"></div>';
   /* 6. participants table */
   const pr=pids.map(p=>{const a=people[p];return {p,a,f:a[0],l:a[a.length-1],d:r0(a[a.length-1].idx)-r0(a[0].idx)}}).sort((x,y)=>y.d-x.d);
-  h+='<div class="card c12"><h2>كل المشاركين</h2><p class="take">مرتبون حسب مقدار التحسن في مؤشر التوازن. اضغط على صف لعرض مسار صاحبه.</p><div class="tscroll max"><table><thead><tr><th>المشارك</th><th>المرحلة</th><th>القياسات</th><th>أول قياس</th><th>آخر قياس</th><th>التغير</th><th>المسار</th><th>جودة الحياة: أول ثم آخر</th></tr></thead><tbody>'+
-     pr.map(x=>{return '<tr class="pick'+(x.p===selPid?" sel":"")+'" data-pid="'+x.p+'" tabindex="0"><td>'+esc(label(x.p))+"</td><td>"+esc(stageName(x.f.stage))+'</td><td class="num">'+x.a.length+'</td><td class="num">'+r0(x.f.idx)+'</td><td class="num">'+r0(x.l.idx)+"</td><td>"+chg(x.d)+"</td><td>"+spark(weeks.map(w=>{const r=x.a.find(y=>y.seq===w);return r?r.idx:null}))+'</td><td class="num">'+r0(x.f.qol)+" → "+r0(x.l.qol)+"</td></tr>"}).join("")+"</tbody></table></div></div>";
+  h+='<div class="card c12"><h2>كل المشاركين</h2><p class="take">مرتبون حسب مقدار التحسن في مؤشر التوازن. اضغط على صف لعرض مسار صاحبه.</p><div class="tscroll max"><table><thead><tr><th>المشارك</th><th>المرحلة</th><th>القياسات</th><th>أول قياس</th><th>آخر قياس</th><th>التغير</th><th>المسار</th><th>جودة الحياة: أول ثم آخر</th><th>التقرير</th></tr></thead><tbody>'+
+     pr.map(x=>{return '<tr class="pick'+(x.p===selPid?" sel":"")+'" data-pid="'+x.p+'" tabindex="0"><td>'+esc(label(x.p))+"</td><td>"+esc(stageName(x.f.stage))+'</td><td class="num">'+x.a.length+'</td><td class="num">'+r0(x.f.idx)+'</td><td class="num">'+r0(x.l.idx)+"</td><td>"+chg(x.d)+"</td><td>"+spark(weeks.map(w=>{const r=x.a.find(y=>y.seq===w);return r?r.idx:null}))+'</td><td class="num">'+r0(x.f.qol)+" → "+r0(x.l.qol)+'</td><td><a class="rl" target="_blank" rel="noopener" href="'+esc(siteUrl(x.l.code))+'">افتح ↗</a></td></tr>'}).join("")+"</tbody></table></div></div>";
   /* 7. decisions */
   const cnt=(arr,k,keys)=>keys.map(x=>arr.filter(r=>r[k]===x).length);
   h+='<div class="card c4"><h2>قرارات الأسبوع</h2><p class="take">ماذا قرر المشاركون أن يفعلوا بمهمتهم المتكررة (كل القياسات)</p><div class="chart sm"><canvas id="cAct" role="img" aria-label="قرارات الأسبوع"></canvas></div></div>';
@@ -297,20 +310,21 @@ function render(){
     options:baseOpts({scales:Object.assign(baseOpts().scales,{y:Object.assign(baseOpts().scales.y,{min:0,max:100,ticks:Object.assign(baseOpts().scales.y.ticks,{callback:v=>v+"%"})})}),plugins:Object.assign(baseOpts().plugins,{tooltip:Object.assign(baseOpts().plugins.tooltip,{callbacks:{label:c=>" "+c.dataset.label+": "+r0(c.parsed.y)+"%"}})})})});
   renderPerson(D);
   document.querySelectorAll("tr.pick").forEach(tr=>{const go=()=>{selPid=tr.dataset.pid;document.querySelectorAll("tr.pick").forEach(x=>x.classList.toggle("sel",x===tr));renderPerson(D);$("#pCard").scrollIntoView({behavior:"smooth",block:"start"})};
-    tr.addEventListener("click",go);tr.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}})});
+    tr.addEventListener("click",e=>{if(e.target.closest("a"))return;go()});tr.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}})});
 }
 function renderPerson(D){
   kill("person");const {people,weeks}=D,pids=Object.keys(people);const a=people[selPid];if(!a)return;
   const f=a[0],l=a[a.length-1];
   let h='<h2>مسار مشارك عبر الأسابيع</h2><p class="take">الشخص نفسه، نتائج مختلفة كل أسبوع. التحسن يظهر بعد الأسبوع الذي يطبق فيه خطته.</p>';
   h+='<label class="note">اختر مشاركاً <select id="pSel">'+pids.map(p=>'<option value="'+p+'"'+(p===selPid?" selected":"")+">"+esc(label(p))+"</option>").join("")+"</select></label>";
-  h+='<p class="note">رقم المشارك: <span class="num">'+selPid+"</span> · المرحلة: "+esc(stageName(f.stage))+"</p>";
+  h+='<p class="note">رقم المشارك: <span class="num">'+selPid+"</span> · المرحلة: "+esc(stageName(f.stage))+(l.cohort?" · المجموعة: "+esc(l.cohort):"")+"</p>";
+  h+='<p class="note">التقرير الفردي لآخر قياس ('+esc(wkLabel(l.seq))+') بالتصميم نفسه الذي يراه المشارك:</p>'+actsHTML(l);
   const box=(t,x,y,fmt,down)=>'<div><span>'+esc(t)+'</span><b class="num">'+fmt(y)+"</b> "+(a.length>1?chg(down?(r0(x)-r0(y)):(r0(y)-r0(x))):"")+"</div>";
   h+='<div class="pk">'+box("مؤشر التوازن",f.idx,l.idx,r0)+box("جودة الحياة",f.qol,l.qol,r0)+box("WHO-5",f.who,l.who,r0)+'<div><span>الاستنزاف من 10</span><b class="num">'+l.dr+'</b> <span class="num" style="display:inline">('+f.dr+" → "+l.dr+")</span></div></div>";
   h+=legend(DK.map(k=>[dimShort(k),"var("+DVAR[k]+")"]))+'<div class="chart"><canvas id="cPerson" role="img" aria-label="أبعاد المشارك عبر الأسابيع"></canvas></div>';
-  h+="<details open><summary>القياسات الأسبوعية وقرار كل أسبوع</summary>"+tableHTML(["الأسبوع","المؤشر"].concat(DK.map(dimShort)).concat(["جودة الحياة","الاستنزاف","قرار الأسبوع","يعيد الوقت إلى"]),
+  h+="<details open><summary>القياسات الأسبوعية وقرار كل أسبوع</summary>"+tableHTML(["الأسبوع","المؤشر"].concat(DK.map(dimShort)).concat(["جودة الحياة","الاستنزاف","قرار الأسبوع","يعيد الوقت إلى","التقرير"]),
     a.map(r=>[esc(wkLabel(r.seq)),'<span class="num">'+r0(r.idx)+"</span>"].concat(DK.map(k=>'<span class="num">'+r0(r.dims[k])+"</span>")).concat(['<span class="num">'+r0(r.qol)+"</span>",'<span class="num">'+r.dr+"</span>",
-      esc(((C.ACTIONS.find(x=>x.key===r.act)||{}).noun_ar||"")+" "+((C.TASKS.find(x=>x.key===r.task)||{}).ar||"")),esc((C.T2.find(o=>o.key===r.rei)||{}).ar||"")])))+"</details>";
+      esc(((C.ACTIONS.find(x=>x.key===r.act)||{}).noun_ar||"")+" "+((C.TASKS.find(x=>x.key===r.task)||{}).ar||"")),esc((C.T2.find(o=>o.key===r.rei)||{}).ar||""),'<a class="rl" target="_blank" rel="noopener" href="'+esc(siteUrl(r.code))+'">افتح ↗</a>'])))+"</details>";
   $("#pCard").innerHTML=h;
   $("#pSel").addEventListener("change",e=>{selPid=e.target.value;document.querySelectorAll("tr.pick").forEach(x=>x.classList.toggle("sel",x.dataset.pid===selPid));renderPerson(D)});
   const ws=weeks.filter(w=>a.some(r=>r.seq===w));
@@ -343,8 +357,8 @@ async function loadLive(manual){if(!KEY||busy){render();return}busy=true;if(manu
   try{const r=await fetch(new URL("results",RELAY).href,{headers:{"X-Key":KEY},cache:"no-store"});
     if(r.status===401){KEY="";try{localStorage.removeItem("ddl-dash-key")}catch(e){};LIVE_ERR="المفتاح غير صحيح.";toast("","");busy=false;render();return}
     if(!r.ok)throw new Error("http "+r.status);const j=await r.json();const out=[],part=[];
-    (j.rows||[]).forEach(x=>{const c=String(x.c||"");if(c.startsWith("DDLP-")){const pp=decodePartial(c);if(pp)part.push(pp);return}const d=decode(c);if(!d||d.bad)return;d.t=Date.parse(x.t)||0;out.push(d)});
-    LIVE=out;LIVEPART=part;LIVE_AT=new Date();LIVE_ERR="";if(manual)toast("تم التحديث","ok");else toast("","");
+    (j.rows||[]).forEach(x=>{const c=String(x.c||"");if(c.startsWith("DDLP-")){const pp=decodePartial(c);if(pp){pp.t=Date.parse(x.t)||0;part.push(pp)}return}const d=decode(c);if(!d||d.bad)return;d.t=Date.parse(x.t)||0;out.push(d)});
+    LIVE=out;LIVEPART=part;LIVE_RAW=(j.rows||[]).map(x=>({c:String(x.c||""),t:Date.parse(x.t)||0}));LIVE_AT=new Date();LIVE_ERR="";if(manual)toast("تم التحديث","ok");else toast("","");
   }catch(e){LIVE_ERR="تحقق من الاتصال، وستعيد الصفحة المحاولة تلقائياً.";if(manual)toast("تعذّر التحديث","err")}
   busy=false;if(SRC==="live"){fillCohorts();render()}}
 function readKey(){const m=/[#&]k=([A-Za-z0-9]{8,64})/.exec(location.hash);
@@ -356,19 +370,43 @@ async function boot(){
   setInterval(()=>{if(SRC==="live"&&document.visibilityState==="visible")loadLive(false)},120000);
   document.addEventListener("visibilitychange",()=>{if(SRC==="live"&&document.visibilityState==="visible"&&LIVE_AT&&Date.now()-LIVE_AT>60000)loadLive(false)});
 }
+/* ---------- bulk download of every record ---------- */
+function exportAll(){
+  if(typeof XLSX==="undefined"){toast("تعذّر تحميل أداة Excel. تحقق من الاتصال وأعد المحاولة.","err");return}
+  const seen=new Set(),raw=(SRC==="live"?LIVE_RAW:FILERAW).filter(x=>{const k=x.c+"|"+x.t;if(seen.has(k))return false;seen.add(k);return true}).sort((a,b)=>a.t-b.t);
+  if(!raw.length){toast("لا توجد سجلات للتحميل بعد.","err");return}
+  const dt=t=>t?new Date(t):"";
+  const s1=[["ID","Start time","Completion time","Email","Name","رمز نتيجتك (يُعبّأ تلقائياً من الموقع، لا تعدّله)","الموافقة"]].concat(raw.map((x,i)=>[i+1,dt(x.t),dt(x.t),"anonymous","",x.c,"أوافق"]));
+  const uniq=new Set(),done=[];raw.forEach(x=>{if(!x.c.startsWith("DDL2-")||uniq.has(x.c))return;const d=decode(x.c);if(!d||d.bad)return;uniq.add(x.c);d.t=x.t;done.push(d)});
+  const lab=(arr,k)=>{const o=arr.find(o=>o.key===k)||{};return o.ar||o.noun_ar||""};
+  const h2=["رقم المشارك","المجموعة","المرحلة الحياتية","رقم القياس","التاريخ","مؤشر التوازن"].concat(DK.map(dimShort)).concat(["جودة الحياة","الرفاه WHO-5","الرضا عن الحياة (من 10)","الطاقة (من 10)","الاستنزاف (من 10)","ساعات وفرتها التقنية أسبوعياً","ساعات تعود إلى الحياة سنوياً","المهمة المختارة","قرار الأسبوع","يعيد الوقت إلى","أين ذهب الوقت الموفر"]).concat(C.ITEMS.map(i=>i.id+" (المستوى 0 إلى 3)")).concat(["لغة القياس","رابط التقرير","رمز النتيجة"]);
+  const s2=[h2].concat(done.map(d=>[d.pid,d.cohort,stageName(d.stage),d.seq,dt(d.t),r0(d.idx)].concat(DK.map(k=>r0(d.dims[k]))).concat([r0(d.qol),d.who,d.ls,d.en,d.dr,d.hours,d.human,lab(C.TASKS,d.task),lab(C.ACTIONS,d.act),lab(C.T2,d.rei),d.t2.map(k=>lab(C.T2,k)).join("، ")]).concat(C.ITEMS.map(i=>d.lv[i.id])).concat([d.lang===1?"الإنجليزية":"العربية",siteUrl(d.code),d.code])));
+  const pu=new Set(),parts=[];raw.forEach(x=>{if(!x.c.startsWith("DDLP-")||pu.has(x.c))return;const pp=decodePartial(x.c);if(!pp)return;pu.add(x.c);parts.push([pp.pid,pp.cohort,pp.seq,pp.step,dt(x.t),x.c])});
+  const s3=[["رقم المشارك","المجموعة","رقم القياس","آخر صفحة وصل إليها (من 6)","التاريخ","الرمز"]].concat(parts);
+  const wb=XLSX.utils.book_new();
+  const mk=(aoa,cols)=>{const ws=XLSX.utils.aoa_to_sheet(aoa,{cellDates:true,dateNF:"yyyy-mm-dd hh:mm"});ws["!cols"]=cols.map(w=>({wch:w}));return ws};
+  XLSX.utils.book_append_sheet(wb,mk(s1,[6,18,18,12,8,62,10]),"ردود Forms");
+  XLSX.utils.book_append_sheet(wb,mk(s2,h2.map((h,i)=>i===h2.length-1?62:i===h2.length-2?56:Math.max(10,Math.min(26,h.length+2)))),"السجلات المفصلة");
+  XLSX.utils.book_append_sheet(wb,mk(s3,[12,12,10,16,18,62]),"لم يكملوا");
+  wb.Workbook={Views:[{RTL:true}]};
+  const d=new Date(),ds=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+  XLSX.writeFile(wb,"سجلات_بوصلة_الحياة_الرقمية_الكريمة_"+ds+".xlsx");
+  toast("حُمّل الملف: "+done.length+" قياساً مكتملاً و"+parts.length+" غير مكتمل","ok");
+}
+$("#exportBtn").addEventListener("click",exportAll);
 /* ---------- Forms export upload ---------- */
 function toast(t,cls){const e=$("#toast");e.textContent=t;e.className="toast "+(cls||"")}
 $("#file").addEventListener("change",async e=>{
   const fl=e.target.files[0];if(!fl)return;toast("جارٍ القراءة...");
   try{
     if(typeof XLSX==="undefined")throw new Error("lib");
-    const wb=XLSX.read(await fl.arrayBuffer(),{type:"array",cellDates:true});const out=[],part=[];let bad=0;
+    const wb=XLSX.read(await fl.arrayBuffer(),{type:"array",cellDates:true});const out=[],part=[],raw=[];let bad=0;
     wb.SheetNames.forEach(sn=>{const rows=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,raw:false,defval:""});
       const head=(rows[0]||[]).map(x=>String(x));const tcol=head.findIndex(x=>/Completion time|وقت الإكمال|Start time|وقت البدء/i.test(x));
-      rows.slice(1).forEach(r=>{for(const c of r){const s=String(c).toUpperCase().replace(/\s+/g,"");if(s.indexOf("DDLP-")>=0){const pp=decodePartial(s);if(pp)part.push(pp);break}if(s.indexOf("DDL2-")<0)continue;const d=decode(s);if(!d)continue;if(d.bad){bad++;break}
-        d.t=tcol>=0?Date.parse(r[tcol])||0:0;out.push(d);break}})});
+      rows.slice(1).forEach(r=>{const tt=tcol>=0?Date.parse(r[tcol])||0:0;for(const c of r){const s=String(c).toUpperCase().replace(/\s+/g,"");if(s.indexOf("DDLP-")>=0){const pp=decodePartial(s);if(pp){pp.t=tt;part.push(pp);raw.push({c:pp.code,t:tt})}break}if(s.indexOf("DDL2-")<0)continue;const d=decode(s);if(!d)continue;if(d.bad){bad++;break}
+        d.t=tt;out.push(d);raw.push({c:d.code,t:tt});break}})});
     if(!out.length){toast("لم أجد رموز نتائج صالحة في هذا الملف.","err");return}
-    FILEDATA=out;PARTIAL=part;FILENAME=fl.name;SRC="file";fillCohorts();const o=$("#fSrc").querySelector('[value="file"]');o.disabled=false;$("#fSrc").value="file";selPid=null;
+    FILEDATA=out;PARTIAL=part;FILERAW=raw;FILENAME=fl.name;SRC="file";fillCohorts();const o=$("#fSrc").querySelector('[value="file"]');o.disabled=false;$("#fSrc").value="file";selPid=null;
     toast("الردود المقروءة: "+out.length+(bad?" · رموز غير صالحة استُبعدت: "+bad:""),"ok");render();
   }catch(err){toast(err.message==="lib"?"تعذّر تحميل أداة قراءة Excel. تحقق من الاتصال وأعد المحاولة.":"تعذّرت قراءة الملف. صدّر النتائج من Forms بصيغة Excel ثم أعد المحاولة.","err")}
   e.target.value="";
