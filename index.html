@@ -1,0 +1,782 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="قياس ذاتي في 5 دقائق: أين يذهب وقتك، وكم يعود منه إلى أسرتك وصحتك ومجتمعك، وما الذي يستنزف طاقتك.">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}</style>
+<title>بوصلة الحياة الرقمية الكريمة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Reem+Kufi:wght@500;600;700&display=swap">
+<style>
+/* Layout: one calm column, a journey of six short screens ending in a personal dossier. */
+:root{
+  --bg:#F3F6F3; --surface:#FFFFFF; --sunk:#E9EFEA; --ink:#14211C; --muted:#5A6A62; --line:#D6DFD9;
+  --accent:#175C4C; --accent-ink:#FFFFFF; --accent-soft:#DCEDE6;
+  --time:#B8730F; --time-soft:#F7EAD3;
+  --fam:#B0435A; --hea:#4A7F35; --soc:#2A6A8C; --dig:#6556A3;
+  --good:#2F7A4F; --warn:#A86A0C; --crit:#A63A3A; --crit-soft:#F6E1DF;
+  --f-display:"Reem Kufi","IBM Plex Sans Arabic","Segoe UI",Tahoma,sans-serif;
+  --f-body:"IBM Plex Sans Arabic","Segoe UI",Tahoma,"Noto Sans Arabic",sans-serif;
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1613; --surface:#16211D; --sunk:#1C2924; --ink:#E6EEEA; --muted:#9BAEA5; --line:#2A3A34;
+  --accent:#62C3A0; --accent-ink:#0B1411; --accent-soft:#1E3A31;
+  --time:#E9AC4C; --time-soft:#3A2C14;
+  --fam:#E58399; --hea:#93C67A; --soc:#73B6DA; --dig:#AFA2EA;
+  --good:#7BCB98; --warn:#E7B460; --crit:#F08C84; --crit-soft:#3B2220; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1613; --surface:#16211D; --sunk:#1C2924; --ink:#E6EEEA; --muted:#9BAEA5; --line:#2A3A34;
+  --accent:#62C3A0; --accent-ink:#0B1411; --accent-soft:#1E3A31;
+  --time:#E9AC4C; --time-soft:#3A2C14;
+  --fam:#E58399; --hea:#93C67A; --soc:#73B6DA; --dig:#AFA2EA;
+  --good:#7BCB98; --warn:#E7B460; --crit:#F08C84; --crit-soft:#3B2220; color-scheme:dark}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.7;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+.wrap{max-width:720px;margin-inline:auto}
+h1,h2,h3{font-family:var(--f-display);font-weight:600;line-height:1.35;text-wrap:balance;margin:0}
+p{margin:0}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:8px}
+.num{font-variant-numeric:tabular-nums}
+
+/* top bar */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:18px 14px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand svg{flex:none}
+.brand b{font-family:var(--f-display);font-weight:600;font-size:17px;line-height:1.3}
+.brand small{display:block;color:var(--muted);font-size:12px;letter-spacing:.02em}
+.top-actions{display:flex;gap:8px;align-items:center}
+.chip-btn{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 14px;font-size:14px;cursor:pointer}
+.chip-btn[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+
+/* progress */
+.progress{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-block:4px 22px}
+.progress span{height:6px;border-radius:6px;background:var(--line)}
+.progress span.done{background:var(--accent)}
+.progress span.now{background:var(--accent);opacity:.55}
+.step-label{color:var(--muted);font-size:13px;margin-bottom:6px;letter-spacing:.02em}
+
+/* intro */
+.hero{display:grid;gap:16px;padding-block:18px 8px}
+.eyebrow{color:var(--accent);font-weight:600;font-size:14px;letter-spacing:.03em}
+.hero h1{font-size:clamp(28px,6vw,40px)}
+.hero p.lede{font-size:17px;color:var(--ink);max-width:60ch}
+.facts{display:flex;flex-wrap:wrap;gap:8px}
+.facts span{background:var(--sunk);border-radius:999px;padding:4px 12px;font-size:14px}
+.cta-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.btn{border:0;border-radius:12px;padding:12px 22px;font-weight:600;cursor:pointer;background:var(--accent);color:var(--accent-ink);font-size:16px}
+.btn.ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.note{color:var(--muted);font-size:14px}
+
+.sample{margin-top:22px;border:1px dashed var(--line);border-radius:var(--r);padding:18px;display:grid;gap:12px;background:var(--surface)}
+.sample-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.tag{font-size:12px;border-radius:999px;padding:2px 10px;background:var(--sunk);color:var(--muted)}
+
+/* questions */
+.section-head{display:grid;gap:6px;margin-bottom:16px}
+.section-head h2{font-size:clamp(22px,4.6vw,28px)}
+.q{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin:0 0 14px;display:grid;gap:10px;min-width:0}
+.q-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.frame{font-size:12px;border-radius:999px;padding:2px 10px;background:var(--accent-soft);color:var(--accent);font-weight:600}
+.q-text{font-weight:600;font-size:16.5px}
+.q-ex{color:var(--muted);font-size:14px}
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.opts.cols1{grid-template-columns:1fr}
+.opt{position:relative;display:flex;align-items:center;gap:10px;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;min-width:0;background:var(--surface);font-size:15px;line-height:1.5}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .dot{flex:none;width:18px;height:18px;border-radius:50%;border:2px solid var(--muted)}
+.opt:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.opt:has(input:checked) .dot{border-color:var(--accent);background:radial-gradient(circle,var(--accent) 45%,transparent 50%)}
+.opt:has(input:focus-visible){outline:3px solid var(--accent);outline-offset:2px}
+.opt.sq .dot{border-radius:5px}
+.opt.sq:has(input:checked) .dot{background:var(--accent)}
+.lvl{flex:none;font-size:11px;color:var(--muted);width:16px;text-align:center}
+.who-grid .opts{grid-template-columns:repeat(3,minmax(0,1fr))}
+.ladder{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));gap:4px}
+.ladder label{display:grid;place-items:center;height:44px;border:1.5px solid var(--line);border-radius:10px;cursor:pointer;font-weight:600;background:var(--surface)}
+.ladder input{position:absolute;opacity:0;pointer-events:none}
+.ladder label:has(input:checked){background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.ladder label:has(input:focus-visible){outline:3px solid var(--accent);outline-offset:2px}
+.ladder-ends{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}
+.nav{display:flex;justify-content:space-between;gap:10px;margin-top:8px;align-items:center;flex-wrap:wrap}
+.warn-msg{color:var(--crit);font-size:14px}
+
+/* report */
+.report{display:grid;gap:18px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:grid;gap:14px;min-width:0}
+.card h3{font-size:19px}
+.persona{display:grid;gap:10px}
+.persona .who{font-size:13px;color:var(--muted)}
+.persona h2{font-size:clamp(26px,5.5vw,34px)}
+.score-row{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.dial{flex:none}
+.score-text{display:grid;gap:4px;min-width:0;flex:1}
+.band{display:inline-block;width:max-content;border-radius:999px;padding:3px 12px;font-weight:600;font-size:14px;background:var(--accent-soft);color:var(--accent)}
+.meta-line{color:var(--muted);font-size:14px}
+.dims{display:grid;gap:14px}
+.dim{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center}
+.dim .name{font-weight:600}
+.dim .val{font-weight:600}
+.bar{grid-column:1 / -1;height:10px;border-radius:10px;background:var(--sunk);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:10px}
+.dim .lab{grid-column:1 / -1;font-size:13px;color:var(--muted)}
+.time-card{background:var(--time-soft);border-color:transparent}
+.time-big{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.time-big b{font-family:var(--f-display);font-size:clamp(40px,9vw,56px);line-height:1;color:var(--time)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips span{font-size:13px;border-radius:999px;padding:2px 10px;background:var(--surface);border:1px solid var(--line)}
+.scale{position:relative;height:38px;margin-top:6px}
+.scale .track{position:absolute;inset-inline:0;top:14px;height:10px;border-radius:10px;background:var(--sunk)}
+.scale .fill{position:absolute;top:14px;height:10px;border-radius:10px;background:var(--accent);inset-inline-start:0}
+.scale .mark{position:absolute;top:6px;width:2px;height:26px;background:var(--ink)}
+.scale-legend{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.insight{border-inline-start:4px solid var(--accent);padding-inline-start:12px}
+.support{background:var(--crit-soft);border-radius:12px;padding:12px 14px;font-size:15px}
+.support b{white-space:nowrap}
+.plan{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.plan li{display:flex;gap:10px;align-items:flex-start}
+.plan .box{flex:none;width:22px;height:22px;border-radius:6px;border:2px solid var(--accent);margin-top:3px}
+.plan small{display:block;color:var(--muted);font-size:13px}
+.share{display:grid;gap:10px}
+.share-row{display:flex;flex-wrap:wrap;gap:8px}
+.share-row a,.share-row button{display:inline-flex;align-items:center;gap:8px;border-radius:12px;padding:10px 14px;font-weight:600;font-size:15px;text-decoration:none;cursor:pointer;border:1.5px solid var(--line);background:var(--surface);color:var(--ink)}
+.share-row .wa{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.toast{min-height:1.5em;font-size:14px;color:var(--accent)}
+textarea.copybox{width:100%;min-height:120px;border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--sunk);color:var(--ink);font:inherit;font-size:14px}
+.foot{color:var(--muted);font-size:13px;margin-top:6px}
+
+/* dashboard */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.kpi{background:var(--sunk);border-radius:12px;padding:12px;display:grid;gap:2px}
+.kpi b{font-family:var(--f-display);font-size:28px;line-height:1.2}
+.kpi span{font-size:13px;color:var(--muted)}
+.hbars{display:grid;gap:8px}
+.hbar{display:grid;grid-template-columns:minmax(90px,170px) minmax(0,1fr) 44px;gap:10px;align-items:center;font-size:14px}
+.hbar .t{height:10px;background:var(--sunk);border-radius:10px;overflow:hidden}
+.hbar .t i{display:block;height:100%;background:var(--accent);border-radius:10px}
+@media (max-width:480px){
+  .opts{grid-template-columns:1fr}
+  .who-grid .opts{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ladder{grid-template-columns:repeat(6,minmax(0,1fr))}
+  .hbar{grid-template-columns:minmax(80px,120px) minmax(0,1fr) 40px}
+}
+@media (prefers-reduced-motion:no-preference){
+  .bar i,.scale .fill{transition:width .6s ease}
+  .view{animation:rise .35s ease both}
+  @keyframes rise{from{transform:translateY(6px)}to{transform:none}}
+}
+
+/* v2 additions */
+.duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.duo>div{min-width:0}
+.sub{font-size:13px;color:var(--muted);margin-top:-6px}
+.parts{display:grid;gap:12px}
+.parts .dim .lab{font-size:12.5px}
+.reading{border-inline-start:4px solid var(--warn);padding-inline-start:12px}
+.reading.calm{border-inline-start-color:var(--good)}
+.tiny{font-size:12.5px;color:var(--muted)}
+.decision{background:var(--accent-soft);border-color:transparent}
+.decision .head{font-family:var(--f-display);font-size:clamp(20px,4.6vw,26px);font-weight:600;line-height:1.35;color:var(--accent)}
+.tbl-wrap{overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums}
+.tbl th,.tbl td{padding:8px 4px;border-bottom:1px solid var(--line);text-align:start;white-space:nowrap}
+.tbl th{font-weight:600;color:var(--muted);font-size:13px;white-space:normal;vertical-align:bottom}
+.tbl button{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:3px 8px;font-size:13px;cursor:pointer;color:var(--ink)}
+.deltas{display:flex;flex-wrap:wrap;gap:8px}
+.deltas span{border-radius:999px;padding:3px 12px;font-size:13.5px;background:var(--sunk)}
+.deltas .up{color:var(--good)} .deltas .down{color:var(--crit)}
+.code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.14em;font-weight:600;font-size:18px;direction:ltr;unicode-bidi:isolate}
+.pid-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pid-row input{border:1px solid var(--line);border-radius:10px;padding:8px 10px;width:9.5em;background:var(--surface);direction:ltr;text-transform:uppercase;letter-spacing:.1em}
+.banner{background:var(--time-soft);border-radius:12px;padding:12px 14px;display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.linkbtn{display:inline-flex;align-items:center;gap:8px;border-radius:12px;padding:12px 20px;font-weight:600;text-decoration:none;background:var(--accent);color:var(--accent-ink)}
+@media (max-width:520px){.duo{grid-template-columns:1fr}}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true">
+        <circle cx="17" cy="17" r="15" fill="none" stroke="var(--accent)" stroke-width="2"/>
+        <path d="M17 6 L20 17 L17 28 L14 17 Z" fill="var(--accent)"/>
+        <circle cx="17" cy="17" r="2.2" fill="var(--time)"/>
+      </svg>
+      <div><b id="brandName"></b><small id="brandTag"></small></div>
+    </div>
+    <div class="top-actions">
+      <button class="chip-btn" id="dashBtn" hidden></button>
+      <button class="chip-btn" id="langBtn" aria-label="Language"></button>
+    </div>
+  </header>
+  <main id="app" aria-live="polite"></main>
+</div>
+
+<script>
+const C = {"UAE_LADDER_2026":6.8,"SUPPORT_LINE":"800 4673 (HOPE)","STAGES":[{"key":"single","ar":"أعزب/عزباء، دون مسؤوليات رعاية","en":"Single, no caregiving duties"},{"key":"married_nokids","ar":"متزوج/ة، دون أبناء","en":"Married, no children"},{"key":"married_kids","ar":"متزوج/ة، ولديّ أبناء","en":"Married, with children"},{"key":"carer","ar":"غير متزوج/ة، وأرعى أفراداً من أسرتي","en":"Not married, caring for family members"}],"DIMENSIONS":[{"key":"family","ar":"الحضور الأسري وجودة العلاقات","short_ar":"الأسرة","en":"Family presence","short_en":"Family"},{"key":"health","ar":"الصحة الشخصية والتجدد","short_ar":"الصحة","en":"Health and renewal","short_en":"Health"},{"key":"social","ar":"التواصل الاجتماعي والعطاء","short_ar":"المجتمع","en":"Community and giving","short_en":"Community"},{"key":"digital","ar":"التوازن الرقمي واسترداد الوقت","short_ar":"التوازن الرقمي","en":"Digital balance and time","short_en":"Digital"}],"WEIGHTS":{"single":{"family":0.15,"health":0.35,"social":0.25,"digital":0.25},"married_nokids":{"family":0.25,"health":0.25,"social":0.2,"digital":0.3},"married_kids":{"family":0.35,"health":0.2,"social":0.15,"digital":0.3},"carer":{"family":0.3,"health":0.25,"social":0.2,"digital":0.25}},"ITEMS":[{"id":"F1","dim":"family","frame":"7d","ar":"خلال الأيام السبعة الماضية، كم يوماً قضيت وقتاً مع أسرتك أو أحبّتك دون هواتف أو شاشات؟","en":"In the past 7 days, on how many days did you spend time with family or loved ones without phones or screens?","opts_ar":["يوم واحد أو أقل","يومان إلى 3 أيام","4 إلى 5 أيام","6 إلى 7 أيام"],"opts_en":["One day or less","2 to 3 days","4 to 5 days","6 to 7 days"],"ex_ar":"وجبة مشتركة، حوار مع الوالدين، قراءة مع الأبناء","ex_en":"A shared meal, a talk with parents, reading with the kids","tip_ar":"اجعل وجبة واحدة يومياً بلا هواتف على الطاولة.","tip_en":"Make one meal a day phone free at the table."},{"id":"F2","dim":"family","frame":"7d","ar":"خلال الأيام السبعة الماضية، كم من الوقت خصصت باهتمام كامل لشخص قريب منك (شريك الحياة، الأبناء، الوالدان)؟","en":"In the past 7 days, how much fully focused time did you give someone close to you (spouse, children, parents)?","opts_ar":["تواصل سريع فقط وغير منتظم","15 إلى 29 دقيقة في بعض الأيام","30 إلى 44 دقيقة في معظم الأيام","45 دقيقة أو أكثر يومياً"],"opts_en":["Only quick, irregular contact","15 to 29 minutes on some days","30 to 44 minutes on most days","45 minutes or more every day"],"ex_ar":"متابعة الأبناء، حديث مع شريك الحياة، مساعدة أحد الوالدين","ex_en":"Checking in with the kids, a real talk with your spouse, helping a parent","tip_ar":"خصص 15 دقيقة قبل النوم لحديث بتركيز كامل مع شخص قريب منك.","tip_en":"Give someone close to you 15 minutes of full attention before bed."},{"id":"F3","dim":"family","frame":"7d","ar":"خلال الأيام السبعة الماضية، كم مرة بادرت أنت بالتواصل مع أقاربك أو بمساعدتهم؟","en":"In the past 7 days, how many times did you reach out to relatives or help them, on your own initiative?","opts_ar":["لم أبادر، أو عند الضرورة فقط","مرة واحدة","مرتان إلى 3 مرات","4 مرات أو أكثر"],"opts_en":["I didn't, or only when needed","Once","2 to 3 times","4 times or more"],"ex_ar":"زيارة، اتصال، توصيل أو قضاء حاجة","ex_en":"A visit, a call, a lift or an errand","tip_ar":"اتصل بأحد أقاربك هذا الأسبوع، أو زره نصف ساعة.","tip_en":"Call a relative this week, or visit for half an hour."},{"id":"H1","dim":"health","frame":"7d","ar":"خلال الأيام السبعة الماضية، كم يوماً مارست نشاطاً بدنياً لمدة 30 دقيقة على الأقل؟","en":"In the past 7 days, on how many days were you physically active for at least 30 minutes?","opts_ar":["لم أمارس أي يوم","يوم إلى 3 أيام","4 إلى 5 أيام","6 إلى 7 أيام"],"opts_en":["Not a single day","1 to 3 days","4 to 5 days","6 to 7 days"],"ex_ar":"مشي، سباحة، دراجة، تمارين منزلية","ex_en":"Walking, swimming, cycling, home workouts","tip_ar":"امشِ 20 دقيقة بعد العشاء، ثلاثة أيام هذا الأسبوع.","tip_en":"Walk for 20 minutes after dinner, three days this week."},{"id":"H2","dim":"health","frame":"7d","ar":"خلال الأيام السبعة الماضية، كيف كان نومك في معظم الليالي؟","en":"In the past 7 days, how did you sleep on most nights?","opts_ar":["أقل من 6 ساعات، بمواعيد غير منتظمة","نحو 6 ساعات، مع تفاوت كبير","7 إلى 8 ساعات، مع بعض التفاوت","7 إلى 9 ساعات، بمواعيد ثابتة"],"opts_en":["Under 6 hours, at irregular times","About 6 hours, very uneven","7 to 8 hours, somewhat uneven","7 to 9 hours, at steady times"],"ex_ar":"موعد نوم ثابت، إغلاق الشاشة قبل النوم، استراحة واعية","ex_en":"A steady bedtime, screens off before sleep, a mindful break","tip_ar":"ثبّت موعد نومك، وأطفئ الشاشات قبله بثلاثين دقيقة.","tip_en":"Keep a steady bedtime and turn screens off 30 minutes before it."},{"id":"H3","dim":"health","frame":"7d","ar":"خلال الأيام السبعة الماضية، كم من الوقت خصصت لنفسك في نشاط هادف (قراءة، تعلم، هواية، تأمل)؟","en":"In the past 7 days, how much time did you set aside for something meaningful for yourself (reading, learning, a hobby, reflection)?","opts_ar":["أقل من 10 دقائق، أو لا شيء","10 إلى 19 دقيقة في بعض الأيام","20 إلى 29 دقيقة في معظم الأيام","30 دقيقة أو أكثر يومياً"],"opts_en":["Under 10 minutes, or none","10 to 19 minutes on some days","20 to 29 minutes on most days","30 minutes or more every day"],"ex_ar":"قراءة، تعلم لغة أو مهارة، هواية، تأمل","ex_en":"Reading, learning a language or skill, a hobby, reflection","tip_ar":"خصص 15 دقيقة يومياً لقراءة أو لتعلم مهارة تحبها.","tip_en":"Set aside 15 minutes a day to read or learn a skill you enjoy."},{"id":"S1","dim":"social","frame":"7d","ar":"خلال الأيام السبعة الماضية، كم مرة تواصلت مع صديق أو زميل تواصلاً حقيقياً (لقاء، أو مكالمة مدتها 20 دقيقة أو أكثر)؟","en":"In the past 7 days, how many times did you truly connect with a friend or colleague (a meeting, or a call of 20 minutes or more)?","opts_ar":["رسائل سريعة فقط، أو لا تواصل","مرة واحدة","مرتان إلى 3 مرات","4 مرات أو أكثر"],"opts_en":["Quick messages only, or none","Once","2 to 3 times","4 times or more"],"ex_ar":"زيارة صديق، مكالمة ممتدة، مجلس أو نشاط جماعي","ex_en":"Visiting a friend, a long call, a majlis or group activity","tip_ar":"رتّب مكالمة طويلة أو لقاء مع صديق لم تره منذ مدة.","tip_en":"Set up a long call or a meetup with a friend you haven't seen in a while."},{"id":"S2","dim":"social","frame":"30d","ar":"خلال الشهر الماضي، كم مرة شاركت في نشاط مجتمعي أو لقاء جماعي (مجلس، فعالية، نادٍ، نشاط في الحي)؟","en":"In the past month, how many times did you take part in a community activity or gathering (a majlis, an event, a club, a neighborhood activity)?","opts_ar":["لم أشارك","مرة واحدة","مرتان إلى 3 مرات","أسبوعياً أو أكثر"],"opts_en":["Not at all","Once","2 to 3 times","Weekly or more"],"ex_ar":"مجلس، فعالية في الحي، نادٍ، نشاط جماعي","ex_en":"A majlis, a neighborhood event, a club, a group activity","tip_ar":"اختر مجلساً أو نشاطاً واحداً في حيّك تحضره هذا الشهر.","tip_en":"Pick one majlis or neighborhood activity to join this month."},{"id":"S3","dim":"social","frame":"30d","ar":"خلال الشهر الماضي، كم مرة قدمت عطاءً لغيرك خارج أسرتك (تطوع، صدقة، إرشاد، مساعدة جار)؟","en":"In the past month, how many times did you give to people outside your family (volunteering, charity, mentoring, helping a neighbor)?","opts_ar":["لم يحدث","مرة واحدة","مرتان إلى 3 مرات","أسبوعياً أو أكثر"],"opts_en":["Not at all","Once","2 to 3 times","Weekly or more"],"ex_ar":"صدقة، إرشاد، مساعدة جار، تطوع، مشاركة معرفة","ex_en":"Charity, mentoring, helping a neighbor, volunteering, sharing what you know","tip_ar":"قدّم عطاءً واحداً هذا الأسبوع: مساعدة جار، أو مشاركة معرفة، أو ساعة تطوع.","tip_en":"Give once this week: help a neighbor, share what you know, or volunteer for an hour."},{"id":"D1","dim":"digital","frame":"habit","ar":"عندما يتوفر لك وقت إضافي (بفضل التقنية أو غيرها)، أين يذهب في الغالب؟","en":"When you gain extra time (thanks to technology or anything else), where does it usually go?","opts_ar":["إلى شاشات أو عمل إضافي","جزء صغير منه (نحو الربع) لأسرتي أو صحتي أو تعلمي","نحو نصفه","ثلاثة أرباعه أو أكثر"],"opts_en":["To more screens or more work","A small part (about a quarter) to family, health or learning","About half of it","Three quarters or more"],"share":[0,0.25,0.5,0.75],"ex_ar":"30 دقيقة مشي، وجبة أسرية، قراءة أو زيارة","ex_en":"A 30 minute walk, a family meal, reading or a visit","tip_ar":"عندما توفر لك أداة ذكية وقتاً، احجزه فوراً في تقويمك لنشاط أسري أو صحي.","tip_en":"When a smart tool saves you time, book it in your calendar right away for family or health."},{"id":"D2","dim":"digital","frame":"7d","ar":"في يوم عادي من الأيام السبعة الماضية، كم من الوقت قضيت على الشاشات للترفيه، خارج العمل والدراسة؟","en":"On a typical day in the past 7 days, how much time did you spend on screens for entertainment, outside work and study?","opts_ar":["أكثر من 3 ساعات","من ساعتين إلى 3 ساعات","من ساعة إلى ساعتين","أقل من ساعة"],"opts_en":["More than 3 hours","2 to 3 hours","1 to 2 hours","Less than 1 hour"],"ex_ar":"تواصل اجتماعي، فيديو، ألعاب","ex_en":"Social media, video, games","tip_ar":"ضع حداً يومياً للتطبيقات الترفيهية من إعدادات هاتفك.","tip_en":"Set a daily limit for entertainment apps in your phone settings."},{"id":"D3","dim":"digital","frame":"7d","ar":"خلال الأيام السبعة الماضية، كم يوماً التزمت بأوقات خالية من الشاشات (مثل الوجبات، أو الساعة الأخيرة قبل النوم)؟","en":"In the past 7 days, on how many days did you keep screen free times (such as meals, or the last hour before bed)?","opts_ar":["لم ألتزم أي يوم","يوم إلى 3 أيام","4 إلى 5 أيام","6 إلى 7 أيام"],"opts_en":["Not a single day","1 to 3 days","4 to 5 days","6 to 7 days"],"ex_ar":"وضع عدم الإزعاج، هاتف خارج غرفة النوم، وجبات بلا أجهزة","ex_en":"Do Not Disturb, phone out of the bedroom, device free meals","tip_ar":"اجعل غرفة النوم ووقت الوجبات مناطق بلا أجهزة.","tip_en":"Make the bedroom and mealtimes device free zones."}],"TIME":{"T1":{"ar":"خلال الأيام السبعة الماضية، كم ساعة تقريباً وفّرت لك أدوات الذكاء الاصطناعي أو الأتمتة، في العمل أو المنزل؟","en":"In the past 7 days, roughly how many hours did AI or automation tools save you, at work or at home?","opts_ar":["لا أستخدمها، أو لم توفر وقتاً يُذكر","أقل من ساعة","1 إلى 3 ساعات","4 إلى 5 ساعات","6 ساعات أو أكثر"],"opts_en":["I don't use them, or no real time saved","Less than 1 hour","1 to 3 hours","4 to 5 hours","6 hours or more"],"hours":[0,0.5,2,4.5,7],"ex_ar":"تلخيص، مسودة رسالة، تنظيم موعد، تحليل بيانات، تذكير ذكي","ex_en":"Summaries, drafting a message, scheduling, data analysis, smart reminders"},"T2":{"ar":"إلى أين ذهب معظم هذا الوقت؟ (اختر كل ما ينطبق)","en":"Where did most of that time go? (choose all that apply)","opts":[{"key":"family","ar":"الأسرة","en":"Family","good":true},{"key":"health","ar":"الصحة والحركة","en":"Health and movement","good":true},{"key":"learning","ar":"التعلم والتطوير","en":"Learning","good":true},{"key":"giving","ar":"العطاء والمجتمع","en":"Giving and community","good":true},{"key":"rest","ar":"الراحة والهدوء","en":"Rest","good":true},{"key":"work","ar":"عمل إضافي","en":"More work","good":false},{"key":"screens","ar":"شاشات وترفيه رقمي","en":"More screens","good":false}]}},"WHO5":{"stem_ar":"خلال الأسبوعين الماضيين...","stem_en":"Over the last two weeks...","items_ar":["شعرت بالبهجة والمزاج الجيد","شعرت بالهدوء والاسترخاء","شعرت بالنشاط والحيوية","استيقظت وأنا أشعر بالانتعاش والراحة","كانت حياتي اليومية مليئة بأشياء تثير اهتمامي"],"items_en":["I have felt cheerful and in good spirits","I have felt calm and relaxed","I have felt active and vigorous","I woke up feeling fresh and rested","My daily life has been filled with things that interest me"],"opts_ar":["طوال الوقت","معظم الوقت","أكثر من نصف الوقت","أقل من نصف الوقت","بعض الوقت","ولا مرة"],"opts_en":["All of the time","Most of the time","More than half of the time","Less than half of the time","Some of the time","At no time"],"values":[5,4,3,2,1,0]},"BANDS":[{"min":90,"ar":"توازن مستدام","en":"Sustained balance","msg_ar":"وقتك يذهب بثبات إلى ما يهمك. هذا ما يعنيه التوازن في الحياة الرقمية.","msg_en":"Your time goes steadily to what matters to you. This is what balance in a digital life looks like."},{"min":80,"ar":"توازن عالٍ","en":"High balance","msg_ar":"معظم عاداتك مستقرة وذات معنى، مع فرص محدودة للتحسين.","msg_en":"Most of your habits are steady and meaningful, with a few chances to improve."},{"min":65,"ar":"توازن جيد","en":"Good balance","msg_ar":"لديك أساس قوي، وتثبيت عادتين إضافيتين سيرفع توازنك بوضوح.","msg_en":"You have a strong base. Locking in two more habits will lift your balance clearly."},{"min":50,"ar":"توازن مقبول","en":"Fair balance","msg_ar":"لديك بدايات جيدة. ركّز على عادتين يوميتين في بعدين مختلفين.","msg_en":"You have good starts. Focus on two daily habits in two different areas."},{"min":0,"ar":"إعادة توازن مطلوبة","en":"Time to rebalance","msg_ar":"وقتك يحتاج إلى إعادة توازن. ابدأ بخطوة صغيرة واحدة في النوم أو الحركة أو تقليل الشاشة.","msg_en":"Your time needs rebalancing. Start with one small step in sleep, movement or screen time."}],"DIM_LABELS":[{"min":80,"ar":"نقطة قوة","en":"Strength"},{"min":65,"ar":"جيد وقابل للتثبيت","en":"Good, ready to lock in"},{"min":50,"ar":"أولوية تحسين","en":"Priority to improve"},{"min":0,"ar":"ابدأ بخطوة صغيرة","en":"Start with a small step"}],"WHO_BANDS":[{"min":56,"ar":"رفاه جيد","en":"Good wellbeing"},{"min":29,"ar":"رفاه منخفض","en":"Low wellbeing"},{"min":0,"ar":"رفاه منخفض جداً","en":"Very low wellbeing"}],"PERSONAS":{"thriving":{"ar":"المتوازن المزدهر","en":"The Thriving Balancer","d_ar":"تمنح أسرتك وصحتك ومجتمعك نصيبها من وقتك، وتستخدم التقنية بوعي.","d_en":"You give your family, health and community their share of your time, and use technology with intent."},"starting":{"ar":"في بداية الرحلة","en":"Starting the Journey","d_ar":"كل الأبعاد تنتظر خطوتك الأولى، والخبر الجيد أن خطوة صغيرة تصنع فرقاً واضحاً.","d_en":"Every area is waiting for your first step, and the good news is that one small step makes a real difference."},"family":{"ar":"المنجز المشغول","en":"The Busy Achiever","d_ar":"تبني وتنجز، وأسرتك تنتظر نصيبها من وقتك.","d_en":"You build and deliver, and your family is waiting for its share of your time."},"health":{"ar":"المعطاء الذي ينسى نفسه","en":"The Giver Who Forgets Themselves","d_ar":"تمنح من حولك الكثير، وحان الوقت لتمنح نفسك وصحتك.","d_en":"You give a lot to the people around you. It is time to give some to yourself and your health."},"social":{"ar":"حارس الدائرة القريبة","en":"The Close Circle Keeper","d_ar":"دائرتك القريبة قوية، والمجتمع من حولك ينتظر حضورك.","d_en":"Your inner circle is strong, and the community around you is waiting for you."},"digital":{"ar":"المتصل دائماً","en":"The Always Connected","d_ar":"التقنية تمنحك الكثير، لكنها تأخذ من وقتك أكثر مما ينبغي.","d_en":"Technology gives you a lot, but it takes more of your time than it should."}},"INSIGHTS":{"aligned_high":{"ar":"عاداتك وشعورك متناغمان. حافظ على ما يعمل لديك.","en":"Your habits and how you feel are in tune. Keep doing what works."},"habits_ok_feel_low":{"ar":"عاداتك جيدة، لكن شعورك بالرفاه أقل مما تستحق. هذه إشارة تستحق الانتباه: تحدث مع شخص تثق به، ومع مختص إذا استمر هذا الشعور.","en":"Your habits are good, but you feel less well than you deserve. That is worth paying attention to: talk to someone you trust, and to a professional if it lasts."},"feel_ok_habits_low":{"ar":"تشعر بخير، وأمامك فرصة لتثبيت عادات تحمي هذا الشعور على المدى البعيد.","en":"You feel well, and you have a chance to build habits that protect that feeling for the long run."},"both_low":{"ar":"قد تمر بفترة ضاغطة. ابدأ بخطوة صغيرة واحدة هذا الأسبوع، ولا تتردد في طلب الدعم.","en":"You may be going through a demanding time. Start with one small step this week, and don't hesitate to ask for support."}},"DIGITAL_TIP":{"ar":"قبل أن تعتمد على إجابة أداة ذكاء اصطناعي، تحقق من مصدرها، ولا تُدخل فيها بيانات شخصية حساسة.","en":"Before you rely on an AI tool's answer, check the source, and never enter sensitive personal data into it."},"VERSION":2,"LIFE_SAT":{"ar":"إذا كانت 0 تعني أدنى مستوى و10 أعلى مستوى، كيف تقيّم حياتك بشكل عام اليوم؟","en":"If 0 is the lowest and 10 the highest, how would you rate your life overall today?","lo_ar":"أدنى مستوى","hi_ar":"أعلى مستوى","lo_en":"Lowest","hi_en":"Highest"},"ENERGY":{"ar":"كيف تقيّم مستوى طاقتك المتاحة للحياة اليومية اليوم؟","en":"How would you rate the energy you have available for daily life today?","lo_ar":"لا طاقة إطلاقاً","hi_ar":"طاقة كاملة","lo_en":"No energy at all","hi_en":"Full energy"},"DRAIN":{"ar":"خلال الأيام السبعة الماضية، إلى أي درجة استنزفت متطلبات العمل والمهام اليومية طاقتك؟","en":"In the past 7 days, how much did the demands of work and daily tasks drain your energy?","lo_ar":"لا تستنزفني إطلاقاً","hi_ar":"تستنزفني بشدة","lo_en":"Not at all","hi_en":"Severely"},"QOL_WEIGHTS":{"who5":0.4,"ls":0.3,"energy":0.3},"QOL_BANDS":[{"min":70,"ar":"جودة حياة مرتفعة","en":"High quality of life"},{"min":50,"ar":"جودة حياة متوسطة","en":"Moderate quality of life"},{"min":0,"ar":"جودة حياة منخفضة","en":"Low quality of life"}],"QOL_NOTE":{"ar":"مؤشر تجريبي للمبادرة. الأوزان أولية وتُعاير بعد التجربة الميدانية.","en":"An experimental index for the initiative. Weights are initial and will be calibrated after the field trial."},"GAP_THRESHOLD":3,"GAP_READINGS":{"sat_gt_energy":{"ar":"رضاك عن حياتك أعلى من طاقتك المتاحة لها. تقدّر حياتك، لكن طاقتك لا تكفي لتعيشها كما تريد. ابدأ بما يستهلك طاقتك هذا الأسبوع.","en":"You rate your life higher than the energy you have for it. You value your life, but your energy isn't enough to live it the way you want. Start with what is draining you this week."},"energy_gt_sat":{"ar":"طاقتك أعلى من رضاك عن حياتك. لديك طاقة تبحث عن وجهة، فوجّهها إلى ما يرفع رضاك: أسرتك، أو صحتك، أو هدف شخصي.","en":"Your energy is higher than your satisfaction with life. You have energy looking for a direction, so point it at what lifts your satisfaction: family, health or a personal goal."},"aligned":{"ar":"رضاك وطاقتك متقاربان، ولا توجد فجوة تستحق المراجعة الآن.","en":"Your satisfaction and energy are close, with no gap that needs review right now."}},"GAP_NOTE":{"ar":"قراءة تأملية تصميمية للمبادرة، وليست تشخيصاً أو حداً سريرياً.","en":"A reflective design reading for the initiative, not a diagnosis or clinical threshold."},"DRAIN_LEVELS":[{"min":7,"ar":"مرتفع","en":"High"},{"min":4,"ar":"متوسط","en":"Moderate"},{"min":0,"ar":"منخفض","en":"Low"}],"DRAIN_RULE":{"rel_min":6,"rel_gap":2,"high_min":7,"mod_min":4},"DRAIN_READINGS":{"vs_energy":{"ar":"الاستنزاف التشغيلي مرتفع مقارنة بالطاقة المتاحة. راجع ما يمكن تبسيطه أو أتمتته أو إيقافه لاستعادة مساحة أكبر للحياة.","en":"Operating drain is high compared with the energy you have. Review what you can simplify, automate or stop to win back more room for life."},"high":{"ar":"الاستنزاف مرتفع، وطاقتك ما زالت تغطيه. احمِ هذا التوازن بقرار واحد هذا الأسبوع قبل أن يميل.","en":"Drain is high, and your energy still covers it. Protect that balance with one decision this week before it tips."},"moderate":{"ar":"استنزاف متوسط. قرار صغير هذا الأسبوع يحافظ على طاقتك.","en":"Moderate drain. One small decision this week will protect your energy."},"low":{"ar":"الاستنزاف منخفض، ومتطلبات يومك في حدود طاقتك.","en":"Drain is low, and the demands of your day fit within your energy."}},"DRAIN_NOTE":{"ar":"مؤشر مستقل عن WHO-5، لأن مقياس الرفاه لا يقيس الإنهاك الوظيفي.","en":"Kept separate from WHO-5, because the wellbeing index doesn't measure work burnout."},"DECISION_INTRO":{"ar":"الهدف أن تخرج بقرار عملي واحد: مهمة متكررة ستبسّطها أو تؤتمتها أو توقفها هذا الأسبوع، والمكان الذي ستعيد إليه وقتها.","en":"The goal is one practical decision: a recurring task you will simplify, automate or stop this week, and where its time will go."},"TASK_Q":{"ar":"اختر مهمة متكررة تأخذ من وقتك أكثر مما تستحق.","en":"Pick a recurring task that takes more of your time than it deserves."},"ACTION_Q":{"ar":"ماذا ستفعل بها هذا الأسبوع؟","en":"What will you do with it this week?"},"HOURS_Q":{"ar":"كم من الوقت تتوقع أن يعيده إليك هذا القرار أسبوعياً؟","en":"How much time do you expect this decision to give back each week?"},"REINVEST_Q":{"ar":"أين ستعيد استثمار هذا الوقت؟","en":"Where will you reinvest that time?"},"TASKS":[{"key":"meetings","ar":"الاجتماعات","en":"Meetings"},{"key":"email","ar":"البريد الإلكتروني والرسائل","en":"Email and messages"},{"key":"reports","ar":"التقارير والعروض","en":"Reports and presentations"},{"key":"data","ar":"إدخال البيانات والمتابعة","en":"Data entry and follow-up"},{"key":"scheduling","ar":"تنسيق المواعيد","en":"Scheduling"},{"key":"errands","ar":"المعاملات والمشاوير","en":"Errands and paperwork"},{"key":"home","ar":"المهام المنزلية المتكررة","en":"Repetitive household tasks"},{"key":"scrolling","ar":"التصفح بلا هدف","en":"Aimless scrolling"}],"ACTIONS":[{"key":"simplify","ar":"أبسّطها","en":"Simplify it","verb_ar":"بسّط","verb_en":"Simplify","noun_ar":"تبسيط"},{"key":"automate","ar":"أؤتمتها","en":"Automate it","verb_ar":"أتمت","verb_en":"Automate","noun_ar":"أتمتة"},{"key":"stop","ar":"أوقفها","en":"Stop it","verb_ar":"أوقف","verb_en":"Stop","noun_ar":"إيقاف"}],"HOURS_BACK":{"opts_ar":["أقل من 30 دقيقة","30 إلى 60 دقيقة","ساعة إلى ساعتين","أكثر من ساعتين"],"opts_en":["Under 30 minutes","30 to 60 minutes","1 to 2 hours","More than 2 hours"],"hours":[0.25,0.75,1.5,2.5]},"REINVEST_KEYS":["family","health","learning","giving","rest"],"SUGGEST":{"meetings":{"simplify":["قلّص الاجتماع إلى 25 دقيقة، بجدول أعمال من ثلاث نقاط يُرسل مسبقاً.","Cut the meeting to 25 minutes, with a three point agenda sent in advance."],"automate":["دع أداة ذكاء اصطناعي تكتب المحضر والمهام، وترسلها تلقائياً بعد الاجتماع.","Let an AI tool write the minutes and action items and send them automatically after the meeting."],"stop":["ألغِ اجتماعاً متكرراً واحداً، واستبدله بتحديث مكتوب أسبوعي.","Cancel one recurring meeting and replace it with a weekly written update."]},"email":{"simplify":["افتح البريد في وقتين محددين يومياً بدلاً من المتابعة طوال اليوم.","Check email at two set times a day instead of all day long."],"automate":["أنشئ قواعد فرز تلقائية، واطلب ملخصاً يومياً للرسائل المهمة.","Set up automatic sorting rules and a daily summary of the messages that matter."],"stop":["ألغِ الاشتراك في النشرات والقوائم التي لا تقرؤها.","Unsubscribe from newsletters and lists you never read."]},"reports":{"simplify":["اختصر التقرير المتكرر في صفحة واحدة بقالب ثابت.","Shrink the recurring report to one page with a fixed template."],"automate":["اجعل التقرير يُبنى تلقائياً من البيانات، وراجعه فقط قبل إرساله.","Have the report build itself from the data, and only review it before sending."],"stop":["اسأل من يستلم التقرير إن كان يقرؤه، وأوقف ما لا يقرؤه أحد.","Ask the people who receive the report whether they read it, and stop what nobody reads."]},"data":{"simplify":["أدخل البيانات في نموذج واحد بدلاً من عدة ملفات.","Enter data in one form instead of several files."],"automate":["اربط النموذج بالجدول مباشرة، واجعل تذكيرات المتابعة آلية.","Connect the form straight to the sheet and automate follow-up reminders."],"stop":["أوقف إدخال أي بيانات لا يستخدمها أحد في قرار.","Stop entering any data that nobody uses for a decision."]},"scheduling":{"simplify":["حدد أوقاتاً ثابتة للمواعيد في أسبوعك بدلاً من التنسيق كل مرة.","Set fixed weekly slots for appointments instead of arranging each one."],"automate":["استخدم رابط حجز يختار منه الآخرون الوقت المناسب بأنفسهم.","Use a booking link so people pick a suitable time themselves."],"stop":["اعتذر عن المواعيد التي لا تحتاج حضورك، واطلب ملخصها.","Decline meetings that don't need you, and ask for a summary."]},"errands":{"simplify":["اجمع المشاوير في مشوار واحد أسبوعياً.","Batch your errands into one trip a week."],"automate":["أنجز المعاملات عبر التطبيقات الحكومية الرقمية، وفعّل التجديد والدفع التلقائي.","Use government apps for paperwork, and turn on auto renewal and auto pay."],"stop":["أوقف المشاوير التي يمكن أن يغني عنها التوصيل.","Stop the errands that delivery can replace."]},"home":{"simplify":["اطبخ لثلاثة أيام دفعة واحدة، واكتب قائمة مشتريات مشتركة للأسرة.","Cook for three days in one go, and keep one shared shopping list for the family."],"automate":["فعّل الطلب المتكرر للمشتريات الأساسية والتذكيرات المنزلية.","Set up recurring orders for basics and household reminders."],"stop":["توقف عن حمل كل المهام وحدك، ووزّعها على أفراد الأسرة.","Stop carrying every chore alone, and share them across the family."]},"scrolling":{"simplify":["انقل التطبيقات المشتتة من الشاشة الرئيسية لهاتفك.","Move distracting apps off your phone's home screen."],"automate":["فعّل حداً زمنياً يومياً وتنبيهاً عند تجاوزه.","Turn on a daily time limit with an alert when you pass it."],"stop":["احذف تطبيقاً واحداً يأخذ من وقتك أكثر مما يعطيك.","Delete one app that takes more time than it gives."]}},"CODE_PREFIX":"DDL2-","CODE_FIELDS":[["stage",1],["F1",1],["F2",1],["F3",1],["H1",1],["H2",1],["H3",1],["S1",1],["S2",1],["S3",1],["D1",1],["D2",1],["D3",1],["T1",1],["T2",7],["W1",1],["W2",1],["W3",1],["W4",1],["W5",1],["LS",2],["EN",2],["DR",2],["TASK",1],["ACT",1],["HRS",1],["REI",1],["SEQ",1],["LANG",1]],"PID_CHARS":"ABCDEFGHJKMNPQRSTUVWXYZ23456789","FORMS":{"prefill_url":"","placeholder":"DDLCODE"}};
+</script>
+<script>
+(function(){
+"use strict";
+const T = {
+ ar:{brand:"بوصلة الحياة الرقمية الكريمة",tag:"نموذج أولي للمقترح · الإصدار 2",lang:"English",
+  eyebrow:"قياس ذاتي في 5 دقائق",h1:"أين يذهب وقتك، وكم يعود منه إليك؟",
+  lede:"أجب عن 27 سؤالاً قصيراً عن أسبوعك، واحصل على تقرير شخصي يقرأ عاداتك وشعورك معاً: توازنك في أربعة أبعاد، وجودة حياتك اليوم، وما يستنزف طاقتك، والساعات التي تعيدها التقنية إليك، ثم قرار عملي واحد لهذا الأسبوع.",
+  facts:["27 سؤالاً","نحو 5 دقائق","دون اسم أو بريد"],start:"ابدأ القياس",resume:"تابع من حيث توقفت",restart:"ابدأ من جديد",
+  privacy:"إجاباتك تبقى على جهازك، ولا نطلب اسمك أو بريدك. هذا القياس للتأمل الذاتي وليس تشخيصاً صحياً أو نفسياً.",
+  example:"مثال توضيحي",exampleTitle:"شكل التقرير الذي ستحصل عليه",
+  exQol:"جودة الحياة",exDrain:"الاستنزاف",exDecision:"قرار الأسبوع: تبسيط الاجتماعات",
+  steps:["مرحلتك","الأسرة","الصحة","المجتمع","الوقت والتقنية","شعورك","قرار الأسبوع"],stepOf:"الخطوة {a} من {b}",
+  stageQ:"أيّ وصف يناسب مرحلتك الحياتية الآن؟",stageNote:"نستخدم مرحلتك لضبط وزن كل بعد في النتيجة، لا للمفاضلة بين الناس.",
+  frame:{"7d":"الأيام السبعة الماضية","30d":"الشهر الماضي","habit":"عادةً","14d":"الأسبوعان الماضيان","today":"اليوم"},
+  exLabel:"أمثلة: ",next:"التالي",back:"السابق",seeReport:"اعرض تقريري",missing:"أجب عن كل الأسئلة في هذه الصفحة للمتابعة.",
+  timeIntro:"هذا القسم يقيس الفكرة الأساسية في المقترح: كم وقتاً توفّره لك التقنية، وأين يذهب.",
+  feelIntro:"خمسة أسئلة من مقياس الرفاه WHO-5 المعتمد دولياً، ثم سؤالان عن رضاك عن حياتك وطاقتك اليوم.",
+  drainSection:"ما يستنزف طاقتك",decSection:"قرارك لهذا الأسبوع",
+  rTitle:"تقريرك الشخصي",personaOf:"نمطك",rIndex:"مؤشر التوازن",rIndexSub:"يقرأ عاداتك في أربعة أبعاد",outOf:"من 100",rStage:"مرحلتك",rWeights:"أوزان الأبعاد في مرحلتك",
+  rQol:"مؤشر جودة الحياة اليومية",rQolSub:"يقرأ شعورك: 40% رفاه، و30% رضا عن الحياة، و30% طاقة",
+  who:"مؤشر الرفاه (WHO-5)",ls:"الرضا عن الحياة",en:"الطاقة اليومية",weight:"الوزن {w}%",of10:"{v} من 10",
+  satEnergy:"الرضا والطاقة",uaeRef:"للاستئناس: متوسط تقييم الحياة في الإمارات {v} من 10 في تقرير السعادة العالمي 2026، بصيغة سؤال مختلفة.",
+  rDrain:"الاستنزاف التشغيلي",drainLbl:"الاستنزاف",energyAvail:"الطاقة المتاحة",level:"المستوى: {l}",
+  rDims:"أبعادك الأربعة",gap:"الفرق بين أقوى بعد وأضعفه: {n} نقطة.",gapLo:"الأبعاد متقاربة، وهذا توازن جيد.",gapMid:"تفاوت متوسط بين الأبعاد.",gapHi:"تفاوت واسع: بعد يأخذ من وقت بعد آخر.",
+  rTime:"عائد الوقت",timeSaved:"وفّرت لك التقنية نحو {h} أسبوعياً، وتعيد استثمار نحو {p}% من أي وقت إضافي فيما يهمك.",
+  timeBigLabel:"تعود إلى أسرتك وصحتك وتعلمك في السنة",timeLost:"ونحو {n} {u} في السنة تذهب إلى شاشات أو عمل إضافي.",
+  timeNone:"لا تستخدم أدوات الذكاء الاصطناعي حالياً. لو وفّرت لك ساعتين أسبوعياً وأعدت استثمار نصفهما، لكسبت 52 ساعة إضافية في السنة لأسرتك وصحتك.",
+  where:"أين ذهب الوقت المسترد:",
+  support:"إذا كان هذا الشعور يرافقك منذ مدة، فالتحدث مع مختص خطوة قوية. يمكنك الاتصال بخط الدعم النفسي الوطني على {n}، أو التحدث مع طبيبك.",
+  rDecision:"قرار الأسبوع",decTime:"الوقت المتوقع أن يعود إليك أسبوعياً: {h}، وسيذهب إلى: {r}.",decHow:"كيف تبدأ: ",
+  rPlan:"خطتك للأيام السبعة القادمة",planNote:"مبنية على أضعف ثلاثة سلوكيات في إجاباتك.",tipLabel:"للاستخدام المسؤول: ",
+  rHist:"سجل نتائجي",histFirst:"هذا أول قياس محفوظ على هذا الجهاز. أعد القياس بعد 30 يوماً لترى ما تغيّر.",histChange:"مقارنة بقياسك السابق ({d}):",
+  histCols:["التاريخ","التوازن","جودة الحياة","الاستنزاف",""],histOpen:"اعرض",histNote:"يُحفظ السجل على هذا الجهاز فقط، ولا يصل إلى أحد.",
+  histClear:"امسح سجلي من هذا الجهاز",histConfirm:"اضغط مرة أخرى لتأكيد المسح",histCleared:"مُسح السجل.",histCount:"لديك {n} قياسات محفوظة على هذا الجهاز.",histOne:"لديك قياس واحد محفوظ على هذا الجهاز.",
+  pastBanner:"تقرير محفوظ بتاريخ {d}",pastBack:"عودة",
+  dIdx:"التوازن",dQol:"جودة الحياة",dDrain:"الاستنزاف",
+  rShare:"شارك تقريرك",wa:"أرسل الملخص عبر واتساب",png:"احفظ بطاقة التقرير (صورة)",html:"احفظ التقرير المفصل",copy:"انسخ الملخص",mail:"افتح البريد بالملخص",
+  shareNote:"الملخص المشترك يتضمن التوازن وعائد الوقت وقرار الأسبوع وخطتك، ولا يتضمن نتائج الرفاه والاستنزاف. لمشاركة التقرير كاملاً بالبريد أو واتساب، احفظ التقرير المفصل ثم أرفقه.",
+  copied:"نُسخ الملخص.",copyFallback:"حدّد النص أدناه وانسخه.",saved:"حُفظ الملف.",declined:"لم يُحفظ الملف.",saveUnavailable:"الحفظ غير متاح في هذا العرض. انسخ الملخص بدلاً من ذلك.",
+  rPilot:"شارك في التجربة الميدانية",pilotFormP:"أرسل نتيجتك إلى فريق التجربة دون اسمك أو بريدك. يفتح الزر نموذج Microsoft Forms وفيه رمز نتيجتك جاهزاً، فاضغط «إرسال» فقط.",
+  pilotFormBtn:"أرسل نتيجتي إلى التجربة",pidLbl:"رمزك في التجربة",pidNote:"احتفظ بهذا الرمز. يربط قياسك الأول بقياسك بعد 30 يوماً دون أن يعرف أحد هويتك.",
+  pidChange:"لديك رمز من قياس سابق على جهاز آخر؟",pidSave:"استخدم هذا الرمز",pidBad:"الرمز 6 أحرف وأرقام، مثل K7M2Q9.",pidOk:"حُدّث رمزك.",
+  pilotP:"أضف نتيجتك إلى النتائج المجمّعة دون اسمك أو بريدك. نحفظ الدرجات فقط.",
+  pilotBtn:"أضف نتيجتي",pilotDone:"أُضيفت نتيجتك. شكراً لك.",pilotErr:"تعذّرت الإضافة: حسابك لا يملك صلاحية الإضافة إلى هذه الصفحة.",
+  retake:"أعد القياس بعد 30 يوماً لترى أثر قرارك وخطتك.",retakeBtn:"ابدأ قياساً جديداً",
+  disclaimer:"هذا القياس للتأمل الذاتي وليس تشخيصاً صحياً أو نفسياً. الأوزان والحدود أولية وتُعاير بعد التجربة الميدانية.",
+  dash:"النتائج المجمّعة",dashBack:"العودة إلى القياس",dashNote:"تظهر هذه الصفحة لمالك الموقع ومحرريه فقط. لا تتضمن النتائج أسماء أو عناوين بريد.",
+  dashEmpty:"لا توجد نتائج بعد. عندما يضغط المشاركون «أضف نتيجتي» في تقاريرهم، تظهر الأرقام هنا مباشرة.",
+  dashLoading:"جارٍ تحميل النتائج...",dashErr:"تعذّر تحميل النتائج.",
+  kN:"مشارك",kIdx:"متوسط مؤشر التوازن",kQol:"متوسط جودة الحياة",kDrain:"متوسط الاستنزاف (من 10)",kHours:"ساعة إنسانية سنوياً (المجموع)",
+  dBands:"توزيع مستويات التوازن",dDims:"متوسط الأبعاد",dStages:"المراحل الحياتية",dWhere:"أين يذهب الوقت المسترد",dActions:"قرارات الأسبوع",dGap:"الرضا مقابل الطاقة",
+  gapNames:{sat_gt_energy:"رضا أعلى من الطاقة",energy_gt_sat:"طاقة أعلى من الرضا",aligned:"متقاربان"},
+  sumHead:"بوصلة الحياة الرقمية الكريمة",sumPersona:"نمطي",sumIndex:"مؤشر التوازن",sumTime:"عائد الوقت: {n} {u} في السنة تعود إلى حياتي",
+  sumDecision:"قراري لهذا الأسبوع: {d}، ويعود وقتها إلى: {r}.",sumPlan:"خطتي لهذا الأسبوع:",
+  cardFoot:"للتأمل الذاتي وليس تشخيصاً",reportFile:"التقرير المفصل",generated:"تاريخ القياس",codeLbl:"رمز النتيجة",answers:"إجاباتك"},
+ en:{brand:"Dignified Digital Life Compass",tag:"Proposal prototype · v2",lang:"العربية",
+  eyebrow:"A 5 minute self check",h1:"Where does your time go, and how much comes back to you?",
+  lede:"Answer 27 short questions about your week and get a personal report that reads your habits and how you feel together: your balance across four areas, your quality of life today, what drains your energy, the hours technology gives back, and one practical decision for this week.",
+  facts:["27 questions","About 5 minutes","No name or email"],start:"Start the check",resume:"Pick up where you left off",restart:"Start over",
+  privacy:"Your answers stay on your device, and we never ask for your name or email. This is a self reflection tool, not a health or psychological diagnosis.",
+  example:"Example",exampleTitle:"What your report will look like",
+  exQol:"Quality of life",exDrain:"Drain",exDecision:"This week: simplify meetings",
+  steps:["You","Family","Health","Community","Time and tech","How you feel","This week"],stepOf:"Step {a} of {b}",
+  stageQ:"Which describes your life stage right now?",stageNote:"We use your stage to weight each area in your score, never to rank people.",
+  frame:{"7d":"Past 7 days","30d":"Past month","habit":"Usually","14d":"Past 2 weeks","today":"Today"},
+  exLabel:"For example: ",next:"Next",back:"Back",seeReport:"See my report",missing:"Answer every question on this page to continue.",
+  timeIntro:"This part measures the core idea of the proposal: how much time technology saves you, and where it goes.",
+  feelIntro:"Five questions from the internationally used WHO-5 Wellbeing Index, then two questions on your life satisfaction and energy today.",
+  drainSection:"What drains your energy",decSection:"Your decision for this week",
+  rTitle:"Your personal report",personaOf:"Your pattern",rIndex:"Balance index",rIndexSub:"Reads your habits across four areas",outOf:"out of 100",rStage:"Your stage",rWeights:"Area weights for your stage",
+  rQol:"Daily quality of life index",rQolSub:"Reads how you feel: 40% wellbeing, 30% life satisfaction, 30% energy",
+  who:"Wellbeing index (WHO-5)",ls:"Life satisfaction",en:"Daily energy",weight:"Weight {w}%",of10:"{v} / 10",
+  satEnergy:"Satisfaction and energy",uaeRef:"For reference: the UAE average life evaluation is {v} out of 10 in the World Happiness Report 2026, asked with a different question.",
+  rDrain:"Operating drain",drainLbl:"Drain",energyAvail:"Energy available",level:"Level: {l}",
+  rDims:"Your four areas",gap:"Gap between your strongest and weakest area: {n} points.",gapLo:"Your areas are close together, which is good balance.",gapMid:"A moderate gap between areas.",gapHi:"A wide gap: one area is taking time from another.",
+  rTime:"Your time dividend",timeSaved:"Technology saves you about {h} a week, and you put about {p}% of any extra time into what matters to you.",
+  timeBigLabel:"go back to family, health and learning each year",timeLost:"And about {n} {u} a year go to more screens or more work.",
+  timeNone:"You don't use AI tools right now. If they saved you two hours a week and you reinvested half, you would gain 52 extra hours a year for family and health.",
+  where:"Where your reclaimed time went:",
+  support:"If this feeling has been with you for a while, talking to a professional is a strong step. You can call the national mental support line on {n}, or speak with your doctor.",
+  rDecision:"Your decision this week",decTime:"Time you expect back each week: {h}, going to: {r}.",decHow:"How to start: ",
+  rPlan:"Your plan for the next 7 days",planNote:"Built from the three weakest habits in your answers.",tipLabel:"Use AI responsibly: ",
+  rHist:"My results history",histFirst:"This is the first check saved on this device. Take it again in 30 days to see what changed.",histChange:"Compared with your last check ({d}):",
+  histCols:["Date","Balance","Quality of life","Drain",""],histOpen:"Open",histNote:"Your history is saved on this device only and goes nowhere else.",
+  histClear:"Clear my history on this device",histConfirm:"Press again to confirm",histCleared:"History cleared.",histCount:"You have {n} checks saved on this device.",histOne:"You have one check saved on this device.",
+  pastBanner:"Saved report from {d}",pastBack:"Back",
+  dIdx:"Balance",dQol:"Quality of life",dDrain:"Drain",
+  rShare:"Share your report",wa:"Send the summary on WhatsApp",png:"Save the report card (image)",html:"Save the full report",copy:"Copy the summary",mail:"Open email with the summary",
+  shareNote:"The shared summary includes your balance, time dividend, weekly decision and plan. It leaves out wellbeing and drain. To share the full report by email or WhatsApp, save it and attach the file.",
+  copied:"Summary copied.",copyFallback:"Select the text below and copy it.",saved:"File saved.",declined:"The file was not saved.",saveUnavailable:"Saving isn't available in this view. Copy the summary instead.",
+  rPilot:"Join the field trial",pilotFormP:"Send your result to the trial team without your name or email. The button opens a Microsoft Form with your result code filled in, so you only press Submit.",
+  pilotFormBtn:"Send my result to the trial",pidLbl:"Your trial code",pidNote:"Keep this code. It links your first check to your check 30 days later without anyone knowing who you are.",
+  pidChange:"Have a code from an earlier check on another device?",pidSave:"Use this code",pidBad:"The code is 6 letters and numbers, like K7M2Q9.",pidOk:"Your code was updated.",
+  pilotP:"Add your result to the combined results, without your name or email. We keep scores only.",
+  pilotBtn:"Add my result",pilotDone:"Your result was added. Thank you.",pilotErr:"Couldn't add it: your account can't add results to this page.",
+  retake:"Take the check again in 30 days to see what your decision and plan changed.",retakeBtn:"Start a new check",
+  disclaimer:"This is a self reflection tool, not a health or psychological diagnosis. Weights and thresholds are initial and will be calibrated after the field trial.",
+  dash:"Combined results",dashBack:"Back to the check",dashNote:"Only the page owner and editors see this view. Results carry no names or emails.",
+  dashEmpty:"No results yet. When participants press \"Add my result\" in their report, the numbers appear here live.",
+  dashLoading:"Loading results...",dashErr:"Couldn't load the results.",
+  kN:"participants",kIdx:"Average balance index",kQol:"Average quality of life",kDrain:"Average drain (out of 10)",kHours:"human hours a year (total)",
+  dBands:"Balance levels",dDims:"Average by area",dStages:"Life stages",dWhere:"Where reclaimed time goes",dActions:"Weekly decisions",dGap:"Satisfaction vs energy",
+  gapNames:{sat_gt_energy:"Satisfaction above energy",energy_gt_sat:"Energy above satisfaction",aligned:"Close together"},
+  sumHead:"Dignified Digital Life Compass",sumPersona:"My pattern",sumIndex:"Balance index",sumTime:"Time dividend: {n} {u} a year back to my life",
+  sumDecision:"My decision this week: {d}, with the time going to: {r}.",sumPlan:"My plan this week:",
+  cardFoot:"For self reflection, not a diagnosis",reportFile:"Full report",generated:"Date",codeLbl:"Result code",answers:"Your answers"}
+};
+const DIMCOL={family:"--fam",health:"--hea",social:"--soc",digital:"--dig"};
+const SECTIONS=[null,"family","health","social","time","feel","decision"];
+const NSTEPS=7, REPORT=7;
+const app=document.getElementById("app");
+const BLANK=()=>({stage:null,a:{},t1:null,t2:[],who:[null,null,null,null,null],ls:null,en:null,dr:null,task:null,act:null,hrs:null,rei:null});
+let S=Object.assign({lang:"ar",step:-1,view:"survey",tried:false,runId:null},BLANK());
+let V=S, pastEntry=null, clearArmed=false;
+const caps={db:null,user:null,dl:null,canWrite:false,isAdmin:false,pilotState:""};
+const STANDALONE=!(window.claude&&window.claude.use);
+let memPid=null;
+function nativeSave(filename,data){const blob=data instanceof Blob?data:new Blob([data],{type:"text/html;charset=utf-8"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(url);a.remove()},1500)}
+
+function t(k){return T[S.lang][k]}
+function f(s,o){return s.replace(/\{(\w+)\}/g,(m,k)=>o[k])}
+function L(o){return o[S.lang==="ar"?"ar":"en"]}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function store(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function fetchStore(k){try{return JSON.parse(localStorage.getItem(k)||"null")}catch(e){return null}}
+function save(){store("ddl-draft-v2",S)}
+function load(){const d=fetchStore("ddl-draft-v2");if(d&&typeof d==="object"){S=Object.assign(S,d);S.view="survey";S.tried=false}V=S}
+function history(){const h=fetchStore("ddl-history");return Array.isArray(h)?h:[]}
+function today(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function snap(src){const o={};Object.keys(BLANK()).forEach(k=>o[k]=JSON.parse(JSON.stringify(src[k])));return o}
+
+/* ---------- scoring engine (mirrors the Excel model) ---------- */
+function compute(st){
+  st=st||V;
+  const w=C.WEIGHTS[st.stage]; const dims={};
+  C.DIMENSIONS.forEach(d=>{const its=C.ITEMS.filter(i=>i.dim===d.key);dims[d.key]=its.reduce((s,i)=>s+st.a[i.id]*100/3,0)/its.length});
+  const index=C.DIMENSIONS.reduce((s,d)=>s+w[d.key]*dims[d.key],0);
+  const band=C.BANDS.find(b=>index>=b.min-1e-9);
+  const vals=C.DIMENSIONS.map(d=>dims[d.key]);const mx=Math.max(...vals),mn=Math.min(...vals);const gap=mx-mn;
+  const order=C.DIMENSIONS.map((d,i)=>({k:d.key,v:dims[d.key],w:w[d.key],i}));
+  const weakest=order.slice().sort((a,b)=>a.v-b.v||b.w-a.w||a.i-b.i)[0].k;
+  let persona;
+  if(mn>=80-1e-9)persona="thriving";else if(index<50&&gap<25)persona="starting";else persona=weakest;
+  const hours=C.TIME.T1.hours[st.t1];const share=C.ITEMS.find(i=>i.id==="D1").share[st.a.D1];
+  const human=Math.round(hours*share*52),lost=Math.round(hours*(1-share)*52);
+  const who=st.who.reduce((s,i)=>s+C.WHO5.values[i],0)*4;
+  const whoBand=C.WHO_BANDS.find(b=>who>=b.min);
+  const Q=C.QOL_WEIGHTS;const qol=Q.who5*who+Q.ls*st.ls*10+Q.energy*st.en*10;
+  const qolBand=C.QOL_BANDS.find(b=>qol>=b.min-1e-9);
+  const g=st.ls-st.en;const gapKey=g>=C.GAP_THRESHOLD?"sat_gt_energy":g<=-C.GAP_THRESHOLD?"energy_gt_sat":"aligned";
+  const DRR=C.DRAIN_RULE;const dr=st.dr;
+  const drainKey=(dr>=DRR.rel_min&&dr-st.en>=DRR.rel_gap)?"vs_energy":dr>=DRR.high_min?"high":dr>=DRR.mod_min?"moderate":"low";
+  const drainLevel=C.DRAIN_LEVELS.find(b=>dr>=b.min);
+  const okFeel=who>52, okHab=index>=65;
+  const insight=okHab&&okFeel?"aligned_high":okHab?"habits_ok_feel_low":okFeel?"feel_ok_habits_low":"both_low";
+  const items=C.ITEMS.map((it,i)=>({it,l:st.a[it.id],w:w[it.dim],i}));
+  const plan=items.slice().sort((a,b)=>a.l-b.l||b.w-a.w||a.i-b.i).slice(0,3).map(x=>x.it);
+  const task=C.TASKS[st.task],act=C.ACTIONS[st.act],rei=reinvestOpt(st.rei);
+  const tip=C.SUGGEST[task.key][act.key];
+  return {dims,index,band,gap,weakest,persona,hours,share,human,lost,who,whoBand,qol,qolBand,gapKey,drainKey,drainLevel,insight,plan,support:who<=28,task,act,rei,tip,hrsBack:st.hrs};
+}
+function reinvestOpt(i){const k=C.REINVEST_KEYS[i];return C.TIME.T2.opts.find(o=>o.key===k)}
+function dimLabel(v){return C.DIM_LABELS.find(b=>v>=b.min-1e-9)}
+function r0(v){return Math.round(v)}
+function decisionText(R){const verb=S.lang==="ar"?R.act.noun_ar:R.act.verb_en;const tk=S.lang==="ar"?R.task.ar:R.task.en.charAt(0).toLowerCase()+R.task.en.slice(1);return verb+" "+tk}
+function of10(v){return f(t("of10"),{v})}
+
+/* ---------- result code for the field trial (decoded by the Excel template) ---------- */
+function getPid(){
+  let p=null;try{p=localStorage.getItem("ddl-pid")}catch(e){}
+  if(!p||!/^[A-Z2-9]{6}$/.test(p)){p=memPid||randomPid();memPid=p;try{localStorage.setItem("ddl-pid",p)}catch(e){}}
+  return p;
+}
+function randomPid(){const cs=C.PID_CHARS;let s="";const arr=new Uint32Array(6);try{crypto.getRandomValues(arr)}catch(e){for(let i=0;i<6;i++)arr[i]=Math.floor(Math.random()*1e9)}for(let i=0;i<6;i++)s+=cs[arr[i]%cs.length];return s}
+function cohort(){let c="";try{const q=new URLSearchParams(location.search).get("g");if(q)c=q}catch(e){}if(!c&&location.hash)c=location.hash.slice(1);c=(c||"").toUpperCase();return /^[A-Z0-9]{1,10}$/.test(c)?c:""}
+function seqOf(id){const h=history().slice().sort((a,b)=>a.id-b.id);const i=h.findIndex(x=>x.id===id);return Math.min(9,i<0?h.length+1:i+1)}
+function buildCode(st,id){
+  const v={stage:C.STAGES.findIndex(s=>s.key===st.stage),T1:st.t1,T2:C.TIME.T2.opts.map(o=>st.t2.includes(o.key)?1:0).join(""),
+    LS:st.ls,EN:st.en,DR:st.dr,TASK:st.task,ACT:st.act,HRS:st.hrs,REI:st.rei,SEQ:seqOf(id),LANG:S.lang==="ar"?0:1};
+  C.ITEMS.forEach(it=>v[it.id]=st.a[it.id]);st.who.forEach((x,k)=>v["W"+(k+1)]=C.WHO5.values[x]);
+  const digits=C.CODE_FIELDS.map(([n,w])=>String(v[n]).padStart(w,"0")).join("");
+  let chk=0;for(let i=0;i<digits.length;i++)chk+=(+digits[i])*(i+1);chk%=97;
+  const c=cohort();return C.CODE_PREFIX+digits+String(chk).padStart(2,"0")+"-"+getPid()+(c?"-"+c:"");
+}
+function formsUrl(code){const F=C.FORMS;if(!F||!F.prefill_url)return "";return F.prefill_url.split(F.placeholder).join(encodeURIComponent(code))}
+
+/* ---------- history (this device only) ---------- */
+function recordHistory(){
+  if(!S.runId)S.runId=Date.now();
+  const R=compute(S);let h=history();
+  const e={id:S.runId,date:today(),idx:r0(R.index),qol:r0(R.qol),dr:S.dr,human:R.human,snap:snap(S)};
+  const i=h.findIndex(x=>x.id===e.id);if(i>=0)h[i]=e;else h.push(e);
+  h.sort((a,b)=>a.id-b.id);if(h.length>20)h=h.slice(h.length-20);store("ddl-history",h);save();
+}
+
+/* ---------- rendering helpers ---------- */
+function header(){
+  document.documentElement.lang=S.lang;document.documentElement.dir=S.lang==="ar"?"rtl":"ltr";
+  document.title=t("brand");
+  document.getElementById("brandName").textContent=t("brand");
+  document.getElementById("brandTag").textContent=t("tag");
+  document.getElementById("langBtn").textContent=t("lang");
+  const db=document.getElementById("dashBtn");db.hidden=!caps.isAdmin;
+  db.textContent=S.view==="dash"?t("dashBack"):t("dash");db.setAttribute("aria-pressed",S.view==="dash"?"true":"false");
+}
+function progress(){
+  let h='<div class="step-label">'+esc(f(t("stepOf"),{a:S.step+1,b:NSTEPS}))+" · "+esc(t("steps")[S.step])+'</div><div class="progress" aria-hidden="true">';
+  for(let i=0;i<NSTEPS;i++)h+='<span class="'+(i<S.step?"done":i===S.step?"now":"")+'"></span>';
+  return h+"</div>";
+}
+function optList(name,opts,sel,cls,showLvl){
+  return '<div class="opts '+(cls||"")+'" role="radiogroup">'+opts.map((o,i)=>
+   '<label class="opt" for="'+name+"-"+i+'"><input type="radio" id="'+name+"-"+i+'" name="'+name+'" value="'+i+'"'+(sel===i?" checked":"")+'><span class="dot"></span>'+(showLvl?'<span class="lvl num">'+(i+1)+"</span>":"")+'<span>'+esc(o)+"</span></label>").join("")+"</div>";
+}
+function scale10(name,sel,lo,hi){
+  let h='<div class="ladder" role="radiogroup">';
+  for(let i=0;i<=10;i++)h+='<label for="'+name+"-"+i+'"><input type="radio" id="'+name+"-"+i+'" name="'+name+'" value="'+i+'"'+(sel===i?" checked":"")+'><span class="num">'+i+"</span></label>";
+  return h+'</div><div class="ladder-ends"><span>0 · '+esc(lo)+'</span><span>10 · '+esc(hi)+"</span></div>";
+}
+function qCard(frame,text,body,ex){return '<fieldset class="q"><div class="q-meta"><span class="frame">'+esc(t("frame")[frame])+'</span></div><div class="q-text">'+esc(text)+"</div>"+(ex?'<div class="q-ex">'+esc(ex)+"</div>":"")+body+"</fieldset>"}
+function itemCard(it){return qCard(it.frame,L(it),optList(it.id,S.lang==="ar"?it.opts_ar:it.opts_en,S.a[it.id],"",true),t("exLabel")+(S.lang==="ar"?it.ex_ar:it.ex_en))}
+function navRow(isLast){
+  return '<div class="nav"><button class="btn ghost" data-act="back">'+esc(t("back"))+'</button><span class="warn-msg" id="warn">'+(S.tried&&!complete()?esc(t("missing")):"")+'</span><button class="btn" data-act="next">'+esc(isLast?t("seeReport"):t("next"))+"</button></div>";
+}
+function complete(step){
+  const s=step==null?S.step:step;
+  if(s===0)return S.stage!=null;
+  if(s>=1&&s<=3){const d=SECTIONS[s];return C.ITEMS.filter(i=>i.dim===d).every(i=>S.a[i.id]!=null)}
+  if(s===4)return S.t1!=null&&["D1","D2","D3"].every(k=>S.a[k]!=null);
+  if(s===5)return S.who.every(v=>v!=null)&&S.ls!=null&&S.en!=null;
+  if(s===6)return S.dr!=null&&S.task!=null&&S.act!=null&&S.hrs!=null&&S.rei!=null;
+  return true;
+}
+function dial(v,col){
+  const r=34,c=2*Math.PI*r,off=c*(1-Math.max(0,Math.min(100,v))/100);
+  return '<svg class="dial" width="96" height="96" viewBox="0 0 96 96" role="img" aria-label="'+r0(v)+'/100"><circle cx="48" cy="48" r="'+r+'" fill="none" stroke="var(--sunk)" stroke-width="10"/><circle cx="48" cy="48" r="'+r+'" fill="none" stroke="var('+(col||"--accent")+')" stroke-width="10" stroke-linecap="round" stroke-dasharray="'+c.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'" transform="rotate(-90 48 48)"/><text x="48" y="55" text-anchor="middle" font-family="Reem Kufi, sans-serif" font-size="24" font-weight="600" fill="var(--ink)">'+r0(v)+"</text></svg>";
+}
+function bar(name,valTxt,pct,col,lab){return '<div class="dim"><span class="name">'+esc(name)+'</span><span class="val num">'+esc(valTxt)+'</span><div class="bar"><i style="width:'+Math.max(0,Math.min(100,pct)).toFixed(1)+"%;background:var("+col+')"></i></div>'+(lab?'<span class="lab">'+esc(lab)+"</span>":"")+"</div>"}
+
+/* ---------- views ---------- */
+function histTable(h,withOpen,curId){
+  const cols=t("histCols");
+  return '<div class="tbl-wrap"><table class="tbl"><thead><tr>'+cols.slice(0,withOpen?5:4).map(c=>"<th>"+esc(c)+"</th>").join("")+"</tr></thead><tbody>"+
+    h.slice().reverse().map(e=>"<tr><td>"+esc(e.date)+'</td><td class="num">'+e.idx+'</td><td class="num">'+e.qol+'</td><td class="num">'+esc(of10(e.dr))+"</td>"+(withOpen?"<td>"+(e.id===curId?"":'<button data-act="past" data-id="'+e.id+'">'+esc(t("histOpen"))+"</button>")+"</td>":"")+"</tr>").join("")+"</tbody></table></div>";
+}
+function vIntro(){
+  const has=S.stage!=null||Object.keys(S.a).length>0;
+  const ex={family:56,health:78,social:67,digital:89};
+  const bars=C.DIMENSIONS.map(d=>bar(S.lang==="ar"?d.short_ar:d.short_en,String(ex[d.key]),ex[d.key],DIMCOL[d.key])).join("");
+  const h=history();
+  let hist="";
+  if(h.length){hist='<div class="card" style="margin-top:22px"><h3>'+esc(t("rHist"))+'</h3><p class="meta-line">'+esc(h.length===1?t("histOne"):f(t("histCount"),{n:h.length}))+"</p>"+histTable(h,true)+'<p class="tiny">'+esc(t("histNote"))+"</p></div>"}
+  app.innerHTML='<section class="view"><div class="hero"><span class="eyebrow">'+esc(t("eyebrow"))+'</span><h1>'+esc(t("h1"))+'</h1><p class="lede">'+esc(t("lede"))+'</p><div class="facts">'+t("facts").map(x=>"<span>"+esc(x)+"</span>").join("")+'</div><div class="cta-row">'+
+   (has?'<button class="btn" data-act="resume">'+esc(t("resume"))+'</button><button class="btn ghost" data-act="restart">'+esc(t("restart"))+"</button>":'<button class="btn" data-act="start">'+esc(t("start"))+"</button>")+
+   '</div><p class="note">'+esc(t("privacy"))+'</p></div>'+hist+
+   '<div class="sample" aria-label="'+esc(t("example"))+'"><div class="sample-head"><b>'+esc(t("exampleTitle"))+'</b><span class="tag">'+esc(t("example"))+'</span></div>'+
+   '<div class="score-row">'+dial(72)+'<div class="score-text"><span class="meta-line">'+esc(t("personaOf"))+'</span><b style="font-family:var(--f-display);font-size:20px">'+esc(L(C.PERSONAS.family))+'</b><span class="band">'+esc(L(C.BANDS[2]))+'</span></div></div><div class="dims">'+bars+'</div>'+
+   '<div class="chips"><span>'+esc(t("exQol"))+' 64</span><span>'+esc(t("exDrain"))+" "+esc(of10(7))+'</span><span>'+esc(t("exDecision"))+'</span></div>'+
+   '<div class="time-big"><b class="num">104</b><span>'+esc(hw(104)+" "+t("timeBigLabel"))+'</span></div></div></section>';
+}
+function vStage(){
+  app.innerHTML='<section class="view">'+progress()+'<div class="section-head"><h2>'+esc(t("stageQ"))+'</h2><p class="note">'+esc(t("stageNote"))+'</p></div><fieldset class="q">'+optList("stage",C.STAGES.map(s=>L(s)),C.STAGES.findIndex(s=>s.key===S.stage),"cols1")+"</fieldset>"+navRow(false)+"</section>";
+}
+function vDim(){
+  const d=C.DIMENSIONS.find(x=>x.key===SECTIONS[S.step]);
+  app.innerHTML='<section class="view">'+progress()+'<div class="section-head"><h2>'+esc(L(d))+"</h2></div>"+C.ITEMS.filter(i=>i.dim===d.key).map(itemCard).join("")+navRow(false)+"</section>";
+}
+function vTime(){
+  const T1=C.TIME.T1,T2=C.TIME.T2;const d=C.DIMENSIONS.find(x=>x.key==="digital");
+  let h='<section class="view">'+progress()+'<div class="section-head"><h2>'+esc(L(d))+'</h2><p class="note">'+esc(t("timeIntro"))+"</p></div>";
+  h+=qCard("7d",L(T1),optList("T1",S.lang==="ar"?T1.opts_ar:T1.opts_en,S.t1,"",false),t("exLabel")+(S.lang==="ar"?T1.ex_ar:T1.ex_en));
+  if(S.t1!=null&&S.t1>0){
+    h+='<fieldset class="q"><div class="q-text">'+esc(L(T2))+'</div><div class="opts">'+T2.opts.map((o,i)=>'<label class="opt sq" for="T2-'+i+'"><input type="checkbox" id="T2-'+i+'" name="T2" value="'+o.key+'"'+(S.t2.includes(o.key)?" checked":"")+'><span class="dot"></span><span>'+esc(L(o))+"</span></label>").join("")+"</div></fieldset>";
+  }
+  h+=["D1","D2","D3"].map(id=>itemCard(C.ITEMS.find(i=>i.id===id))).join("");
+  app.innerHTML=h+navRow(false)+"</section>";
+}
+function vFeel(){
+  const W=C.WHO5;let h='<section class="view">'+progress()+'<div class="section-head"><h2>'+esc(t("steps")[5])+'</h2><p class="note">'+esc(t("feelIntro"))+"</p></div>";
+  h+='<div class="who-grid">';
+  W.items_ar.forEach((x,i)=>{h+=qCard("14d",(S.lang==="ar"?W.items_ar:W.items_en)[i],optList("W"+i,S.lang==="ar"?W.opts_ar:W.opts_en,S.who[i],"",false))});
+  h+="</div>";
+  const LS=C.LIFE_SAT,EN=C.ENERGY,ar=S.lang==="ar";
+  h+=qCard("today",L(LS),scale10("LS",S.ls,ar?LS.lo_ar:LS.lo_en,ar?LS.hi_ar:LS.hi_en));
+  h+=qCard("today",L(EN),scale10("EN",S.en,ar?EN.lo_ar:EN.lo_en,ar?EN.hi_ar:EN.hi_en));
+  app.innerHTML=h+navRow(false)+"</section>";
+}
+function vDecision(){
+  const DR=C.DRAIN,ar=S.lang==="ar",HB=C.HOURS_BACK;
+  let h='<section class="view">'+progress()+'<div class="section-head"><h2>'+esc(t("drainSection"))+"</h2></div>";
+  h+=qCard("7d",L(DR),scale10("DR",S.dr,ar?DR.lo_ar:DR.lo_en,ar?DR.hi_ar:DR.hi_en));
+  h+='<div class="section-head" style="margin-top:22px"><h2>'+esc(t("decSection"))+'</h2><p class="note">'+esc(L(C.DECISION_INTRO))+"</p></div>";
+  h+='<fieldset class="q"><div class="q-text">'+esc(L(C.TASK_Q))+"</div>"+optList("TASK",C.TASKS.map(L),S.task,"",false)+"</fieldset>";
+  h+='<fieldset class="q"><div class="q-text">'+esc(L(C.ACTION_Q))+"</div>"+optList("ACT",C.ACTIONS.map(L),S.act,"",false);
+  if(S.task!=null&&S.act!=null){const tip=C.SUGGEST[C.TASKS[S.task].key][C.ACTIONS[S.act].key];h+='<p class="q-ex">'+esc(t("decHow")+(ar?tip[0]:tip[1]))+"</p>"}
+  h+="</fieldset>";
+  h+='<fieldset class="q"><div class="q-text">'+esc(L(C.HOURS_Q))+"</div>"+optList("HRS",ar?HB.opts_ar:HB.opts_en,S.hrs,"",false)+"</fieldset>";
+  h+='<fieldset class="q"><div class="q-text">'+esc(L(C.REINVEST_Q))+"</div>"+optList("REI",C.REINVEST_KEYS.map((k,i)=>L(reinvestOpt(i))),S.rei,"",false)+"</fieldset>";
+  app.innerHTML=h+navRow(true)+"</section>";
+}
+function vReport(){
+  const st=V,R=compute(st);const stg=C.STAGES.find(s=>s.key===st.stage);const w=C.WEIGHTS[st.stage];const P=C.PERSONAS[R.persona];const ar=S.lang==="ar";
+  const wtxt=C.DIMENSIONS.map(d=>(ar?d.short_ar:d.short_en)+" "+Math.round(w[d.key]*100)+"%").join(" · ");
+  let h='<section class="view report">';
+  if(pastEntry)h+='<div class="banner"><b>'+esc(f(t("pastBanner"),{d:pastEntry.date}))+'</b><button class="btn ghost" data-act="pastBack">'+esc(t("pastBack"))+"</button></div>";
+  h+='<h1 style="font-size:clamp(24px,5vw,30px)">'+esc(t("rTitle"))+"</h1>";
+  // persona + balance
+  h+='<div class="card persona"><span class="who">'+esc(t("personaOf"))+'</span><h2>'+esc(L(P))+'</h2><p>'+esc(ar?P.d_ar:P.d_en)+'</p><div class="score-row">'+dial(R.index)+'<div class="score-text"><span class="meta-line">'+esc(t("rIndex")+" · "+t("outOf"))+'</span><span class="tiny">'+esc(t("rIndexSub"))+'</span><span class="band">'+esc(L(R.band))+'</span><p>'+esc(ar?R.band.msg_ar:R.band.msg_en)+'</p></div></div><p class="meta-line">'+esc(t("rStage")+": "+L(stg))+"<br>"+esc(t("rWeights")+": "+wtxt)+"</p></div>";
+  // quality of life
+  const Q=C.QOL_WEIGHTS;
+  h+='<div class="card"><h3>'+esc(t("rQol"))+'</h3><p class="sub">'+esc(t("rQolSub"))+'</p><div class="score-row">'+dial(R.qol,"--soc")+'<div class="score-text"><span class="meta-line">'+esc(t("outOf"))+'</span><span class="band">'+esc(L(R.qolBand))+'</span><p class="tiny">'+esc(L(C.QOL_NOTE))+"</p></div></div>";
+  h+='<div class="parts">'+bar(t("who"),String(R.who),R.who,"--accent",L(R.whoBand)+" · "+f(t("weight"),{w:Math.round(Q.who5*100)}))+bar(t("ls"),of10(st.ls),st.ls*10,"--time",f(t("weight"),{w:Math.round(Q.ls*100)}))+bar(t("en"),of10(st.en),st.en*10,"--hea",f(t("weight"),{w:Math.round(Q.energy*100)}))+"</div>";
+  h+='<p class="tiny">'+esc(f(t("uaeRef"),{v:C.UAE_LADDER_2026}))+"</p>";
+  h+='<h3 style="font-size:16px;margin-top:4px">'+esc(t("satEnergy"))+'</h3><p class="reading'+(R.gapKey==="aligned"?" calm":"")+'">'+esc(L(C.GAP_READINGS[R.gapKey]))+'</p><p class="tiny">'+esc(L(C.GAP_NOTE))+"</p>";
+  h+='<p class="insight">'+esc(L(C.INSIGHTS[R.insight]))+"</p>";
+  if(R.support)h+='<p class="support">'+esc(f(t("support"),{n:C.SUPPORT_LINE})).replace(C.SUPPORT_LINE,"<b dir=\"ltr\">"+C.SUPPORT_LINE+"</b>")+"</p>";
+  h+="</div>";
+  // operating drain
+  h+='<div class="card"><h3>'+esc(t("rDrain"))+'</h3><div class="duo"><div>'+bar(t("drainLbl"),of10(st.dr),st.dr*10,"--warn",f(t("level"),{l:L(R.drainLevel)}))+"</div><div>"+bar(t("energyAvail"),of10(st.en),st.en*10,"--hea","")+'</div></div><p class="reading'+(R.drainKey==="low"?" calm":"")+'">'+esc(L(C.DRAIN_READINGS[R.drainKey]))+'</p><p class="tiny">'+esc(L(C.DRAIN_NOTE))+"</p></div>";
+  // weekly decision
+  const HB=C.HOURS_BACK;
+  h+='<div class="card decision"><h3>'+esc(t("rDecision"))+'</h3><div class="head">'+esc(decisionText(R))+'</div><p>'+esc(t("decHow")+(ar?R.tip[0]:R.tip[1]))+'</p><p class="meta-line">'+esc(f(t("decTime"),{h:(ar?HB.opts_ar:HB.opts_en)[st.hrs],r:L(R.rei)}))+"</p></div>";
+  // dimensions
+  h+='<div class="card"><h3>'+esc(t("rDims"))+'</h3><div class="dims">'+C.DIMENSIONS.map(d=>{const v=R.dims[d.key];return bar(L(d),String(r0(v)),v,DIMCOL[d.key],L(dimLabel(v)))}).join("")+'</div><p class="meta-line">'+esc(f(t("gap"),{n:r0(R.gap)})+" "+(R.gap<20?t("gapLo"):R.gap<40?t("gapMid"):t("gapHi")))+"</p></div>";
+  // time dividend
+  h+='<div class="card time-card"><h3>'+esc(t("rTime"))+"</h3>";
+  if(R.hours>0){
+    h+='<p>'+esc(f(t("timeSaved"),{h:fmtH(R.hours),p:Math.round(R.share*100)}))+'</p><div class="time-big"><b class="num">'+R.human+'</b><span>'+esc(hw(R.human)+" "+t("timeBigLabel"))+"</span></div>";
+    if(R.lost>0)h+='<p class="meta-line">'+esc(f(t("timeLost"),{n:R.lost,u:hw(R.lost)}))+"</p>";
+    if(st.t2.length)h+='<div><span class="meta-line">'+esc(t("where"))+'</span><div class="chips">'+C.TIME.T2.opts.filter(o=>st.t2.includes(o.key)).map(o=>"<span>"+esc(L(o))+"</span>").join("")+"</div></div>";
+  }else h+="<p>"+esc(t("timeNone"))+"</p>";
+  h+="</div>";
+  // plan
+  h+='<div class="card"><h3>'+esc(t("rPlan"))+'</h3><p class="meta-line">'+esc(t("planNote"))+'</p><ul class="plan">'+R.plan.map(it=>'<li><span class="box" aria-hidden="true"></span><span>'+esc(ar?it.tip_ar:it.tip_en)+"<small>"+esc(L(C.DIMENSIONS.find(d=>d.key===it.dim)))+"</small></span></li>").join("")+'</ul><p class="meta-line">'+esc(t("tipLabel")+L(C.DIGITAL_TIP))+"</p></div>";
+  // history
+  h+=histCard();
+  if(!pastEntry){
+    const sum=summaryText(R,st);
+    h+='<div class="card share"><h3>'+esc(t("rShare"))+'</h3><div class="share-row"><a class="wa" target="_blank" rel="noopener" href="https://wa.me/?text='+encodeURIComponent(sum)+'">'+icon("wa")+esc(t("wa"))+'</a>'+
+       '<button data-act="png" class="dl-only">'+icon("img")+esc(t("png"))+'</button><button data-act="html" class="dl-only">'+icon("doc")+esc(t("html"))+'</button><button data-act="copy">'+icon("copy")+esc(t("copy"))+'</button><a href="mailto:?subject='+encodeURIComponent(t("sumHead"))+"&body="+encodeURIComponent(sum)+'">'+icon("mail")+esc(t("mail"))+'</a></div><p class="note">'+esc(t("shareNote"))+'</p><div class="toast" id="toast" role="status"></div><textarea class="copybox" id="copybox" readonly hidden>'+esc(sum)+"</textarea></div>";
+    h+=pilotCard();
+    h+='<div class="card"><p>'+esc(t("retake"))+'</p><div><button class="btn ghost" data-act="restart">'+esc(t("retakeBtn"))+'</button></div><p class="foot">'+esc(t("disclaimer"))+"</p></div>";
+  }else h+='<div class="card"><p class="foot">'+esc(t("disclaimer"))+"</p></div>";
+  app.innerHTML=h+"</section>";
+  if(!caps.dl&&!STANDALONE)document.querySelectorAll(".dl-only").forEach(b=>b.hidden=true);
+}
+function histCard(){
+  const h=history();if(!h.length)return "";
+  let x='<div class="card"><h3>'+esc(t("rHist"))+"</h3>";
+  const curId=pastEntry?pastEntry.id:S.runId;const i=h.findIndex(e=>e.id===curId);
+  if(i>0){const a=h[i],b=h[i-1];const d=(n,lab,inv)=>{const v=a[n]-b[n];const good=inv?v<0:v>0;return '<span class="'+(v===0?"":good?"up":"down")+'">'+esc(lab)+" "+(v>0?"+":"")+v+"</span>"};
+    x+='<p class="meta-line">'+esc(f(t("histChange"),{d:b.date}))+'</p><div class="deltas">'+d("idx",t("dIdx"))+d("qol",t("dQol"))+d("dr",t("dDrain"),true)+"</div>";}
+  else if(h.length===1)x+='<p class="meta-line">'+esc(t("histFirst"))+"</p>";
+  x+=histTable(h,!pastEntry,curId)+'<p class="tiny">'+esc(t("histNote"))+'</p><div><button class="btn ghost" data-act="clearHist" style="padding:8px 14px;font-size:14px">'+esc(clearArmed?t("histConfirm"):t("histClear"))+'</button></div><div class="toast" id="htoast" role="status"></div></div>';
+  return x;
+}
+function pilotCard(){
+  const code=buildCode(S,S.runId);const url=formsUrl(code);
+  if(url){
+    return '<div class="card"><h3>'+esc(t("rPilot"))+'</h3><p>'+esc(t("pilotFormP"))+'</p><div><span class="meta-line">'+esc(t("pidLbl"))+'</span><div class="code">'+esc(getPid())+'</div><p class="tiny">'+esc(t("pidNote"))+'</p></div><div><a class="linkbtn" target="_blank" rel="noopener" href="'+esc(url)+'">'+esc(t("pilotFormBtn"))+'</a></div>'+
+      '<details><summary class="tiny">'+esc(t("pidChange"))+'</summary><div class="pid-row" style="margin-top:8px"><input id="pidIn" maxlength="6" autocomplete="off" aria-label="'+esc(t("pidLbl"))+'"><button class="btn ghost" data-act="pid" style="padding:8px 14px;font-size:14px">'+esc(t("pidSave"))+'</button></div><div class="toast" id="pidToast" role="status"></div></details></div>';
+  }
+  if(caps.canWrite){
+    return '<div class="card"><h3>'+esc(t("rPilot"))+'</h3><p>'+esc(t("pilotP"))+'</p><div><button class="btn" data-act="pilot"'+(caps.pilotState==="done"?" disabled":"")+">"+esc(t("pilotBtn"))+'</button></div><div class="toast" id="ptoast" role="status">'+(caps.pilotState==="done"?esc(t("pilotDone")):caps.pilotState==="err"?esc(t("pilotErr")):"")+"</div></div>";
+  }
+  return "";
+}
+function fmtH(h){if(S.lang!=="ar")return h===0.5?"half an hour":h+" hours";return {0.5:"نصف ساعة",2:"ساعتين",4.5:"أربع ساعات ونصف",7:"سبع ساعات"}[h]||(h+" ساعات")}
+function hw(n){if(S.lang!=="ar")return n===1?"hour":"hours";const m=n%100;if(n===2)return "ساعتان";if(m>=3&&m<=10)return "ساعات";return "ساعة"}
+function icon(n){
+  const p={wa:'<path d="M4 20l1.3-3.8A8 8 0 1 1 8 19z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>',
+   img:'<rect x="3" y="4" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 16l5-5 4 4 3-3 6 6" fill="none" stroke="currentColor" stroke-width="2"/>',
+   doc:'<path d="M6 3h8l4 4v14H6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12h6M9 16h6" stroke="currentColor" stroke-width="2"/>',
+   copy:'<rect x="8" y="8" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 8V4H4v12h4" fill="none" stroke="currentColor" stroke-width="2"/>',
+   mail:'<rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 7l9 6 9-6" fill="none" stroke="currentColor" stroke-width="2"/>'}[n];
+  return '<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">'+p+"</svg>";
+}
+function summaryText(R,st){
+  const ar=S.lang==="ar";
+  const lines=[t("sumHead"),t("sumPersona")+": "+L(C.PERSONAS[R.persona]),t("sumIndex")+": "+r0(R.index)+"/100 ("+L(R.band)+")",
+   C.DIMENSIONS.map(d=>(ar?d.short_ar:d.short_en)+" "+r0(R.dims[d.key])).join(" | ")];
+  if(R.hours>0)lines.push(f(t("sumTime"),{n:R.human,u:hw(R.human)}));
+  lines.push(f(t("sumDecision"),{d:decisionText(R),r:L(R.rei)}));
+  lines.push("",t("sumPlan"));R.plan.forEach(it=>lines.push("• "+(ar?it.tip_ar:it.tip_en)));
+  return lines.join("\n");
+}
+
+/* ---------- report card image (canvas keeps Arabic shaping correct) ---------- */
+async function makeCard(R){
+  try{await Promise.race([Promise.all([document.fonts.load('600 64px "Reem Kufi"'),document.fonts.load('500 30px "IBM Plex Sans Arabic"'),document.fonts.load('600 30px "IBM Plex Sans Arabic"')]),new Promise(r=>setTimeout(r,2500))])}catch(e){}
+  const W=1080,H=1820,cv=document.createElement("canvas");cv.width=W;cv.height=H;const g=cv.getContext("2d");
+  const rtl=S.lang==="ar";g.direction=rtl?"rtl":"ltr";const M=80;const X=rtl?W-M:M;const al=rtl?"right":"left";
+  const ink="#14211C",muted="#5A6A62",acc="#175C4C",time="#B8730F",cols={family:"#B0435A",health:"#4A7F35",social:"#2A6A8C",digital:"#6556A3"};
+  g.fillStyle="#F3F6F3";g.fillRect(0,0,W,H);
+  g.fillStyle=acc;g.fillRect(0,0,W,190);
+  g.fillStyle="#FFFFFF";g.textAlign=al;g.font='600 50px "Reem Kufi", sans-serif';g.fillText(t("brand"),X,108);
+  g.font='500 28px "IBM Plex Sans Arabic", sans-serif';g.fillStyle="#DCEDE6";g.fillText(t("rTitle"),X,155);
+  g.fillStyle=muted;g.font='500 30px "IBM Plex Sans Arabic", sans-serif';g.fillText(t("personaOf"),X,272);
+  g.fillStyle=ink;g.font='600 60px "Reem Kufi", sans-serif';g.fillText(L(C.PERSONAS[R.persona]),X,350);
+  g.font='600 150px "Reem Kufi", sans-serif';g.fillStyle=acc;g.fillText(String(r0(R.index)),X,530);
+  const iw=g.measureText(String(r0(R.index))).width;
+  g.font='500 32px "IBM Plex Sans Arabic", sans-serif';g.fillStyle=muted;
+  const nx=rtl?X-iw-24:X+iw+24;g.fillText(t("rIndex")+" · "+t("outOf"),nx,470);
+  g.fillStyle=ink;g.font='600 36px "IBM Plex Sans Arabic", sans-serif';g.fillText(L(R.band),nx,522);
+  let y=620;const BW=W-2*M;
+  C.DIMENSIONS.forEach(d=>{const v=R.dims[d.key];
+    g.fillStyle=ink;g.font='600 32px "IBM Plex Sans Arabic", sans-serif';g.textAlign=al;g.fillText(L(d),X,y);
+    g.textAlign=rtl?"left":"right";g.fillText(String(r0(v)),rtl?M:W-M,y);
+    g.fillStyle="#E1E8E3";roundRect(g,M,y+18,BW,22,11);g.fill();
+    g.fillStyle=cols[d.key];const bw=Math.max(22,BW*v/100);roundRect(g,rtl?W-M-bw:M,y+18,bw,22,11);g.fill();
+    y+=104;});
+  g.textAlign=al;
+  g.fillStyle="#F7EAD3";roundRect(g,M,y,BW,160,24);g.fill();
+  if(R.hours>0){g.fillStyle=time;g.font='600 80px "Reem Kufi", sans-serif';g.fillText(String(R.human),rtl?X-40:X+40,y+105);
+    const numW=g.measureText(String(R.human)).width;g.fillStyle=ink;g.font='500 30px "IBM Plex Sans Arabic", sans-serif';
+    wrapText(g,hw(R.human)+" "+t("timeBigLabel"),rtl?X-40-numW-24:X+40+numW+24,y+78,BW-numW-110,40,al);}
+  else{g.fillStyle=ink;g.font='500 28px "IBM Plex Sans Arabic", sans-serif';wrapText(g,t("timeNone"),rtl?X-40:X+40,y+62,BW-80,40,al);}
+  y+=190;
+  g.fillStyle="#DCEDE6";roundRect(g,M,y,BW,150,24);g.fill();
+  g.fillStyle=muted;g.font='500 26px "IBM Plex Sans Arabic", sans-serif';g.textAlign=al;g.fillText(t("rDecision"),rtl?X-40:X+40,y+50);
+  g.fillStyle=acc;g.font='600 40px "Reem Kufi", sans-serif';wrapText(g,decisionText(R),rtl?X-40:X+40,y+108,BW-80,46,al);
+  y+=210;
+  g.fillStyle=ink;g.font='600 32px "IBM Plex Sans Arabic", sans-serif';g.fillText(t("rPlan"),X,y);y+=50;
+  g.font='500 27px "IBM Plex Sans Arabic", sans-serif';
+  R.plan.forEach(it=>{y=wrapText(g,"• "+(rtl?it.tip_ar:it.tip_en),X,y,BW,38,al)+8;});
+  g.fillStyle=muted;g.font='500 22px "IBM Plex Sans Arabic", sans-serif';g.fillText(t("cardFoot"),X,H-50);
+  return new Promise(res=>cv.toBlob(b=>res(b),"image/png"));
+}
+function roundRect(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()}
+function wrapText(g,text,x,y,max,lh,al){g.textAlign=al;const words=text.split(" ");let line="";for(const wd of words){const test=line?line+" "+wd:wd;if(g.measureText(test).width>max&&line){g.fillText(line,x,y);line=wd;y+=lh}else line=test}if(line){g.fillText(line,x,y);y+=lh}return y}
+
+/* ---------- full report file ---------- */
+function reportHTML(R,st){
+  const rtl=S.lang==="ar";const stg=C.STAGES.find(s=>s.key===st.stage);const P=C.PERSONAS[R.persona];const Q=C.QOL_WEIGHTS;const HB=C.HOURS_BACK;
+  const row=(n,v,pct,lab,col)=>'<div class="r"><div class="h"><b>'+esc(n)+'</b><span>'+esc(v)+'</span></div><div class="b"><i style="width:'+pct+"%;background:"+col+'"></i></div><small>'+esc(lab)+"</small></div>";
+  const cols={family:"#B0435A",health:"#4A7F35",social:"#2A6A8C",digital:"#6556A3"};
+  let b='<h1>'+esc(t("brand"))+'</h1><p class="m">'+esc(t("reportFile")+" · "+t("generated")+": "+today())+'</p>';
+  b+='<h2>'+esc(t("personaOf")+": "+L(P))+'</h2><p>'+esc(rtl?P.d_ar:P.d_en)+'</p><p class="big">'+r0(R.index)+' <span>/ 100 · '+esc(t("rIndex")+" · "+L(R.band))+'</span></p><p>'+esc(rtl?R.band.msg_ar:R.band.msg_en)+'</p><p class="m">'+esc(t("rStage")+": "+L(stg))+"</p>";
+  b+="<h2>"+esc(t("rQol"))+'</h2><p class="m">'+esc(t("rQolSub"))+'</p><p class="big q">'+r0(R.qol)+' <span>/ 100 · '+esc(L(R.qolBand))+"</span></p>"+
+    row(t("who"),String(R.who),R.who,L(R.whoBand)+" · "+f(t("weight"),{w:Math.round(Q.who5*100)}),"#175C4C")+row(t("ls"),of10(st.ls),st.ls*10,f(t("weight"),{w:Math.round(Q.ls*100)}),"#B8730F")+row(t("en"),of10(st.en),st.en*10,f(t("weight"),{w:Math.round(Q.energy*100)}),"#4A7F35")+
+    '<p class="m">'+esc(f(t("uaeRef"),{v:C.UAE_LADDER_2026}))+"</p><h3>"+esc(t("satEnergy"))+"</h3><p>"+esc(L(C.GAP_READINGS[R.gapKey]))+'</p><p class="m">'+esc(L(C.GAP_NOTE))+"</p><p><b>"+esc(L(C.INSIGHTS[R.insight]))+"</b></p>"+(R.support?'<p class="s">'+esc(f(t("support"),{n:C.SUPPORT_LINE}))+"</p>":"")+'<p class="m">'+esc(L(C.QOL_NOTE))+"</p>";
+  b+="<h2>"+esc(t("rDrain"))+"</h2>"+row(t("drainLbl"),of10(st.dr),st.dr*10,f(t("level"),{l:L(R.drainLevel)}),"#A86A0C")+row(t("energyAvail"),of10(st.en),st.en*10,"","#4A7F35")+"<p>"+esc(L(C.DRAIN_READINGS[R.drainKey]))+'</p><p class="m">'+esc(L(C.DRAIN_NOTE))+"</p>";
+  b+="<h2>"+esc(t("rDecision"))+'</h2><p class="big d">'+esc(decisionText(R))+"</p><p>"+esc(t("decHow")+(rtl?R.tip[0]:R.tip[1]))+"</p><p>"+esc(f(t("decTime"),{h:(rtl?HB.opts_ar:HB.opts_en)[st.hrs],r:L(R.rei)}))+"</p>";
+  b+="<h2>"+esc(t("rDims"))+"</h2>"+C.DIMENSIONS.map(dd=>row(L(dd),String(r0(R.dims[dd.key])),r0(R.dims[dd.key]),L(dimLabel(R.dims[dd.key])),cols[dd.key])).join("")+'<p class="m">'+esc(f(t("gap"),{n:r0(R.gap)}))+"</p>";
+  b+="<h2>"+esc(t("rTime"))+"</h2>"+(R.hours>0?"<p>"+esc(f(t("timeSaved"),{h:fmtH(R.hours),p:Math.round(R.share*100)}))+'</p><p class="big t">'+R.human+" <span>"+esc(hw(R.human)+" "+t("timeBigLabel"))+"</span></p>"+(R.lost>0?"<p>"+esc(f(t("timeLost"),{n:R.lost,u:hw(R.lost)}))+"</p>":""):"<p>"+esc(t("timeNone"))+"</p>");
+  b+="<h2>"+esc(t("rPlan"))+"</h2><ul>"+R.plan.map(it=>"<li>"+esc(rtl?it.tip_ar:it.tip_en)+"</li>").join("")+"</ul><p>"+esc(t("tipLabel")+L(C.DIGITAL_TIP))+"</p>";
+  b+="<h3>"+esc(t("answers"))+"</h3><table>"+C.ITEMS.map(it=>"<tr><td>"+esc(L(it))+"</td><td>"+esc((rtl?it.opts_ar:it.opts_en)[st.a[it.id]])+"</td></tr>").join("")+
+    "<tr><td>"+esc(L(C.LIFE_SAT))+"</td><td>"+esc(of10(st.ls))+"</td></tr><tr><td>"+esc(L(C.ENERGY))+"</td><td>"+esc(of10(st.en))+"</td></tr><tr><td>"+esc(L(C.DRAIN))+"</td><td>"+esc(of10(st.dr))+"</td></tr></table>";
+  b+='<p class="m">'+esc(t("codeLbl")+": ")+'<span dir="ltr">'+esc(buildCode(st,pastEntry?pastEntry.id:S.runId))+'</span></p><p class="m">'+esc(t("retake"))+'</p><p class="m">'+esc(t("disclaimer"))+"</p>";
+  return '<!doctype html><html lang="'+S.lang+'" dir="'+(rtl?"rtl":"ltr")+'"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(t("brand"))+"</title><style>body{font-family:'IBM Plex Sans Arabic','Segoe UI',Tahoma,sans-serif;max-width:720px;margin:24px auto;padding:0 16px;color:#14211C;background:#fff;line-height:1.7}h1{color:#175C4C;margin-bottom:0}h2{margin-top:28px;border-bottom:2px solid #DCEDE6;padding-bottom:4px}.m{color:#5A6A62;font-size:14px}.big{font-size:44px;font-weight:700;color:#175C4C;margin:8px 0}.big span{font-size:18px;color:#14211C;font-weight:600}.big.t{color:#B8730F}.big.q{color:#2A6A8C}.big.d{font-size:28px}.r{margin:10px 0}.h{display:flex;justify-content:space-between}.b{height:10px;background:#E9EFEA;border-radius:10px;overflow:hidden}.b i{display:block;height:100%}small{color:#5A6A62}table{border-collapse:collapse;width:100%;font-size:14px}td{border-bottom:1px solid #D6DFD9;padding:6px 4px;vertical-align:top}td:last-child{width:38%;font-weight:600}.s{background:#F6E1DF;padding:10px;border-radius:8px}</style></head><body>"+b+"</body></html>";
+}
+
+/* ---------- actions ---------- */
+function go(step){S.step=step;S.tried=false;save();render();window.scrollTo({top:0,behavior:"auto"})}
+function render(){header();
+  if(S.view==="dash")return vDash();
+  if(pastEntry)return vReport();
+  V=S;
+  if(S.step<0)return vIntro();
+  if(S.step===0)return vStage();
+  if(S.step>=1&&S.step<=3)return vDim();
+  if(S.step===4)return vTime();
+  if(S.step===5)return vFeel();
+  if(S.step===6)return vDecision();
+  return vReport();
+}
+function toast(id,msg){const el=document.getElementById(id);if(el)el.textContent=msg}
+function keepScroll(fn){const y=window.scrollY;fn();window.scrollTo(0,y)}
+app.addEventListener("change",e=>{
+  const el=e.target;if(!el.name)return;
+  const n=el.name,v=+el.value;
+  if(n==="stage")S.stage=C.STAGES[v].key;
+  else if(n==="T1"){const had=S.t1;S.t1=v;if(S.t1===0)S.t2=[];save();if((had==null||had===0)!==(S.t1===0)){keepScroll(render);const r=document.getElementById("T1-"+S.t1);if(r)r.focus();return}}
+  else if(n==="T2"){S.t2=[...app.querySelectorAll('input[name="T2"]:checked')].map(x=>x.value)}
+  else if(n==="LS")S.ls=v;else if(n==="EN")S.en=v;else if(n==="DR")S.dr=v;
+  else if(n==="TASK"||n==="ACT"){S[n==="TASK"?"task":"act"]=v;save();keepScroll(render);const r=document.getElementById(n+"-"+v);if(r)r.focus();return}
+  else if(n==="HRS")S.hrs=v;else if(n==="REI")S.rei=v;
+  else if(/^W\d$/.test(n))S.who[+n.slice(1)]=v;
+  else S.a[n]=v;
+  save();const w=document.getElementById("warn");if(w&&complete())w.textContent="";
+});
+app.addEventListener("click",async e=>{
+  const b=e.target.closest("[data-act]");if(!b)return;const act=b.dataset.act;
+  if(act==="start"){S.runId=Date.now();go(0)}
+  else if(act==="resume"){if(!S.runId)S.runId=Date.now();go(firstIncomplete())}
+  else if(act==="restart"){Object.assign(S,BLANK());S.runId=Date.now();caps.pilotState="";clearArmed=false;go(0)}
+  else if(act==="back"){go(S.step-1)}
+  else if(act==="next"){if(!complete()){S.tried=true;const w=document.getElementById("warn");if(w)w.textContent=t("missing");return}if(S.step===6)recordHistory();go(S.step+1)}
+  else if(act==="past"){const en=history().find(x=>String(x.id)===b.dataset.id);if(!en||!en.snap)return;pastEntry=en;V=Object.assign({},en.snap);render();window.scrollTo(0,0)}
+  else if(act==="pastBack"){pastEntry=null;V=S;render();window.scrollTo(0,0)}
+  else if(act==="clearHist"){if(!clearArmed){clearArmed=true;b.textContent=t("histConfirm");return}try{localStorage.removeItem("ddl-history")}catch(err){}clearArmed=false;pastEntry=null;V=S;keepScroll(render);toast("htoast",t("histCleared"))}
+  else if(act==="copy"){const txt=summaryText(compute(),V);try{await navigator.clipboard.writeText(txt);toast("toast",t("copied"))}catch(err){const box=document.getElementById("copybox");box.hidden=false;box.focus();box.select();toast("toast",t("copyFallback"))}}
+  else if(act==="png"||act==="html"){if(!caps.dl&&!STANDALONE){toast("toast",t("saveUnavailable"));return}
+    const R=compute();try{const data=act==="png"?await makeCard(R):reportHTML(R,V);const fn=act==="png"?"dignified-digital-life-card.png":"dignified-digital-life-report.html";
+      if(caps.dl)await caps.dl.save({filename:fn,data});else nativeSave(fn,data);toast("toast",t("saved"))}
+    catch(err){try{console.warn("save failed",err)}catch(e){}toast("toast",err&&err.code==="declined"?t("declined"):t("saveUnavailable"))}}
+  else if(act==="pid"){const inp=document.getElementById("pidIn");const v=(inp&&inp.value||"").trim().toUpperCase();
+    if(!/^[A-Z2-9]{6}$/.test(v)){toast("pidToast",t("pidBad"));return}memPid=v;try{localStorage.setItem("ddl-pid",v)}catch(err){}keepScroll(render);toast("pidToast",t("pidOk"))}
+  else if(act==="pilot"){await addPilot()}
+});
+document.getElementById("langBtn").addEventListener("click",()=>{S.lang=S.lang==="ar"?"en":"ar";save();render()});
+document.getElementById("dashBtn").addEventListener("click",()=>{S.view=S.view==="dash"?"survey":"dash";pastEntry=null;V=S;render()});
+function firstIncomplete(){for(let s=0;s<=6;s++){if(!complete(s))return s}return REPORT}
+
+/* ---------- pilot data inside Claude (org members only) ---------- */
+async function addPilot(){
+  const R=compute(S);
+  try{const id=await caps.user.id();if(!id)throw new Error("no id");
+    const d=new Date();
+    await caps.db.doc("responses/"+id).set({stage:S.stage,lang:S.lang,month:d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0"),
+      family:r0(R.dims.family),health:r0(R.dims.health),social:r0(R.dims.social),digital:r0(R.dims.digital),
+      index:r0(R.index),band:R.band.min,who5:R.who,ls:S.ls,en:S.en,qol:r0(R.qol),dr:S.dr,gap:R.gapKey,
+      hours:R.hours,share:R.share,human:R.human,where:S.t2.slice(),task:R.task.key,act:R.act.key,hrs:S.hrs,rei:C.REINVEST_KEYS[S.rei]});
+    caps.pilotState="done";
+  }catch(err){caps.pilotState="err";if(err&&err.code==="invalid_argument")caps.canWrite=false}
+  if(S.view==="survey"&&S.step===REPORT&&!pastEntry)keepScroll(render);
+}
+let unsub=null,dashRows=null,dashErr=false;
+function vDash(){
+  if(!unsub&&caps.db){dashRows=null;unsub=caps.db.collection("responses").onSnapshot(s=>{dashRows=s.docs.map(x=>x.data());if(S.view==="dash")vDash()},()=>{dashErr=true;if(S.view==="dash")vDash()})}
+  let h='<section class="view report"><h1 style="font-size:clamp(24px,5vw,30px)">'+esc(t("dash"))+'</h1><p class="note">'+esc(t("dashNote"))+"</p>";
+  if(dashErr){app.innerHTML=h+'<div class="card"><p>'+esc(t("dashErr"))+"</p></div></section>";return}
+  if(dashRows==null){app.innerHTML=h+'<div class="card"><p>'+esc(t("dashLoading"))+"</p></div></section>";return}
+  if(!dashRows.length){app.innerHTML=h+'<div class="card"><p>'+esc(t("dashEmpty"))+"</p></div></section>";return}
+  const rows=dashRows,n=rows.length,has=k=>rows.filter(r=>typeof r[k]==="number"),avg=k=>{const a=has(k);return a.length?a.reduce((s,r)=>s+r[k],0)/a.length:0};
+  h+='<div class="kpis"><div class="kpi"><b class="num">'+n+'</b><span>'+esc(t("kN"))+'</span></div><div class="kpi"><b class="num">'+r0(avg("index"))+'</b><span>'+esc(t("kIdx"))+'</span></div><div class="kpi"><b class="num">'+r0(avg("qol"))+'</b><span>'+esc(t("kQol"))+'</span></div><div class="kpi"><b class="num">'+avg("dr").toFixed(1)+'</b><span>'+esc(t("kDrain"))+'</span></div><div class="kpi"><b class="num">'+rows.reduce((s,r)=>s+(+r.human||0),0).toLocaleString("en-US")+'</b><span>'+esc(t("kHours"))+"</span></div></div>";
+  const hb=(list)=>{const mx=Math.max(...list.map(x=>x[1]),1);return '<div class="hbars">'+list.map(([l,v,txt,max])=>'<div class="hbar"><span>'+esc(l)+'</span><div class="t"><i style="width:'+(v/(max||mx)*100)+'%"></i></div><span class="num">'+(txt==null?v:txt)+"</span></div>").join("")+"</div>"};
+  h+='<div class="card"><h3>'+esc(t("dDims"))+"</h3>"+hb(C.DIMENSIONS.map(d=>[L(d),avg(d.key),r0(avg(d.key)),100]))+"</div>";
+  h+='<div class="card"><h3>'+esc(t("dQol"))+"</h3>"+hb([[t("who"),avg("who5"),r0(avg("who5")),100],[t("ls"),avg("ls")*10,avg("ls").toFixed(1),100],[t("en"),avg("en")*10,avg("en").toFixed(1),100],[t("drainLbl"),avg("dr")*10,avg("dr").toFixed(1),100]])+"</div>";
+  h+='<div class="card"><h3>'+esc(t("dGap"))+"</h3>"+hb(Object.keys(t("gapNames")).map(k=>[t("gapNames")[k],rows.filter(r=>r.gap===k).length]))+"</div>";
+  h+='<div class="card"><h3>'+esc(t("dActions"))+"</h3>"+hb(C.ACTIONS.map(a=>[S.lang==="ar"?a.noun_ar:a.verb_en,rows.filter(r=>r.act===a.key).length]))+hb(C.TASKS.map(k=>[L(k),rows.filter(r=>r.task===k.key).length]))+"</div>";
+  h+='<div class="card"><h3>'+esc(t("dBands"))+"</h3>"+hb(C.BANDS.map(b=>[L(b),rows.filter(r=>r.band===b.min).length]))+"</div>";
+  h+='<div class="card"><h3>'+esc(t("dStages"))+"</h3>"+hb(C.STAGES.map(s=>[L(s),rows.filter(r=>r.stage===s.key).length]))+"</div>";
+  h+='<div class="card"><h3>'+esc(t("dWhere"))+"</h3>"+hb(C.TIME.T2.opts.map(o=>[L(o),rows.filter(r=>Array.isArray(r.where)&&r.where.includes(o.key)).length]))+"</div></section>";
+  app.innerHTML=h;
+}
+
+/* ---------- boot ---------- */
+load();render();
+(async function(){
+  if(!window.claude||!window.claude.use){
+    /* hosted copy: the Forms link lives in config.json so it can change without touching this page */
+    try{const r=await fetch("config.json",{cache:"no-store"});if(r.ok){const cfg=await r.json();
+      if(cfg&&typeof cfg.forms_prefill_url==="string"&&cfg.forms_prefill_url.indexOf(C.FORMS.placeholder)>0){C.FORMS.prefill_url=cfg.forms_prefill_url;if(S.view==="survey"&&S.step===REPORT)keepScroll(render)}}}catch(e){}
+    return;
+  }
+  try{caps.dl=await window.claude.use("downloads")}catch(e){}
+  try{caps.user=await window.claude.use("user");caps.db=await window.claude.use("db");
+    if(caps.user&&caps.db){caps.isAdmin=!!(await caps.user.canEdit());const cw=await caps.user.can("data.write");caps.canWrite=cw!==false}
+  }catch(e){}
+  if(S.view==="survey")render();else header();
+})();
+})();
+</script>
+
+</body>
+</html>
