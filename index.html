@@ -200,6 +200,34 @@ textarea.copybox{width:100%;min-height:120px;border:1px solid var(--line);border
 @media (max-width:520px){.duo{grid-template-columns:1fr}}
 /* v2.1 infographics and action steps */
 .stagebox{display:grid;gap:8px;border-top:1px solid var(--line);padding-top:14px}
+.idx-t{font-size:17px;font-weight:700}
+.band-msg{margin:0}
+.bscale{position:relative;margin:30px 0 0}
+.bscale .trk{position:relative;display:flex;gap:2px;height:12px}
+.bscale .trk i{display:block;height:100%;border-radius:3px;opacity:.75}
+.bscale .trk i.on{opacity:1;outline:2px solid var(--accent);outline-offset:1px}
+.bscale .dot{position:absolute;top:50%;width:16px;height:16px;margin-inline-start:-8px;margin-top:-8px;border-radius:50%;background:var(--ink);border:3px solid var(--surface)}
+.bscale .pin{position:absolute;top:-28px;width:0;display:flex;justify-content:center}
+.bscale .pin span{white-space:nowrap;font-size:12.5px;font-weight:600;color:var(--ink);background:var(--sunk);border-radius:999px;padding:1px 10px}
+.bscale .ticks{position:relative;height:18px;margin-top:4px;font-size:11px;color:var(--muted)}
+.bscale .ticks span{position:absolute;top:0;width:0;display:flex;justify-content:center}
+.bscale .ticks span:first-child{justify-content:flex-start} .bscale .ticks span:last-child{justify-content:flex-end}
+.bscale .ticks i{font-style:normal}
+.next{margin:2px 0 0}
+.ib{display:grid;gap:9px;margin-top:4px}
+.ib h4{margin:0;font-size:16px}
+.ib .tiny{margin:-4px 0 2px}
+.ib-row{display:grid;grid-template-columns:minmax(92px,auto) 1fr auto;align-items:center;gap:10px}
+.ib-row .nm{display:flex;align-items:center;gap:7px;font-size:14px;font-weight:600}
+.ib-row .nm i{width:10px;height:10px;border-radius:3px;background:var(--c);flex:none}
+.ib-row .tr{position:relative;display:block;height:14px;background:var(--sunk);border-radius:999px;overflow:hidden;box-shadow:inset 0 0 0 1px var(--line)}
+.ib-row .tr b{position:absolute;top:0;bottom:0;inset-inline-start:0;background:var(--c);border-radius:999px}
+.ib-row .pt{font-size:13px;color:var(--muted);white-space:nowrap}
+.ib-row .pt b{color:var(--ink);font-size:14px}
+.ib-total{margin:2px 0 0;font-size:14px;color:var(--muted);text-align:end}
+.ib-total b{color:var(--ink);font-size:16px}
+.fast{display:flex;gap:8px;align-items:flex-start;margin:4px 0 0;background:var(--accent-soft);color:var(--ink);border-radius:10px;padding:10px 12px;font-size:14px;line-height:1.6}
+.fast svg{flex:none;color:var(--accent);margin-top:3px}
 .chip-stage{display:inline-flex;align-items:center;gap:8px;width:max-content;max-width:100%;background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:5px 14px;font-weight:600;font-size:14px}
 .chip-stage svg{flex:none}
 .wbar{display:flex;height:32px;border-radius:10px;overflow:hidden;gap:2px}
@@ -282,7 +310,7 @@ const T = {
   timeIntro:"هذا القسم يقيس الفكرة الأساسية في المقترح: كم وقتاً توفّره لك التقنية، وأين يذهب.",
   feelIntro:"خمسة أسئلة من مقياس الرفاه WHO-5 المعتمد دولياً، ثم سؤالان عن رضاك عن حياتك وطاقتك اليوم.",
   drainSection:"ما يستنزف طاقتك",decSection:"قرارك لهذا الأسبوع",
-  rTitle:"تقريرك الشخصي",personaOf:"نمطك",rIndex:"مؤشر التوازن",rIndexSub:"يقرأ عاداتك في أربعة أبعاد",outOf:"من 100",rStage:"مرحلتك",rWeights:"أوزان الأبعاد في مرحلتك",
+  rTitle:"تقريرك الشخصي",personaOf:"نمطك",rIndex:"مؤشر التوازن",rIndexSub:"يقرأ عاداتك في أربعة أبعاد",idxWhat:"يقيس عاداتك خلال الأيام السبعة الماضية في الأبعاد الأربعة.",youHere:"أنت هنا",toNext:"النقاط المتبقية للوصول إلى «{b}» ({m}): {n}",topBand:"أنت في أعلى مستوى للتوازن.",buildT:"كيف تكوّن مؤشرك؟",buildSub:"لكل بُعد حد أقصى من النقاط يساوي وزنه في مرحلتك، ومجموع الأبعاد الأربعة 100 نقطة. الجزء الملوّن هو ما حققته.",ptsOf:"{p} من {m}",ptsTotal:"المجموع: {n} من 100",fast:"أسرع طريق لرفع مؤشرك: «{d}». كل إجابة أعلى بدرجة واحدة في أحد أسئلة هذا البعد تضيف {g}.",bandsT:"مستويات المؤشر",outOf:"من 100",rStage:"مرحلتك",rWeights:"أوزان الأبعاد في مرحلتك",
   rQol:"مؤشر جودة الحياة اليومية",rQolSub:"يقرأ شعورك: 40% رفاه، و30% رضا عن الحياة، و30% طاقة",
   who:"مؤشر الرفاه (WHO-5)",ls:"الرضا عن الحياة",en:"الطاقة اليومية",weight:"الوزن {w}%",of10:"{v} من 10",
   satEnergy:"الرضا والطاقة",uaeRef:"للاستئناس: متوسط تقييم الحياة في الإمارات {v} من 10 في تقرير السعادة العالمي 2026، بصيغة سؤال مختلفة.",
@@ -334,7 +362,7 @@ const T = {
   timeIntro:"This part measures the core idea of the proposal: how much time technology saves you, and where it goes.",
   feelIntro:"Five questions from the internationally used WHO-5 Wellbeing Index, then two questions on your life satisfaction and energy today.",
   drainSection:"What drains your energy",decSection:"Your decision for this week",
-  rTitle:"Your personal report",personaOf:"Your pattern",rIndex:"Balance index",rIndexSub:"Reads your habits across four areas",outOf:"out of 100",rStage:"Your stage",rWeights:"Area weights for your stage",
+  rTitle:"Your personal report",personaOf:"Your pattern",rIndex:"Balance index",rIndexSub:"Reads your habits across four areas",idxWhat:"Measures your habits over the past 7 days across the four areas.",youHere:"You are here",toNext:"Points to reach \u201c{b}\u201d ({m}): {n}",topBand:"You are at the top level of balance.",buildT:"How your score is built",buildSub:"Each area can add up to its weight for your stage, and the four add up to 100. The colored part is what you earned.",ptsOf:"{p} of {m}",ptsTotal:"Total: {n} of 100",fast:"Fastest way up: {d}. Each answer one step higher on one of its questions adds {g}.",bandsT:"Score levels",outOf:"out of 100",rStage:"Your stage",rWeights:"Area weights for your stage",
   rQol:"Daily quality of life index",rQolSub:"Reads how you feel: 40% wellbeing, 30% life satisfaction, 30% energy",
   who:"Wellbeing index (WHO-5)",ls:"Life satisfaction",en:"Daily energy",weight:"Weight {w}%",of10:"{v} / 10",
   satEnergy:"Satisfaction and energy",uaeRef:"For reference: the UAE average life evaluation is {v} out of 10 in the World Happiness Report 2026, asked with a different question.",
@@ -508,7 +536,7 @@ function complete(step){
 }
 function dial(v,col){
   const r=34,c=2*Math.PI*r,off=c*(1-Math.max(0,Math.min(100,v))/100);
-  return '<svg class="dial" width="96" height="96" viewBox="0 0 96 96" role="img" aria-label="'+r0(v)+'/100"><circle cx="48" cy="48" r="'+r+'" fill="none" stroke="var(--sunk)" stroke-width="10"/><circle cx="48" cy="48" r="'+r+'" fill="none" stroke="var('+(col||"--accent")+')" stroke-width="10" stroke-linecap="round" stroke-dasharray="'+c.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'" transform="rotate(-90 48 48)"/><text x="48" y="55" text-anchor="middle" font-family="Reem Kufi, sans-serif" font-size="24" font-weight="600" fill="var(--ink)">'+r0(v)+"</text></svg>";
+  return '<svg class="dial" width="96" height="96" viewBox="0 0 96 96" role="img" aria-label="'+r0(v)+'/100"><circle cx="48" cy="48" r="'+r+'" fill="none" stroke="var(--sunk)" stroke-width="10"/><circle cx="48" cy="48" r="'+r+'" fill="none" stroke="var('+(col||"--accent")+')" stroke-width="10" stroke-linecap="round" stroke-dasharray="'+c.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'" transform="rotate(-90 48 48)"/><text x="48" y="51" text-anchor="middle" font-family="Reem Kufi, sans-serif" font-size="24" font-weight="600" fill="var(--ink)">'+r0(v)+'</text><text x="48" y="68" text-anchor="middle" font-size="11" fill="var(--muted)">'+esc(t("outOf"))+"</text></svg>";
 }
 function bar(name,valTxt,pct,col,lab){return '<div class="dim"><span class="name">'+esc(name)+'</span><span class="val num">'+esc(valTxt)+'</span><div class="bar"><i style="width:'+Math.max(0,Math.min(100,pct)).toFixed(1)+"%;background:var("+col+')"></i></div>'+(lab?'<span class="lab">'+esc(lab)+"</span>":"")+"</div>"}
 
@@ -580,7 +608,7 @@ function vReport(){
   if(pastEntry)h+='<div class="banner"><b>'+esc(f(t("pastBanner"),{d:pastEntry.date}))+'</b><button class="btn ghost" data-act="pastBack">'+esc(t("pastBack"))+"</button></div>";
   h+='<h1 style="font-size:clamp(24px,5vw,30px)">'+esc(t("rTitle"))+"</h1>";
   // persona + balance
-  h+='<div class="card persona"><span class="who">'+esc(t("personaOf"))+'</span><h2>'+esc(L(P))+'</h2><p>'+esc(ar?P.d_ar:P.d_en)+'</p><div class="score-row">'+dial(R.index)+'<div class="score-text"><span class="meta-line">'+esc(t("rIndex")+" · "+t("outOf"))+'</span><span class="tiny">'+esc(t("rIndexSub"))+'</span><span class="band">'+esc(L(R.band))+'</span><p>'+esc(ar?R.band.msg_ar:R.band.msg_en)+'</p></div></div><div class="stagebox"><span class="chip-stage">'+icon("home")+'<span>'+esc(t("rStage")+": "+L(stg))+'</span></span><span class="meta-line">'+esc(t("rWeights"))+'</span>'+weightGraphic(w)+'</div></div>';
+  h+='<div class="card persona"><span class="who">'+esc(t("personaOf"))+'</span><h2>'+esc(L(P))+'</h2><p>'+esc(ar?P.d_ar:P.d_en)+'</p><div class="score-row">'+dial(R.index)+'<div class="score-text"><b class="idx-t">'+esc(t("rIndex"))+'</b><span class="tiny">'+esc(t("idxWhat"))+'</span><span class="band">'+esc(L(R.band))+'</span></div></div>'+bandScale(R.index)+'<p class="band-msg">'+esc(ar?R.band.msg_ar:R.band.msg_en)+'</p><div class="stagebox"><span class="chip-stage">'+icon("home")+'<span>'+esc(t("rStage")+": "+L(stg))+'</span></span>'+idxBuild(R,w)+'</div></div>';
   // quality of life
   const Q=C.QOL_WEIGHTS;
   h+='<div class="card"><h3>'+esc(t("rQol"))+'</h3><p class="sub">'+esc(t("rQolSub"))+'</p><div class="score-row">'+dial(R.qol,"--soc")+'<div class="score-text"><span class="meta-line">'+esc(t("outOf"))+'</span><span class="band">'+esc(L(R.qolBand))+'</span><p class="tiny">'+esc(L(C.QOL_NOTE))+"</p></div></div>";
@@ -629,6 +657,28 @@ function weightGraphic(w){
   return '<div class="wbar" role="img" aria-label="'+esc(C.DIMENSIONS.map(d=>nm(d)+" "+pct(w[d.key])+"%").join(" · "))+'">'+
     C.DIMENSIONS.map(d=>'<i style="flex:0 0 '+(w[d.key]*100)+'%;background:var('+DIMCOL[d.key]+')"><b class="num">'+pct(w[d.key])+'%</b></i>').join("")+'</div>'+
     '<div class="wlegend">'+C.DIMENSIONS.map(d=>'<span><i style="background:var('+DIMCOL[d.key]+')"></i>'+esc(nm(d))+' <b class="num">'+pct(w[d.key])+'%</b></span>').join("")+'</div>';
+}
+function ptsAr(n){return n===1?"نحو نقطة واحدة":n===2?"نحو نقطتين":n<=10?"نحو "+n+" نقاط":"نحو "+n+" نقطة"}
+function bandScale(v){
+  const bs=C.BANDS.slice().sort((a,b)=>a.min-b.min),cur=C.BANDS.find(b=>v>=b.min-1e-9),pos=Math.max(0,Math.min(100,v));
+  const tone=[16,30,46,64,84];
+  let x='<div class="bscale" role="img" aria-label="'+esc(t("bandsT")+": "+bs.map(b=>L(b)+" "+b.min).join(" · "))+'"><div class="pin" style="inset-inline-start:'+Math.max(7,Math.min(93,pos)).toFixed(1)+'%"><span>'+esc(t("youHere"))+' · <b class="num">'+r0(v)+'</b></span></div>';
+  x+='<div class="trk">'+bs.map((b,i)=>{const nx=i<bs.length-1?bs[i+1].min:100;return '<i class="'+(b===cur?"on":"")+'" style="flex:0 0 '+(nx-b.min)+'%;background:color-mix(in srgb,var(--accent) '+tone[i]+'%,var(--sunk))" title="'+esc(L(b))+'"></i>'}).join("")+'<em class="dot" style="inset-inline-start:'+pos.toFixed(1)+'%"></em></div>';
+  x+='<div class="ticks num">'+[0].concat(bs.slice(1).map(b=>b.min)).concat([100]).map(n=>'<span style="inset-inline-start:'+n+'%"><i>'+n+"</i></span>").join("")+"</div></div>";
+  const nb=bs.find(b=>b.min>v+1e-9);
+  x+='<p class="tiny next">'+esc(nb?f(t("toNext"),{b:L(nb),m:nb.min,n:Math.max(1,Math.ceil(nb.min-v))}):t("topBand"))+"</p>";
+  return x;
+}
+function idxBuild(R,w){
+  const ar=S.lang==="ar",ks=C.DIMENSIONS.map(d=>d.key),mx=Math.max(...ks.map(k=>w[k]));
+  const order=C.DIMENSIONS.slice().sort((a,b)=>w[b.key]-w[a.key]);
+  let x='<div class="ib"><h4>'+esc(t("buildT"))+'</h4><p class="tiny">'+esc(t("buildSub"))+"</p>";
+  order.forEach(d=>{const k=d.key,maxP=w[k]*100,got=w[k]*R.dims[k];
+    x+='<div class="ib-row" style="--c:var('+DIMCOL[k]+')"><span class="nm"><i></i>'+esc(ar?d.short_ar:d.short_en)+'</span><span class="tr" style="width:'+(w[k]/mx*100).toFixed(1)+'%"><b style="width:'+(R.dims[k]).toFixed(1)+'%"></b></span><span class="pt">'+f(esc(t("ptsOf")),{p:'<b class="num">'+got.toFixed(1)+"</b>",m:'<span class="num">'+Math.round(maxP)+"</span>"})+"</span></div>"});
+  x+='<p class="ib-total">'+f(esc(t("ptsTotal")),{n:'<b class="num">'+r0(R.index)+"</b>"})+"</p>";
+  const room=C.DIMENSIONS.filter(d=>R.dims[d.key]<100-1e-9).sort((a,b)=>w[b.key]-w[a.key]||R.dims[a.key]-R.dims[b.key]);
+  if(room.length){const d=room[0],g=Math.max(1,Math.round(100/9*w[d.key]));x+='<p class="fast">'+icon("check")+"<span>"+esc(f(t("fast"),{d:ar?d.short_ar:d.short_en,g:ar?ptsAr(g):"about "+g+(g===1?" point":" points")}))+"</span></p>"}
+  return x+"</div>";
 }
 function extremes(R){
   const ks=C.DIMENSIONS.map(d=>d.key);if(R.gap<0.5)return {hi:null,lo:null};
@@ -816,7 +866,8 @@ function reportHTML(R,st){
   const row=(n,v,pct,lab,col)=>'<div class="r"><div class="h"><b>'+esc(n)+'</b><span>'+esc(v)+'</span></div><div class="b"><i style="width:'+pct+"%;background:"+col+'"></i></div><small>'+esc(lab)+"</small></div>";
   const cols={family:"#B0435A",health:"#4A7F35",social:"#2A6A8C",digital:"#6556A3"};
   let b='<h1>'+esc(t("brand"))+'</h1><p class="m">'+esc(t("reportFile")+" · "+t("generated")+": "+today())+'</p>';
-  b+='<h2>'+esc(t("personaOf")+": "+L(P))+'</h2><p>'+esc(rtl?P.d_ar:P.d_en)+'</p><p class="big">'+r0(R.index)+' <span>/ 100 · '+esc(t("rIndex")+" · "+L(R.band))+'</span></p><p>'+esc(rtl?R.band.msg_ar:R.band.msg_en)+'</p><p class="m">'+esc(t("rStage")+": "+L(stg))+" · "+esc(t("rWeights")+": "+C.DIMENSIONS.map(d=>(rtl?d.short_ar:d.short_en)+" "+pct(C.WEIGHTS[st.stage][d.key])+"%").join(" · "))+"</p>";
+  b+='<h2>'+esc(t("personaOf")+": "+L(P))+'</h2><p>'+esc(rtl?P.d_ar:P.d_en)+'</p><p class="big">'+r0(R.index)+' <span>/ 100 · '+esc(t("rIndex")+" · "+L(R.band))+'</span></p><p>'+esc(rtl?R.band.msg_ar:R.band.msg_en)+'</p><p class="m">'+esc(t("rStage")+": "+L(stg))+" · "+esc(t("rWeights")+": "+C.DIMENSIONS.map(d=>(rtl?d.short_ar:d.short_en)+" "+pct(C.WEIGHTS[st.stage][d.key])+"%").join(" · "))+"</p>"+
+    '<p class="m">'+esc(t("buildT")+" "+C.DIMENSIONS.map(d=>(rtl?d.short_ar:d.short_en)+" "+f(t("ptsOf"),{p:(C.WEIGHTS[st.stage][d.key]*R.dims[d.key]).toFixed(1),m:Math.round(C.WEIGHTS[st.stage][d.key]*100)})).join(" · ")+" · "+f(t("ptsTotal"),{n:r0(R.index)}))+"</p>";
   b+="<h2>"+esc(t("rQol"))+'</h2><p class="m">'+esc(t("rQolSub"))+'</p><p class="big q">'+r0(R.qol)+' <span>/ 100 · '+esc(L(R.qolBand))+"</span></p>"+
     row(t("who"),String(R.who),R.who,L(R.whoBand)+" · "+f(t("weight"),{w:Math.round(Q.who5*100)}),"#175C4C")+row(t("ls"),of10(st.ls),st.ls*10,f(t("weight"),{w:Math.round(Q.ls*100)}),"#B8730F")+row(t("en"),of10(st.en),st.en*10,f(t("weight"),{w:Math.round(Q.energy*100)}),"#4A7F35")+
     '<p class="m">'+esc(f(t("uaeRef"),{v:C.UAE_LADDER_2026}))+"</p><h3>"+esc(t("satEnergy"))+"</h3><p>"+esc(L(C.GAP_READINGS[R.gapKey]))+'</p><p class="m">'+esc(L(C.GAP_NOTE))+"</p><p><b>"+esc(L(C.INSIGHTS[R.insight]))+"</b></p>"+(R.support?'<p class="s">'+esc(f(t("support"),{n:C.SUPPORT_LINE}))+"</p>":"")+'<p class="m">'+esc(L(C.QOL_NOTE))+"</p>";
