@@ -228,6 +228,8 @@ textarea.copybox{width:100%;min-height:120px;border:1px solid var(--line);border
 .ib-total b{color:var(--ink);font-size:16px}
 .fast{display:flex;gap:8px;align-items:flex-start;margin:4px 0 0;background:var(--accent-soft);color:var(--ink);border-radius:10px;padding:10px 12px;font-size:14px;line-height:1.6}
 .fast svg{flex:none;color:var(--accent);margin-top:3px}
+.autosave{margin:0;padding:10px 12px;border-radius:10px;font-weight:600;font-size:14.5px;background:var(--sunk);color:var(--muted)}
+.autosave.ok{background:var(--accent-soft);color:var(--good)} .autosave.err{background:var(--crit-soft);color:var(--crit)}
 .chip-stage{display:inline-flex;align-items:center;gap:8px;width:max-content;max-width:100%;background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:5px 14px;font-weight:600;font-size:14px}
 .chip-stage svg{flex:none}
 .wbar{display:flex;height:32px;border-radius:10px;overflow:hidden;gap:2px}
@@ -332,7 +334,7 @@ const T = {
   shareNote:"الملخص المشترك يتضمن التوازن وعائد الوقت وقرار الأسبوع وخطتك، ولا يتضمن نتائج الرفاه والاستنزاف. لمشاركة التقرير كاملاً بالبريد أو واتساب، احفظ التقرير المفصل ثم أرفقه.",
   copied:"نُسخ الملخص.",copyFallback:"حدّد النص أدناه وانسخه.",saved:"حُفظ الملف.",declined:"لم يُحفظ الملف.",saveUnavailable:"الحفظ غير متاح في هذا العرض. انسخ الملخص بدلاً من ذلك.",
   rPilot:"شارك في التجربة الميدانية",pilotFormP:"أرسل نتيجتك إلى فريق التجربة دون اسمك أو بريدك. يفتح الزر نموذج Microsoft Forms وفيه رمز نتيجتك جاهزاً، فاضغط «إرسال» فقط.",
-  pilotFormBtn:"أرسل نتيجتي إلى التجربة",pidLbl:"رمزك في التجربة",pidNote:"احتفظ بهذا الرمز. يربط قياسك الأول بقياسك بعد 30 يوماً دون أن يعرف أحد هويتك.",
+  pilotFormBtn:"أرسل نتيجتي إلى التجربة",autoOk:"حُفظت نتيجتك في التجربة الميدانية تلقائياً، دون اسمك أو بريدك.",autoWait:"جارٍ حفظ نتيجتك في التجربة الميدانية...",autoErr:"تعذّر الحفظ التلقائي الآن. اضغط الزر أدناه لإرسال نتيجتك.",pilotAutoP:"تُحفظ نتيجتك تلقائياً دون اسمك أو بريدك. احتفظ برقم المشارك لتربط به قياسك القادم.",pidLbl:"رمزك في التجربة",pidNote:"احتفظ بهذا الرمز. يربط قياسك الأول بقياسك بعد 30 يوماً دون أن يعرف أحد هويتك.",
   pidChange:"لديك رمز من قياس سابق على جهاز آخر؟",pidSave:"استخدم هذا الرمز",pidBad:"الرمز 6 أحرف وأرقام، مثل K7M2Q9.",pidOk:"حُدّث رمزك.",
   pilotP:"أضف نتيجتك إلى النتائج المجمّعة دون اسمك أو بريدك. نحفظ الدرجات فقط.",
   pilotBtn:"أضف نتيجتي",pilotDone:"أُضيفت نتيجتك. شكراً لك.",pilotErr:"تعذّرت الإضافة: حسابك لا يملك صلاحية الإضافة إلى هذه الصفحة.",
@@ -384,7 +386,7 @@ const T = {
   shareNote:"The shared summary includes your balance, time dividend, weekly decision and plan. It leaves out wellbeing and drain. To share the full report by email or WhatsApp, save it and attach the file.",
   copied:"Summary copied.",copyFallback:"Select the text below and copy it.",saved:"File saved.",declined:"The file was not saved.",saveUnavailable:"Saving isn't available in this view. Copy the summary instead.",
   rPilot:"Join the field trial",pilotFormP:"Send your result to the trial team without your name or email. The button opens a Microsoft Form with your result code filled in, so you only press Submit.",
-  pilotFormBtn:"Send my result to the trial",pidLbl:"Your trial code",pidNote:"Keep this code. It links your first check to your check 30 days later without anyone knowing who you are.",
+  pilotFormBtn:"Send my result to the trial",autoOk:"Your result was saved to the field trial automatically, without your name or email.",autoWait:"Saving your result to the field trial...",autoErr:"Automatic saving failed just now. Use the button below to send your result.",pilotAutoP:"Your result is saved automatically, without your name or email. Keep your participant ID to link your next check.",pidLbl:"Your trial code",pidNote:"Keep this code. It links your first check to your check 30 days later without anyone knowing who you are.",
   pidChange:"Have a code from an earlier check on another device?",pidSave:"Use this code",pidBad:"The code is 6 letters and numbers, like K7M2Q9.",pidOk:"Your code was updated.",
   pilotP:"Add your result to the combined results, without your name or email. We keep scores only.",
   pilotBtn:"Add my result",pilotDone:"Your result was added. Thank you.",pilotErr:"Couldn't add it: your account can't add results to this page.",
@@ -783,7 +785,8 @@ function histCard(){
 function pilotCard(){
   const code=buildCode(S,S.runId);const url=formsUrl(code);
   if(url){
-    return '<div class="card"><h3>'+esc(t("rPilot"))+'</h3><p>'+esc(t("pilotFormP"))+'</p><div><span class="meta-line">'+esc(t("pidLbl"))+'</span><div class="code">'+esc(getPid())+'</div><p class="tiny">'+esc(t("pidNote"))+'</p></div><div><a class="linkbtn" target="_blank" rel="noopener" href="'+esc(url)+'">'+esc(t("pilotFormBtn"))+'</a></div>'+
+    const auto=!!C.RELAY;
+    return '<div class="card"><h3>'+esc(t("rPilot"))+'</h3>'+(auto?'<p class="autosave '+(caps.saveState||"wait")+'" id="autosave" role="status">'+esc(t(caps.saveState==="ok"?"autoOk":caps.saveState==="err"?"autoErr":"autoWait"))+'</p><p class="tiny">'+esc(t("pilotAutoP"))+'</p>':'<p>'+esc(t("pilotFormP"))+'</p>')+'<div><span class="meta-line">'+esc(t("pidLbl"))+'</span><div class="code">'+esc(getPid())+'</div><p class="tiny">'+esc(t("pidNote"))+'</p></div><div><a class="linkbtn" target="_blank" rel="noopener" href="'+esc(url)+'">'+esc(t("pilotFormBtn"))+'</a></div>'+
       '<details><summary class="tiny">'+esc(t("pidChange"))+'</summary><div class="pid-row" style="margin-top:8px"><input id="pidIn" maxlength="6" autocomplete="off" aria-label="'+esc(t("pidLbl"))+'"><button class="btn ghost" data-act="pid" style="padding:8px 14px;font-size:14px">'+esc(t("pidSave"))+'</button></div><div class="toast" id="pidToast" role="status"></div></details></div>';
   }
   if(caps.canWrite){
@@ -894,8 +897,35 @@ function render(){header();
   if(S.step===4)return vTime();
   if(S.step===5)return vFeel();
   if(S.step===6)return vDecision();
-  return vReport();
+  vReport();autoSave();
 }
+/* ---------- automatic saving to the field trial (through the relay into the KGC Form) ---------- */
+function updSave(){const e=document.getElementById("autosave");if(!e)return;e.className="autosave "+(caps.saveState||"wait");e.textContent=t(caps.saveState==="ok"?"autoOk":caps.saveState==="err"?"autoErr":"autoWait")}
+function autoSave(){
+  if(!C.RELAY||pastEntry||S.step!==REPORT||!S.runId)return;
+  const code=buildCode(S,S.runId);let sent=fetchStore("ddl-sent");if(!sent||typeof sent!=="object")sent={};
+  if(sent[S.runId]===code){caps.saveState="ok";updSave();return}
+  if(caps.saving===code)return;caps.saving=code;caps.saveState="wait";updSave();
+  fetch(C.RELAY,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify({code}),keepalive:true})
+    .then(r=>r.json()).then(j=>{if(j&&j.ok){sent=fetchStore("ddl-sent")||{};sent[S.runId]=code;const ks=Object.keys(sent);if(ks.length>30)delete sent[ks[0]];store("ddl-sent",sent);caps.saveState="ok"}else caps.saveState="err"})
+    .catch(()=>{caps.saveState="err"}).finally(()=>{caps.saving=null;updSave()});
+}
+/* someone who leaves before the report: send what they answered so far, marked unfinished (DDLP) */
+function partialCode(){
+  const st=S,X=w=>"X".repeat(w),val=(x,w)=>x==null||x===""?X(w):String(x).padStart(w,"0");
+  const si=C.STAGES.findIndex(s=>s.key===st.stage);
+  const v={stage:si<0?null:si,T1:st.t1,T2:st.t1==null?null:C.TIME.T2.opts.map(o=>st.t2.includes(o.key)?1:0).join(""),LS:st.ls,EN:st.en,DR:st.dr,TASK:st.task,ACT:st.act,HRS:st.hrs,REI:st.rei,SEQ:seqOf(null),LANG:S.lang==="ar"?0:1};
+  C.ITEMS.forEach(it=>v[it.id]=st.a[it.id]);st.who.forEach((x,k)=>v["W"+(k+1)]=x==null?null:C.WHO5.values[x]);
+  const c=cohort();return "DDLP-"+C.CODE_FIELDS.map(([n,w])=>val(v[n],w)).join("")+"-"+getPid()+"-S"+Math.max(0,S.step)+(c?"-"+c:"");
+}
+let lastPartial=null;
+function sendPartial(){
+  if(!C.RELAY||pastEntry||S.view!=="survey"||S.step<0||S.step>=REPORT||!S.stage)return;
+  const code=partialCode();if(code===lastPartial)return;lastPartial=code;
+  try{navigator.sendBeacon(C.RELAY,new Blob([JSON.stringify({code})],{type:"text/plain"}))}catch(e){}
+}
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden")sendPartial()});
+window.addEventListener("pagehide",sendPartial);
 function toast(id,msg){const el=document.getElementById(id);if(el)el.textContent=msg}
 function keepScroll(fn){const y=window.scrollY;fn();window.scrollTo(0,y)}
 app.addEventListener("change",e=>{
@@ -988,7 +1018,9 @@ load();render();
   if(!window.claude||!window.claude.use){
     /* hosted copy: the Forms link lives in config.json so it can change without touching this page */
     try{const r=await fetch("config.json",{cache:"no-store"});if(r.ok){const cfg=await r.json();
-      if(cfg&&typeof cfg.forms_prefill_url==="string"&&cfg.forms_prefill_url.indexOf(C.FORMS.placeholder)>0){C.FORMS.prefill_url=cfg.forms_prefill_url;if(S.view==="survey"&&S.step===REPORT)keepScroll(render)}}}catch(e){}
+      if(cfg&&typeof cfg.relay_url==="string"&&/^(https:\/\/|http:\/\/localhost[:\/])[^\s]+$/.test(cfg.relay_url))C.RELAY=cfg.relay_url;
+      if(cfg&&typeof cfg.forms_prefill_url==="string"&&cfg.forms_prefill_url.indexOf(C.FORMS.placeholder)>0){C.FORMS.prefill_url=cfg.forms_prefill_url}
+      if(S.view==="survey"&&S.step===REPORT)keepScroll(render)}}catch(e){}
     /* stage averages (aggregates only) for the comparison on the report */
     try{const r=await fetch("baseline.json",{cache:"no-store"});if(r.ok){const b=await r.json();if(b&&typeof b==="object"&&b.stages&&typeof b.stages==="object"){BASE=b;if(S.view==="survey"&&S.step===REPORT)keepScroll(render)}}}catch(e){}
     return;
